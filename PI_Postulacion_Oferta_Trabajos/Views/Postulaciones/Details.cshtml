@@ -1,0 +1,42 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Models.Postulacion
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Postulacion</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PosFechaPostulacion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PosFechaPostulacion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Esp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Esp.EspId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ofe)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ofe.OfeId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Usu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Usu.UsuId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.PosId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

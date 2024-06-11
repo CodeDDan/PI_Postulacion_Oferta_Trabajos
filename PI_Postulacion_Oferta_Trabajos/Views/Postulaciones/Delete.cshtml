@@ -1,0 +1,45 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Models.Postulacion
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Postulacion</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PosFechaPostulacion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PosFechaPostulacion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Esp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Esp.EspId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ofe)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ofe.OfeId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Usu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Usu.UsuId)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="PosId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

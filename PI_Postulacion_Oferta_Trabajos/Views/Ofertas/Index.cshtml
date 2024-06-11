@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PI_Postulacion_Oferta_Trabajos.Models.Oferta>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeTitulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeDescripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeRequisitos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeSalario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeFechaPublicacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Emp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeTitulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeDescripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeRequisitos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeSalario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeFechaPublicacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Emp.EmpId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OfeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OfeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OfeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

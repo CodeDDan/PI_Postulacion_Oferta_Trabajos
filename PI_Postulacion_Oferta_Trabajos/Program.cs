@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using PI_Postulacion_Oferta_Trabajos.Models;
+using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<PO_TrabajosContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
