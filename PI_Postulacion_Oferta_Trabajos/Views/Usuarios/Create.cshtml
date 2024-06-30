@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Crear</h1>
 
 <h4>Usuario</h4>
 <hr />
@@ -13,36 +13,36 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TipId" class="control-label"></label>
+                <label asp-for="TipId" class="control-label">Tipo de Usuario</label>
                 <select asp-for="TipId" class ="form-control" asp-items="ViewBag.TipId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="UsuNombre" class="control-label"></label>
+                <label asp-for="UsuNombre" class="control-label">Nombre</label>
                 <input asp-for="UsuNombre" class="form-control" />
                 <span asp-validation-for="UsuNombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuApellido" class="control-label"></label>
+                <label asp-for="UsuApellido" class="control-label">Apellido</label>
                 <input asp-for="UsuApellido" class="form-control" />
                 <span asp-validation-for="UsuApellido" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuCorreo" class="control-label"></label>
+                <label asp-for="UsuCorreo" class="control-label">Correo</label>
                 <input asp-for="UsuCorreo" class="form-control" />
                 <span asp-validation-for="UsuCorreo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuPassword" class="control-label"></label>
+                <label asp-for="UsuPassword" class="control-label">Password</label>
                 <input asp-for="UsuPassword" class="form-control" />
                 <span asp-validation-for="UsuPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuTelefono" class="control-label"></label>
+                <label asp-for="UsuTelefono" class="control-label">Teléfono</label>
                 <input asp-for="UsuTelefono" class="form-control" />
                 <span asp-validation-for="UsuTelefono" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuCedula" class="control-label"></label>
+                <label asp-for="UsuCedula" class="control-label">Cédula</label>
                 <input asp-for="UsuCedula" class="form-control" />
                 <span asp-validation-for="UsuCedula" class="text-danger"></span>
             </div>

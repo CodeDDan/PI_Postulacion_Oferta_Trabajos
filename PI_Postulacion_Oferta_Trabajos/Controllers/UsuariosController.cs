@@ -48,7 +48,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
-            ViewData["TipId"] = new SelectList(_context.TipoUsuarios, "TipId", "TipId");
+            ViewData["TipId"] = new SelectList(_context.TipoUsuarios, "TipId", "TipNombre");
             return View();
         }
 
