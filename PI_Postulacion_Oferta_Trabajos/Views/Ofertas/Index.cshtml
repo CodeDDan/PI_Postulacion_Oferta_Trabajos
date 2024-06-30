@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.OfeDescripcion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OfeRequisitos)
+                @Html.DisplayNameFor(model => model.OfeTipoContrato)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OfeSalario)
@@ -28,7 +28,46 @@
                 @Html.DisplayNameFor(model => model.OfeFechaPublicacion)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.OfeCantidadVacantes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeTiempoExperiencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeEducacionMinima)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeLicencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeDisponibilidadViajar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeDisponibilidadCambioResidencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeDiscapacidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeEdadMinima)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfeAreaLaboral)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Arl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cid)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Emp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ofm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pul)
             </th>
             <th></th>
         </tr>
@@ -43,7 +82,7 @@
                 @Html.DisplayFor(modelItem => item.OfeDescripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OfeRequisitos)
+                @Html.DisplayFor(modelItem => item.OfeTipoContrato)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OfeSalario)
@@ -52,7 +91,46 @@
                 @Html.DisplayFor(modelItem => item.OfeFechaPublicacion)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.OfeCantidadVacantes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeTiempoExperiencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeEducacionMinima)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeLicencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeDisponibilidadViajar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeDisponibilidadCambioResidencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeDiscapacidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeEdadMinima)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfeAreaLaboral)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Arl.ArlId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cid.CidId)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Emp.EmpId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ofm.OfmId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pul.PulId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.OfeId">Edit</a> |

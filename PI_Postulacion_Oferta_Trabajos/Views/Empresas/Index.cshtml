@@ -13,7 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EmpNombre)
+                @Html.DisplayNameFor(model => model.EmpNombreEmpresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpEmailRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpEmailAcceso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpPassword)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EmpRuc)
@@ -22,13 +31,19 @@
                 @Html.DisplayNameFor(model => model.EmpRazonSocial)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmpDireccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmpCorreo)
+                @Html.DisplayNameFor(model => model.EmpCiudad)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EmpTelefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpNumeroTrabajadores)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpVacantesAnuales)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aep)
             </th>
             <th></th>
         </tr>
@@ -37,7 +52,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.EmpNombre)
+                @Html.DisplayFor(modelItem => item.EmpNombreEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpEmailRegistro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpEmailAcceso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpPassword)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EmpRuc)
@@ -46,13 +70,19 @@
                 @Html.DisplayFor(modelItem => item.EmpRazonSocial)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EmpDireccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmpCorreo)
+                @Html.DisplayFor(modelItem => item.EmpCiudad)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EmpTelefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpNumeroTrabajadores)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpVacantesAnuales)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aep.AepId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EmpId">Edit</a> |

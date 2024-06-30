@@ -13,11 +13,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="UsuId" class="control-label"></label>
-                <input asp-for="UsuId" class="form-control" />
-                <span asp-validation-for="UsuId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="TipId" class="control-label"></label>
                 <select asp-for="TipId" class ="form-control" asp-items="ViewBag.TipId"></select>
             </div>
@@ -42,11 +37,6 @@
                 <span asp-validation-for="UsuPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuDireccion" class="control-label"></label>
-                <input asp-for="UsuDireccion" class="form-control" />
-                <span asp-validation-for="UsuDireccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="UsuTelefono" class="control-label"></label>
                 <input asp-for="UsuTelefono" class="form-control" />
                 <span asp-validation-for="UsuTelefono" class="text-danger"></span>
@@ -55,16 +45,6 @@
                 <label asp-for="UsuCedula" class="control-label"></label>
                 <input asp-for="UsuCedula" class="form-control" />
                 <span asp-validation-for="UsuCedula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuFechaNacimiento" class="control-label"></label>
-                <input asp-for="UsuFechaNacimiento" class="form-control" />
-                <span asp-validation-for="UsuFechaNacimiento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuCurriculumVitae" class="control-label"></label>
-                <input asp-for="UsuCurriculumVitae" class="form-control" />
-                <span asp-validation-for="UsuCurriculumVitae" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

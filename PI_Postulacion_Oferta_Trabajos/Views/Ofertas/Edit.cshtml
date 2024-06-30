@@ -19,6 +19,26 @@
                 <span asp-validation-for="EmpId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="OfmId" class="control-label"></label>
+                <select asp-for="OfmId" class="form-control" asp-items="ViewBag.OfmId"></select>
+                <span asp-validation-for="OfmId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PulId" class="control-label"></label>
+                <select asp-for="PulId" class="form-control" asp-items="ViewBag.PulId"></select>
+                <span asp-validation-for="PulId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CidId" class="control-label"></label>
+                <select asp-for="CidId" class="form-control" asp-items="ViewBag.CidId"></select>
+                <span asp-validation-for="CidId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArlId" class="control-label"></label>
+                <select asp-for="ArlId" class="form-control" asp-items="ViewBag.ArlId"></select>
+                <span asp-validation-for="ArlId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="OfeTitulo" class="control-label"></label>
                 <input asp-for="OfeTitulo" class="form-control" />
                 <span asp-validation-for="OfeTitulo" class="text-danger"></span>
@@ -29,9 +49,9 @@
                 <span asp-validation-for="OfeDescripcion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="OfeRequisitos" class="control-label"></label>
-                <input asp-for="OfeRequisitos" class="form-control" />
-                <span asp-validation-for="OfeRequisitos" class="text-danger"></span>
+                <label asp-for="OfeTipoContrato" class="control-label"></label>
+                <input asp-for="OfeTipoContrato" class="form-control" />
+                <span asp-validation-for="OfeTipoContrato" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OfeSalario" class="control-label"></label>
@@ -42,6 +62,51 @@
                 <label asp-for="OfeFechaPublicacion" class="control-label"></label>
                 <input asp-for="OfeFechaPublicacion" class="form-control" />
                 <span asp-validation-for="OfeFechaPublicacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfeCantidadVacantes" class="control-label"></label>
+                <input asp-for="OfeCantidadVacantes" class="form-control" />
+                <span asp-validation-for="OfeCantidadVacantes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfeTiempoExperiencia" class="control-label"></label>
+                <input asp-for="OfeTiempoExperiencia" class="form-control" />
+                <span asp-validation-for="OfeTiempoExperiencia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfeEducacionMinima" class="control-label"></label>
+                <input asp-for="OfeEducacionMinima" class="form-control" />
+                <span asp-validation-for="OfeEducacionMinima" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="OfeLicencia" /> @Html.DisplayNameFor(model => model.OfeLicencia)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="OfeDisponibilidadViajar" /> @Html.DisplayNameFor(model => model.OfeDisponibilidadViajar)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="OfeDisponibilidadCambioResidencia" /> @Html.DisplayNameFor(model => model.OfeDisponibilidadCambioResidencia)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="OfeDiscapacidad" /> @Html.DisplayNameFor(model => model.OfeDiscapacidad)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfeEdadMinima" class="control-label"></label>
+                <input asp-for="OfeEdadMinima" class="form-control" />
+                <span asp-validation-for="OfeEdadMinima" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OfeAreaLaboral" class="control-label"></label>
+                <input asp-for="OfeAreaLaboral" class="form-control" />
+                <span asp-validation-for="OfeAreaLaboral" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

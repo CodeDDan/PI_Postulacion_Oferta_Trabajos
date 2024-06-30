@@ -57,7 +57,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UsuId,TipId,UsuNombre,UsuApellido,UsuCorreo,UsuPassword,UsuDireccion,UsuTelefono,UsuCedula,UsuFechaNacimiento,UsuCurriculumVitae")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("UsuId,TipId,UsuNombre,UsuApellido,UsuCorreo,UsuPassword,UsuTelefono,UsuCedula")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UsuId,TipId,UsuNombre,UsuApellido,UsuCorreo,UsuPassword,UsuDireccion,UsuTelefono,UsuCedula,UsuFechaNacimiento,UsuCurriculumVitae")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("UsuId,TipId,UsuNombre,UsuApellido,UsuCorreo,UsuPassword,UsuTelefono,UsuCedula")] Usuario usuario)
         {
             if (id != usuario.UsuId)
             {

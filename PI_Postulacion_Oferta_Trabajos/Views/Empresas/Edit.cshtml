@@ -14,9 +14,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="EmpId" />
             <div class="form-group">
-                <label asp-for="EmpNombre" class="control-label"></label>
-                <input asp-for="EmpNombre" class="form-control" />
-                <span asp-validation-for="EmpNombre" class="text-danger"></span>
+                <label asp-for="AepId" class="control-label"></label>
+                <select asp-for="AepId" class="form-control" asp-items="ViewBag.AepId"></select>
+                <span asp-validation-for="AepId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpNombreEmpresa" class="control-label"></label>
+                <input asp-for="EmpNombreEmpresa" class="form-control" />
+                <span asp-validation-for="EmpNombreEmpresa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpEmailRegistro" class="control-label"></label>
+                <input asp-for="EmpEmailRegistro" class="form-control" />
+                <span asp-validation-for="EmpEmailRegistro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpEmailAcceso" class="control-label"></label>
+                <input asp-for="EmpEmailAcceso" class="form-control" />
+                <span asp-validation-for="EmpEmailAcceso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpPassword" class="control-label"></label>
+                <input asp-for="EmpPassword" class="form-control" />
+                <span asp-validation-for="EmpPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmpRuc" class="control-label"></label>
@@ -29,19 +49,24 @@
                 <span asp-validation-for="EmpRazonSocial" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmpDireccion" class="control-label"></label>
-                <input asp-for="EmpDireccion" class="form-control" />
-                <span asp-validation-for="EmpDireccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmpCorreo" class="control-label"></label>
-                <input asp-for="EmpCorreo" class="form-control" />
-                <span asp-validation-for="EmpCorreo" class="text-danger"></span>
+                <label asp-for="EmpCiudad" class="control-label"></label>
+                <input asp-for="EmpCiudad" class="form-control" />
+                <span asp-validation-for="EmpCiudad" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmpTelefono" class="control-label"></label>
                 <input asp-for="EmpTelefono" class="form-control" />
                 <span asp-validation-for="EmpTelefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpNumeroTrabajadores" class="control-label"></label>
+                <input asp-for="EmpNumeroTrabajadores" class="form-control" />
+                <span asp-validation-for="EmpNumeroTrabajadores" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmpVacantesAnuales" class="control-label"></label>
+                <input asp-for="EmpVacantesAnuales" class="form-control" />
+                <span asp-validation-for="EmpVacantesAnuales" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
