@@ -6,7 +6,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
     public partial class UsuarioPerfil
     {
         public int UspId { get; set; }
-        public int UsuId { get; set; }
+        public string UsuarioId { get; set; } = null!;
         public string UspAspiracionLarboral { get; set; } = null!;
         public decimal UspPreferenciaSalarial { get; set; }
         public string? UspHojaVida { get; set; }

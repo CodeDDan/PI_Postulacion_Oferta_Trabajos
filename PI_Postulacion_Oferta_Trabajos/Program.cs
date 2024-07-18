@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PO_TrabajosContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Por defecto viene en true
+builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<PO_TrabajosContext>();
 
 var app = builder.Build();
 
@@ -24,8 +30,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
+
+// Si usamos identity se debe agregar si o si lo siguiente
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

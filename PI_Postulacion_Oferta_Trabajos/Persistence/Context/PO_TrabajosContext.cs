@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PI_Postulacion_Oferta_Trabajos.Models;
 
 namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 {
-    public partial class PO_TrabajosContext : DbContext
+    public partial class PO_TrabajosContext : IdentityDbContext<Usuario>
     {
         public PO_TrabajosContext()
         {
@@ -29,7 +31,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
         public virtual DbSet<Postulacion> Postulaciones { get; set; } = null!;
         public virtual DbSet<Provincia> Provincias { get; set; } = null!;
         public virtual DbSet<PuestoLaboral> PuestosLaborales { get; set; } = null!;
-        public virtual DbSet<TipoUsuario> TipoUsuarios { get; set; } = null!;
         public virtual DbSet<Usuario> Usuarios { get; set; } = null!;
         public virtual DbSet<UsuarioDetalle> UsuarioDetalles { get; set; } = null!;
         public virtual DbSet<UsuarioEducacion> UsuarioEducacions { get; set; } = null!;
@@ -46,6 +47,25 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            // Lo siguiente permite definir como se creara la base
+            // Si no definimos nada, debemos usar correctamente los Data Annotations en cada clase
+
+            base.OnModelCreating(modelBuilder);
+            // Crearemos los roles
+            // Las siguientes instrucciones crearán la migración con inserciones al usar Add-Migration
+
+            var admin = new IdentityRole("admin");
+            admin.NormalizedName = "admin";
+
+            var trabajador = new IdentityRole("trabajador");
+            trabajador.NormalizedName = "trabajador";
+
+            var empleador = new IdentityRole("empleador");
+            empleador.NormalizedName = "empleador";
+
+            modelBuilder.Entity<IdentityRole>().HasData(admin, trabajador, empleador);
+
             modelBuilder.Entity<Administrador>(entity =>
             {
                 entity.HasKey(e => e.AdmId)
@@ -383,7 +403,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.HasIndex(e => e.OfeId, "FK_OFERTAS_POSTULACIONES_FK");
 
-                entity.HasIndex(e => e.UsuId, "FK_USUARIOS_POSTULACIONES_FK");
+                entity.HasIndex(e => e.UsuarioId, "FK_USUARIOS_POSTULACIONES_FK");
 
                 entity.Property(e => e.PosId).HasColumnName("POS_ID");
 
@@ -395,7 +415,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .HasColumnType("datetime")
                     .HasColumnName("POS_FECHA_POSTULACION");
 
-                entity.Property(e => e.UsuId).HasColumnName("USU_ID");
+                entity.Property(e => e.UsuarioId).IsRequired();
 
                 entity.HasOne(d => d.Esp)
                     .WithMany(p => p.Postulaciones)
@@ -411,7 +431,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.HasOne(d => d.Usu)
                     .WithMany(p => p.Postulaciones)
-                    .HasForeignKey(d => d.UsuId)
+                    .HasForeignKey(d => d.UsuarioId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_POSTULAC_FK_USUARI_USUARIOS");
             });
@@ -456,75 +476,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .HasConstraintName("FK_PUESTOS__FK_AREAS__AREAS_LA");
             });
 
-            modelBuilder.Entity<TipoUsuario>(entity =>
-            {
-                entity.HasKey(e => e.TipId)
-                    .IsClustered(false);
-
-                entity.ToTable("TIPO_USUARIO");
-
-                entity.Property(e => e.TipId).HasColumnName("TIP_ID");
-
-                entity.Property(e => e.TipDescripcion)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("TIP_DESCRIPCION");
-
-                entity.Property(e => e.TipNombre)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("TIP_NOMBRE");
-            });
-
-            modelBuilder.Entity<Usuario>(entity =>
-            {
-                entity.HasKey(e => e.UsuId)
-                    .IsClustered(false);
-
-                entity.ToTable("USUARIOS");
-
-                entity.HasIndex(e => e.TipId, "FK_TIPO_USUARIO_FK");
-
-                entity.Property(e => e.UsuId).HasColumnName("USU_ID");
-
-                entity.Property(e => e.TipId).HasColumnName("TIP_ID");
-
-                entity.Property(e => e.UsuApellido)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("USU_APELLIDO");
-
-                entity.Property(e => e.UsuCedula)
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("USU_CEDULA");
-
-                entity.Property(e => e.UsuCorreo)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("USU_CORREO");
-
-                entity.Property(e => e.UsuNombre)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("USU_NOMBRE");
-
-                entity.Property(e => e.UsuPassword)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("USU_PASSWORD");
-
-                entity.Property(e => e.UsuTelefono)
-                    .HasColumnType("numeric(18, 0)")
-                    .HasColumnName("USU_TELEFONO");
-
-                entity.HasOne(d => d.Tip)
-                    .WithMany(p => p.Usuarios)
-                    .HasForeignKey(d => d.TipId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_USUARIOS_FK_TIPO_U_TIPO_USU");
-            });
-
             modelBuilder.Entity<UsuarioDetalle>(entity =>
             {
                 entity.HasKey(e => e.UsdId)
@@ -532,7 +483,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.ToTable("USUARIO_DETALLES");
 
-                entity.HasIndex(e => e.UsuId, "FK_DETALLES_USUARIO_FK");
+                entity.HasIndex(e => e.UsuarioId, "FK_DETALLES_USUARIO_FK");
 
                 entity.Property(e => e.UsdId).HasColumnName("USD_ID");
 
@@ -560,11 +511,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .IsUnicode(false)
                     .HasColumnName("USD_GENERO");
 
-                entity.Property(e => e.UsuId).HasColumnName("USU_ID");
+                entity.Property(e => e.UsuarioId).IsRequired();
 
                 entity.HasOne(d => d.Usu)
                     .WithMany(p => p.UsuarioDetalles)
-                    .HasForeignKey(d => d.UsuId)
+                    .HasForeignKey(d => d.UsuarioId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_USUARIO__FK_DETALL_USUARIOS");
             });
@@ -576,7 +527,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.ToTable("USUARIO_EDUCACION");
 
-                entity.HasIndex(e => e.UsuId, "FK_EDUCACION_USUARIO_FK");
+                entity.HasIndex(e => e.UsuarioId, "FK_EDUCACION_USUARIO_FK");
 
                 entity.Property(e => e.UseId).HasColumnName("USE_ID");
 
@@ -595,11 +546,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .IsUnicode(false)
                     .HasColumnName("USE_TIPO_FORMACION");
 
-                entity.Property(e => e.UsuId).HasColumnName("USU_ID");
+                entity.Property(e => e.UsuarioId).IsRequired();
 
                 entity.HasOne(d => d.Usu)
                     .WithMany(p => p.UsuarioEducacions)
-                    .HasForeignKey(d => d.UsuId)
+                    .HasForeignKey(d => d.UsuarioId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_USUARIO__FK_EDUCAC_USUARIOS");
             });
@@ -611,11 +562,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.ToTable("USUARIO_EXPERIENCIA_LABORAL");
 
-                entity.HasIndex(e => e.UsuId, "FK_EXPERIENCIA_LABORAL_FK");
+                entity.HasIndex(e => e.UsuarioId, "FK_EXPERIENCIA_LABORAL_FK");
 
                 entity.Property(e => e.UsxId).HasColumnName("USX_ID");
 
-                entity.Property(e => e.UsuId).HasColumnName("USU_ID");
+                entity.Property(e => e.UsuarioId).IsRequired();
 
                 entity.Property(e => e.UsxArea)
                     .HasMaxLength(64)
@@ -647,7 +598,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.HasOne(d => d.Usu)
                     .WithMany(p => p.UsuarioExperienciaLaborals)
-                    .HasForeignKey(d => d.UsuId)
+                    .HasForeignKey(d => d.UsuarioId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_USUARIO__FK_EXPERI_USUARIOS");
             });
@@ -659,7 +610,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.ToTable("USUARIO_PERFIL");
 
-                entity.HasIndex(e => e.UsuId, "FK_PERFIL_USUARIO_FK");
+                entity.HasIndex(e => e.UsuarioId, "FK_PERFIL_USUARIO_FK");
 
                 entity.Property(e => e.UspId).HasColumnName("USP_ID");
 
@@ -682,11 +633,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .HasColumnType("decimal(10, 2)")
                     .HasColumnName("USP_PREFERENCIA_SALARIAL");
 
-                entity.Property(e => e.UsuId).HasColumnName("USU_ID");
+                entity.Property(e => e.UsuarioId).IsRequired();
 
                 entity.HasOne(d => d.Usu)
                     .WithMany(p => p.UsuarioPerfils)
-                    .HasForeignKey(d => d.UsuId)
+                    .HasForeignKey(d => d.UsuarioId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_USUARIO__FK_PERFIL_USUARIOS");
             });

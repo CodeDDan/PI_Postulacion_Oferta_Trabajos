@@ -1,0 +1,30 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Models.AeSubdivision
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>AeSubdivision</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AedNombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AedNombre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Aep)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Aep.AepId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.AedId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

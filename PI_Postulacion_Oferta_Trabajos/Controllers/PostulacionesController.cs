@@ -52,7 +52,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         {
             ViewData["EspId"] = new SelectList(_context.EstadoPostulacions, "EspId", "EspId");
             ViewData["OfeId"] = new SelectList(_context.Ofertas, "OfeId", "OfeId");
-            ViewData["UsuId"] = new SelectList(_context.Usuarios, "UsuId", "UsuId");
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id");
             return View();
         }
 
@@ -61,7 +61,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PosId,OfeId,UsuId,EspId,PosFechaPostulacion")] Postulacion postulacion)
+        public async Task<IActionResult> Create([Bind("PosId,OfeId,UsuarioId,EspId,PosFechaPostulacion")] Postulacion postulacion)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             }
             ViewData["EspId"] = new SelectList(_context.EstadoPostulacions, "EspId", "EspId", postulacion.EspId);
             ViewData["OfeId"] = new SelectList(_context.Ofertas, "OfeId", "OfeId", postulacion.OfeId);
-            ViewData["UsuId"] = new SelectList(_context.Usuarios, "UsuId", "UsuId", postulacion.UsuId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", postulacion.UsuarioId);
             return View(postulacion);
         }
 
@@ -90,7 +90,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             }
             ViewData["EspId"] = new SelectList(_context.EstadoPostulacions, "EspId", "EspId", postulacion.EspId);
             ViewData["OfeId"] = new SelectList(_context.Ofertas, "OfeId", "OfeId", postulacion.OfeId);
-            ViewData["UsuId"] = new SelectList(_context.Usuarios, "UsuId", "UsuId", postulacion.UsuId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", postulacion.UsuarioId);
             return View(postulacion);
         }
 
@@ -99,7 +99,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PosId,OfeId,UsuId,EspId,PosFechaPostulacion")] Postulacion postulacion)
+        public async Task<IActionResult> Edit(int id, [Bind("PosId,OfeId,UsuarioId,EspId,PosFechaPostulacion")] Postulacion postulacion)
         {
             if (id != postulacion.PosId)
             {
@@ -128,7 +128,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             }
             ViewData["EspId"] = new SelectList(_context.EstadoPostulacions, "EspId", "EspId", postulacion.EspId);
             ViewData["OfeId"] = new SelectList(_context.Ofertas, "OfeId", "OfeId", postulacion.OfeId);
-            ViewData["UsuId"] = new SelectList(_context.Usuarios, "UsuId", "UsuId", postulacion.UsuId);
+            ViewData["UsuarioId"] = new SelectList(_context.Usuarios, "Id", "Id", postulacion.UsuarioId);
             return View(postulacion);
         }
 
