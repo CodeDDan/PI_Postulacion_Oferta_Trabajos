@@ -48,7 +48,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: Ciudades/Create
         public IActionResult Create()
         {
-            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProId");
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProId", ciudad.ProId);
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre", ciudad.ProId);
             return View(ciudad);
         }
 
@@ -82,7 +82,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProId", ciudad.ProId);
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre", ciudad.ProId);
             return View(ciudad);
         }
 
@@ -118,7 +118,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProId", ciudad.ProId);
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre", ciudad.ProId);
             return View(ciudad);
         }
 
@@ -163,6 +163,23 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         private bool CiudadExists(int id)
         {
           return (_context.Ciudades?.Any(e => e.CidId == id)).GetValueOrDefault();
+        }
+
+        // Método para la validación de unicidad de la ciudad
+        [HttpGet]
+        public async Task<IActionResult> ValidateUniqueCiudad(string cidNombre, int? cidId)
+        {
+            // Consulta para verificar la unicidad
+            bool exists = await _context.Ciudades
+                .Where(c => c.CidNombre == cidNombre && (!cidId.HasValue || c.CidId != cidId.Value))
+                .AnyAsync();
+
+            if (exists)
+            {
+                return Json("El nombre de la ciudad ya existe");
+            }
+
+            return Json(true);
         }
     }
 }

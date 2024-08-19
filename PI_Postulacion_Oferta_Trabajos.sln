@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PI_Postulacion_Oferta_Trabajos", "PI_Postulacion_Oferta_Trabajos\PI_Postulacion_Oferta_Trabajos.csproj", "{88A49BA5-DF57-4B6A-9B9B-338D44897F1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PI_Postulacion_Oferta_Trabajos", "PI_Postulacion_Oferta_Trabajos\PI_Postulacion_Oferta_Trabajos.csproj", "{88A49BA5-DF57-4B6A-9B9B-338D44897F1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

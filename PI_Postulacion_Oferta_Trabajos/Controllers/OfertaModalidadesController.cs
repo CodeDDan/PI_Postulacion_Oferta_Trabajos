@@ -159,5 +159,22 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         {
           return (_context.OfertaModalidads?.Any(e => e.OfmId == id)).GetValueOrDefault();
         }
+
+        // Método para la validación de unicidad de la oferta modalidad, se lo usa en el modelo
+        [HttpGet]
+        public async Task<IActionResult> ValidateUniqueOfertaTipo(string ofmNombre, int? ofmId)
+        {
+            // Consulta para verificar la unicidad
+            bool exists = await _context.OfertaModalidads
+                .Where(a => a.OfmNombre == ofmNombre && (!ofmId.HasValue || a.OfmId != ofmId.Value))
+                .AnyAsync();
+
+            if (exists)
+            {
+                return Json("El nombre de la oferta laboral ya existe");
+            }
+
+            return Json(true);
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
         public string ProNombre { get; set; } = null!;
 
         public virtual ICollection<Ciudad> Ciudades { get; set; }
+        public virtual ICollection<Oferta> Ofertas { get; set; }
     }
 }

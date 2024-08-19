@@ -8,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Hace que el comportamiento predeterminado de ASP.NET Core en cuanto a los tipos de referencia no anulables se suprima.
+builder.Services.AddControllers(
+    options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+
+
 builder.Services.AddDbContext<PO_TrabajosContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

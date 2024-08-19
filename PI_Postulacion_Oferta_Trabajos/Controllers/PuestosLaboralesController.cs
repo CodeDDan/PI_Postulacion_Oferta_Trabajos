@@ -48,7 +48,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: PuestosLaborales/Create
         public IActionResult Create()
         {
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId");
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId", puestoLaboral.ArlId);
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre", puestoLaboral.ArlId);
             return View(puestoLaboral);
         }
 
@@ -82,7 +82,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId", puestoLaboral.ArlId);
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre", puestoLaboral.ArlId);
             return View(puestoLaboral);
         }
 
@@ -163,6 +163,23 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         private bool PuestoLaboralExists(int id)
         {
           return (_context.PuestosLaborales?.Any(e => e.PulId == id)).GetValueOrDefault();
+        }
+
+        // Método para la validación de unicidad del nombre del puesto laboral, se lo utiliza en el modelo
+        [HttpGet]
+        public async Task<IActionResult> ValidateUniquePuestoLaboral(string pulNombre, int? pulId)
+        {
+            // Consulta para verificar la unicidad
+            bool exists = await _context.PuestosLaborales
+                .Where(p => p.PulNombre == pulNombre && (!pulId.HasValue || p.PulId != pulId.Value))
+                .AnyAsync();
+
+            if (exists)
+            {
+                return Json("El nombre del puesto laboral ya existe.");
+            }
+
+            return Json(true);
         }
     }
 }

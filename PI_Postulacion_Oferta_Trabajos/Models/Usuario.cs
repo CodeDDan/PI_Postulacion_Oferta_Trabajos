@@ -28,6 +28,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
         [Required(ErrorMessage = "La cédula es requerida.")]
         [CedulaEcuatoriana(ErrorMessage = "Cédula ecuatoriana no válida.")]
         public string UsuCedula { get; set; } = null!;
+        public int? UsuarioIdEmpresa { get; set; }
 
         public virtual ICollection<Postulacion> Postulaciones { get; set; }
         public virtual ICollection<UsuarioDetalle> UsuarioDetalles { get; set; }

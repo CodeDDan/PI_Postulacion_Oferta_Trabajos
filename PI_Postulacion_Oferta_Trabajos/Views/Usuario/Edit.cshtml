@@ -1,0 +1,92 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Controllers.UserViewModel
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Editar Usuario</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Usuario.Id" />
+            <div class="form-group">
+                <label asp-for="Usuario.UsuNombre" class="control-label"></label>
+                <input asp-for="Usuario.UsuNombre" class="form-control" />
+                <span asp-validation-for="Usuario.UsuNombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usuario.UsuApellido" class="control-label"></label>
+                <input asp-for="Usuario.UsuApellido" class="form-control" />
+                <span asp-validation-for="Usuario.UsuApellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usuario.UsuCedula" class="control-label"></label>
+                <input asp-for="Usuario.UsuCedula" class="form-control" />
+                <span asp-validation-for="Usuario.UsuCedula" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usuario.Email" class="control-label"></label>
+                <input asp-for="Usuario.Email" class="form-control" />
+                <span asp-validation-for="Usuario.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usuario.PhoneNumber" class="control-label"></label>
+                <input asp-for="Usuario.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Usuario.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Roles" class="control-label">Roles</label>
+                <select asp-for="Roles" class="form-control" asp-items="ViewBag.Roles"></select>
+                <span asp-validation-for="Roles" class="text-danger"></span>
+            </div>
+            <!--Campo de asignación para empresa-->
+            <div id="empresa-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="empresaEmail" class="control-label">Email Empresa</label>
+                    <input type="email" id="empresaEmail" name="EmpresaEmail" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="empresaPassword" class="control-label">Contraseña Empresa</label>
+                    <input type="password" id="empresaPassword" name="EmpresaPassword" class="form-control" />
+                </div>
+            </div>
+            <!--Aquí termina-->
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectedRole = document.getElementById('Roles').value;
+            var empresaFields = document.getElementById('empresa-fields');
+            if (selectedRole === 'empleador') {
+                empresaFields.style.display = 'block';
+            }
+
+            document.getElementById('Roles').addEventListener('change', function () {
+                var selectedRole = this.value;
+                if (selectedRole === 'empleador') {
+                    empresaFields.style.display = 'block';
+                } else {
+                    empresaFields.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

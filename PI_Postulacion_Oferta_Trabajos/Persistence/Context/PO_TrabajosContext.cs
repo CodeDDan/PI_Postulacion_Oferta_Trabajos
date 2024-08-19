@@ -41,7 +41,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-            //    optionsBuilder.UseSqlServer("Data Source=DESKTOP-ACCD3TS\\SQLEXPRESS;Initial Catalog=PO_Trabajos;Persist Security Info=True;User ID=Daniel;Password=1234;Trust Server Certificate=True;Encrypt=false;Trusted_Connection=True;MultipleActiveResultSets=true");
+                //    optionsBuilder.UseSqlServer("Data Source=DESKTOP-ACCD3TS\\SQLEXPRESS;Initial Catalog=PO_Trabajos;Persist Security Info=True;User ID=Daniel;Password=1234;Trust Server Certificate=True;Encrypt=false;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -285,6 +285,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.HasIndex(e => e.PulId, "FK_OFERTAS_PUESTOS_LABORALES_FK");
 
+                entity.HasIndex(e => e.ProId, "FK_OFERTAS_PROVINCIAS_FK");
+
                 entity.Property(e => e.OfeId).HasColumnName("OFE_ID");
 
                 entity.Property(e => e.ArlId).HasColumnName("ARL_ID");
@@ -292,11 +294,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                 entity.Property(e => e.CidId).HasColumnName("CID_ID");
 
                 entity.Property(e => e.EmpId).HasColumnName("EMP_ID");
-
-                entity.Property(e => e.OfeAreaLaboral)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("OFE_AREA_LABORAL");
 
                 entity.Property(e => e.OfeCantidadVacantes)
                     .HasColumnType("numeric(18, 0)")
@@ -346,6 +343,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
 
                 entity.Property(e => e.PulId).HasColumnName("PUL_ID");
 
+                entity.Property(e => e.ProId).HasColumnName("PRO_ID");
+
                 entity.HasOne(d => d.Arl)
                     .WithMany(p => p.Oferta)
                     .HasForeignKey(d => d.ArlId)
@@ -375,6 +374,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .HasForeignKey(d => d.PulId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OFERTAS_FK_OFERTA_PUESTOS_");
+
+                entity.HasOne(d => d.Pro)  // Nueva relación
+                    .WithMany(p => p.Ofertas)
+                    .HasForeignKey(d => d.ProId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OFERTAS_FK_PROVINCIAS");
             });
 
             modelBuilder.Entity<OfertaModalidad>(entity =>

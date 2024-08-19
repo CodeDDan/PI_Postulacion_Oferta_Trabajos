@@ -22,7 +22,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: Ofertas
         public async Task<IActionResult> Index()
         {
-            var pO_TrabajosContext = _context.Ofertas.Include(o => o.Arl).Include(o => o.Cid).Include(o => o.Emp).Include(o => o.Ofm).Include(o => o.Pul);
+            var pO_TrabajosContext = _context.Ofertas.Include(o => o.Arl).Include(o => o.Cid).Include(o => o.Emp).Include(o => o.Ofm).Include(o => o.Pro).Include(o => o.Pul);
             return View(await pO_TrabajosContext.ToListAsync());
         }
 
@@ -39,6 +39,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 .Include(o => o.Cid)
                 .Include(o => o.Emp)
                 .Include(o => o.Ofm)
+                .Include(o => o.Pro)
                 .Include(o => o.Pul)
                 .FirstOrDefaultAsync(m => m.OfeId == id);
             if (oferta == null)
@@ -52,11 +53,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: Ofertas/Create
         public IActionResult Create()
         {
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId");
-            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidId");
-            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpId");
-            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmId");
-            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulId");
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre");
+            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidNombre");
+            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpNombreEmpresa");
+            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmNombre");
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre");
+            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulNombre");
             return View();
         }
 
@@ -65,7 +67,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OfeId,EmpId,OfmId,PulId,CidId,ArlId,OfeTitulo,OfeDescripcion,OfeTipoContrato,OfeSalario,OfeFechaPublicacion,OfeCantidadVacantes,OfeTiempoExperiencia,OfeEducacionMinima,OfeLicencia,OfeDisponibilidadViajar,OfeDisponibilidadCambioResidencia,OfeDiscapacidad,OfeEdadMinima,OfeAreaLaboral")] Oferta oferta)
+        public async Task<IActionResult> Create([Bind("OfeId,EmpId,OfmId,PulId,CidId,ArlId,ProId,OfeTitulo,OfeDescripcion,OfeTipoContrato,OfeSalario,OfeFechaPublicacion,OfeCantidadVacantes,OfeTiempoExperiencia,OfeEducacionMinima,OfeLicencia,OfeDisponibilidadViajar,OfeDisponibilidadCambioResidencia,OfeDiscapacidad,OfeEdadMinima")] Oferta oferta)
         {
             if (ModelState.IsValid)
             {
@@ -73,11 +75,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId", oferta.ArlId);
-            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidId", oferta.CidId);
-            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpId", oferta.EmpId);
-            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmId", oferta.OfmId);
-            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulId", oferta.PulId);
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre", oferta.ArlId);
+            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidNombre", oferta.CidId);
+            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpNombreEmpresa", oferta.EmpId);
+            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmNombre", oferta.OfmId);
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre", oferta.ProId);
+            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulNombre", oferta.PulId);
             return View(oferta);
         }
 
@@ -94,11 +97,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 return NotFound();
             }
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId", oferta.ArlId);
-            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidId", oferta.CidId);
-            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpId", oferta.EmpId);
-            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmId", oferta.OfmId);
-            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulId", oferta.PulId);
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre", oferta.ArlId);
+            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidNombre", oferta.CidId);
+            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpNombreEmpresa", oferta.EmpId);
+            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmNombre", oferta.OfmId);
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre", oferta.ProId);
+            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulNombre", oferta.PulId);
             return View(oferta);
         }
 
@@ -107,7 +111,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OfeId,EmpId,OfmId,PulId,CidId,ArlId,OfeTitulo,OfeDescripcion,OfeTipoContrato,OfeSalario,OfeFechaPublicacion,OfeCantidadVacantes,OfeTiempoExperiencia,OfeEducacionMinima,OfeLicencia,OfeDisponibilidadViajar,OfeDisponibilidadCambioResidencia,OfeDiscapacidad,OfeEdadMinima,OfeAreaLaboral")] Oferta oferta)
+        public async Task<IActionResult> Edit(int id, [Bind("OfeId,EmpId,OfmId,PulId,CidId,ArlId,ProId,OfeTitulo,OfeDescripcion,OfeTipoContrato,OfeSalario,OfeFechaPublicacion,OfeCantidadVacantes,OfeTiempoExperiencia,OfeEducacionMinima,OfeLicencia,OfeDisponibilidadViajar,OfeDisponibilidadCambioResidencia,OfeDiscapacidad,OfeEdadMinima")] Oferta oferta)
         {
             if (id != oferta.OfeId)
             {
@@ -134,11 +138,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlId", oferta.ArlId);
-            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidId", oferta.CidId);
-            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpId", oferta.EmpId);
-            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmId", oferta.OfmId);
-            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulId", oferta.PulId);
+            ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre", oferta.ArlId);
+            ViewData["CidId"] = new SelectList(_context.Ciudades, "CidId", "CidNombre", oferta.CidId);
+            ViewData["EmpId"] = new SelectList(_context.Empresas, "EmpId", "EmpNombreEmpresa", oferta.EmpId);
+            ViewData["OfmId"] = new SelectList(_context.OfertaModalidads, "OfmId", "OfmNombre", oferta.OfmId);
+            ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre", oferta.ProId);
+            ViewData["PulId"] = new SelectList(_context.PuestosLaborales, "PulId", "PulNombre", oferta.PulId);
             return View(oferta);
         }
 
@@ -155,6 +160,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 .Include(o => o.Cid)
                 .Include(o => o.Emp)
                 .Include(o => o.Ofm)
+                .Include(o => o.Pro)
                 .Include(o => o.Pul)
                 .FirstOrDefaultAsync(m => m.OfeId == id);
             if (oferta == null)

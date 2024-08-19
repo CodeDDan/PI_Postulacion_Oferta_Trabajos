@@ -52,9 +52,6 @@
                 @Html.DisplayNameFor(model => model.OfeEdadMinima)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OfeAreaLaboral)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Arl)
             </th>
             <th>
@@ -68,6 +65,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Pul)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pro)
             </th>
             <th></th>
         </tr>
@@ -115,22 +115,22 @@
                 @Html.DisplayFor(modelItem => item.OfeEdadMinima)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OfeAreaLaboral)
+                @Html.DisplayFor(modelItem => item.Arl.ArlNombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Arl.ArlId)
+                @Html.DisplayFor(modelItem => item.Cid.CidNombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cid.CidId)
+                @Html.DisplayFor(modelItem => item.Emp.EmpNombreEmpresa)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Emp.EmpId)
+                @Html.DisplayFor(modelItem => item.Ofm.OfmNombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Ofm.OfmId)
+                @Html.DisplayFor(modelItem => item.Pul.PulNombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Pul.PulId)
+                @Html.DisplayFor(modelItem => item.Pro.ProNombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.OfeId">Edit</a> |

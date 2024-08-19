@@ -10,11 +10,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" method="post">
             <div class="form-group">
                 <label asp-for="AepId" class="control-label"></label>
-                <select asp-for="AepId" class ="form-control" asp-items="ViewBag.AepId"></select>
+                <select asp-for="AepId" class="form-control" asp-items="ViewBag.AepId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="AedNombre" class="control-label"></label>
@@ -33,5 +32,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

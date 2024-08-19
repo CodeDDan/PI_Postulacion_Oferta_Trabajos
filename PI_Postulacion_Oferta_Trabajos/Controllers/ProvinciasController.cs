@@ -160,5 +160,20 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         {
           return (_context.Provincias?.Any(e => e.ProId == id)).GetValueOrDefault();
         }
+
+        // Acción para obtener las ciudades basadas en el ProId
+        public IActionResult GetCiudades(int proId)
+        {
+            var ciudades = _context.Ciudades
+                .Where(c => c.ProId == proId)
+                .Select(c => new
+                {
+                    c.CidId,
+                    c.CidNombre
+                })
+                .ToList();
+
+            return Json(ciudades);
+        }
     }
 }

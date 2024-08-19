@@ -24,19 +24,24 @@
                 <span asp-validation-for="OfmId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ArlId" class="control-label"></label>
+                <select asp-for="ArlId" class="form-control" asp-items="ViewBag.ArlId"></select>
+                <span asp-validation-for="ArlId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="PulId" class="control-label"></label>
                 <select asp-for="PulId" class="form-control" asp-items="ViewBag.PulId"></select>
                 <span asp-validation-for="PulId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ProId" class="control-label"></label>
+                <select asp-for="ProId" class="form-control" asp-items="ViewBag.ProId"></select>
+                <span asp-validation-for="ProId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CidId" class="control-label"></label>
                 <select asp-for="CidId" class="form-control" asp-items="ViewBag.CidId"></select>
                 <span asp-validation-for="CidId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ArlId" class="control-label"></label>
-                <select asp-for="ArlId" class="form-control" asp-items="ViewBag.ArlId"></select>
-                <span asp-validation-for="ArlId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OfeTitulo" class="control-label"></label>
@@ -104,11 +109,6 @@
                 <span asp-validation-for="OfeEdadMinima" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="OfeAreaLaboral" class="control-label"></label>
-                <input asp-for="OfeAreaLaboral" class="form-control" />
-                <span asp-validation-for="OfeAreaLaboral" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -119,6 +119,125 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<!--Método de filtro para puestos laborales-->
+<script>
+    $(document).ready(function () {
+        $('#ArlId').change(function () {
+            var arlId = $(this).val();
+            if (arlId) {
+                $.ajax({
+                    url: '@Url.Action("GetPuestosLaborales", "AreasLaborales")',
+                    type: 'GET',
+                    data: { arlId: arlId },
+                    success: function (data) {
+                        var $pulId = $('#PulId');
+                        $pulId.empty();
+                        $pulId.append('<option value="">Seleccione un puesto</option>');
+                        $.each(data, function (index, item) {
+                            $pulId.append($('<option>').val(item.pulId).text(item.pulNombre));
+                        });
+                    }
+                });
+            } else {
+                $('#PulId').empty();
+            }
+        });
+    });
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var initialArlId = '@Model.ArlId'; // Obtener el valor inicial de ArlId
+        var initialPulId = '@Model.PulId'; // Obtener el valor inicial de PulId
+        var initialProId = '@Model.ProId'; // Obtener el valor inicial de ProId
+        var initialCidId = '@Model.CidId'; // Obtener el valor inicial de CidId
+
+        // Actualizar puestos laborales si ArlId tiene valor inicial
+        if (initialArlId) {
+            $.ajax({
+                url: '@Url.Action("GetPuestosLaborales", "AreasLaborales")',
+                type: 'GET',
+                data: { arlId: initialArlId },
+                success: function (data) {
+                    var $pulId = $('#PulId');
+                    $pulId.empty();
+                    $pulId.append('<option value="">Seleccione un puesto</option>');
+                    $.each(data, function (index, item) {
+                        $pulId.append($('<option>').val(item.pulId).text(item.pulNombre));
+                    });
+                    // Selecciona el puesto laboral correcto si existe
+                    if (initialPulId) {
+                        $pulId.val(initialPulId);
+                    }
+                }
+            });
+        }
+
+        // Actualizar ciudades si ProId tiene valor inicial
+        if (initialProId) {
+            $.ajax({
+                url: '@Url.Action("GetCiudades", "Provincias")',
+                type: 'GET',
+                data: { proId: initialProId },
+                success: function (data) {
+                    var $cidId = $('#CidId');
+                    $cidId.empty();
+                    $cidId.append('<option value="">Seleccione una ciudad</option>');
+                    $.each(data, function (index, item) {
+                        $cidId.append($('<option>').val(item.cidId).text(item.cidNombre));
+                    });
+                    // Selecciona la ciudad correcta si existe
+                    if (initialCidId) {
+                        $cidId.val(initialCidId);
+                    }
+                }
+            });
+        }
+
+        // Manejo de cambios en el campo ArlId
+        $('#ArlId').change(function () {
+            var arlId = $(this).val();
+            if (arlId) {
+                $.ajax({
+                    url: '@Url.Action("GetPuestosLaborales", "AreasLaborales")',
+                    type: 'GET',
+                    data: { arlId: arlId },
+                    success: function (data) {
+                        var $pulId = $('#PulId');
+                        $pulId.empty();
+                        $pulId.append('<option value="">Seleccione un puesto</option>');
+                        $.each(data, function (index, item) {
+                            $pulId.append($('<option>').val(item.pulId).text(item.pulNombre));
+                        });
+                    }
+                });
+            } else {
+                $('#PulId').empty().append('<option value="">Seleccione un puesto</option>');
+            }
+        });
+
+        // Manejo de cambios en el campo ProId
+        $('#ProId').change(function () {
+            var proId = $(this).val();
+            if (proId) {
+                $.ajax({
+                    url: '@Url.Action("GetCiudades", "Provincias")',
+                    type: 'GET',
+                    data: { proId: proId },
+                    success: function (data) {
+                        var $cidId = $('#CidId');
+                        $cidId.empty();
+                        $cidId.append('<option value="">Seleccione una ciudad</option>');
+                        $.each(data, function (index, item) {
+                            $cidId.append($('<option>').val(item.cidId).text(item.cidNombre));
+                        });
+                    }
+                });
+            } else {
+                $('#CidId').empty().append('<option value="">Seleccione una ciudad</option>');
+            }
+        });
+    });
+</script>

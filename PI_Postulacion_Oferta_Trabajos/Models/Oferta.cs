@@ -16,6 +16,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
         public int PulId { get; set; }
         public int CidId { get; set; }
         public int ArlId { get; set; }
+        public int ProId { get; set; }  // Nueva propiedad
         public string OfeTitulo { get; set; } = null!;
         public string OfeDescripcion { get; set; } = null!;
         public string OfeTipoContrato { get; set; } = null!;
@@ -29,13 +30,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
         public bool OfeDisponibilidadCambioResidencia { get; set; }
         public bool OfeDiscapacidad { get; set; }
         public int? OfeEdadMinima { get; set; }
-        public string? OfeAreaLaboral { get; set; }
-
         public virtual AreaLaboral Arl { get; set; } = null!;
         public virtual Ciudad Cid { get; set; } = null!;
         public virtual Empresa Emp { get; set; } = null!;
         public virtual OfertaModalidad Ofm { get; set; } = null!;
         public virtual PuestoLaboral Pul { get; set; } = null!;
+        public virtual Provincia Pro { get; set; } = null!;
         public virtual ICollection<Postulacion> Postulaciones { get; set; }
     }
 }

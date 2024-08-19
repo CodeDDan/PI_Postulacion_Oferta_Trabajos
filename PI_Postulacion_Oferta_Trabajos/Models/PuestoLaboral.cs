@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PI_Postulacion_Oferta_Trabajos.Models
 {
@@ -12,6 +16,10 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
 
         public int PulId { get; set; }
         public int ArlId { get; set; }
+
+        // Para que el algoritmo de unicidad funcione con Edit, debe pasarse AdditionalField con el Id correspondiente de la clase
+        [Required(ErrorMessage = "El nombre del puesto laboral es requerido.")]
+        [Remote(action: "ValidateUniquePuestoLaboral", controller: "PuestosLaborales", AdditionalFields = "PulId", ErrorMessage = "El nombre del puesto laboral ya existe.")]
         public string PulNombre { get; set; } = null!;
 
         public virtual AreaLaboral Arl { get; set; } = null!;

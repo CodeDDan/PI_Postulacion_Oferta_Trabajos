@@ -28,7 +28,8 @@
                 @Html.DisplayFor(modelItem => item.AedNombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Aep.AepId)
+                <!-- Aqui cambiamos que se despliega en index -->
+                @Html.DisplayFor(modelItem => item.Aep.AepNombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AedId">Edit</a> |

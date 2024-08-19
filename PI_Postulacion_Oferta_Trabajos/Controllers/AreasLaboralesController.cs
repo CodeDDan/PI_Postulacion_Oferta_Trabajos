@@ -160,5 +160,37 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         {
           return (_context.AreasLaborales?.Any(e => e.ArlId == id)).GetValueOrDefault();
         }
+
+        // Método para la validación de unicidad del área laboral, se lo usa en el modelo
+        [HttpGet]
+        public async Task<IActionResult> ValidateUniqueAreaLaboral(string arlNombre, int? arlId)
+        {
+            // Consulta para verificar la unicidad
+            bool exists = await _context.AreasLaborales
+                .Where(a => a.ArlNombre == arlNombre && (!arlId.HasValue || a.ArlId != arlId.Value))
+                .AnyAsync();
+
+            if (exists)
+            {
+                return Json("El nombre del área laboral ya existe.");
+            }
+
+            return Json(true);
+        }
+
+        // Acción para obtener los puestos laborales basados en el ArlId
+        public IActionResult GetPuestosLaborales(int arlId)
+        {
+            var puestos = _context.PuestosLaborales
+                .Where(p => p.ArlId == arlId)
+                .Select(p => new
+                {
+                    p.PulId,
+                    p.PulNombre
+                })
+                .ToList();
+
+            return Json(puestos);
+        }
     }
 }

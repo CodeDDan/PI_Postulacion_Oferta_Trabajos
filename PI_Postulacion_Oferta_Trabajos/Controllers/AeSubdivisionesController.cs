@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: AeSubdivisiones/Create
         public IActionResult Create()
         {
-            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId");
+            // Por defecto viene con AepId, AepId 
+            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre");
             return View();
         }
 
@@ -64,6 +66,23 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 _context.Add(aeSubdivision);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                // Registrar los errores de validación y el modelo
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        Debug.WriteLine($"Error en {state.Key}: {error.ErrorMessage}");
+                    }
+                }
+
+                // Registro del modelo pasado
+                Debug.WriteLine($"Modelo recibido: AedId = {aeSubdivision.AedId}, AepId = {aeSubdivision.AepId}, AedNombre = {aeSubdivision.AedNombre}");
+
+                // Otra forma de verificar
+                TempData["ModelError"] = "El modelo no es válido";
             }
             ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId", aeSubdivision.AepId);
             return View(aeSubdivision);
@@ -82,7 +101,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 return NotFound();
             }
-            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId", aeSubdivision.AepId);
+            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre", aeSubdivision.AepId);
             return View(aeSubdivision);
         }
 
