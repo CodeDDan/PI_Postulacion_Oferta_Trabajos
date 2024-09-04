@@ -49,7 +49,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // GET: Empresas/Create
         public IActionResult Create()
         {
-            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId");
+            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre");
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmpId,AepId,EmpNombreEmpresa,EmpEmailRegistro,EmpEmailAcceso,EmpPassword,EmpRuc,EmpRazonSocial,EmpCiudad,EmpTelefono,EmpNumeroTrabajadores,EmpVacantesAnuales")] Empresa empresa)
+        public async Task<IActionResult> Create([Bind("EmpId,AepId,EmpNombreEmpresa,EmpEmailRegistro,EmpEmailAcceso,EmpPassword,EmpRuc,EmpRazonSocial,EmpCiudad,EmpTelefono,EmpNumeroTrabajadores,EmpVacantesAnuales,EmpDescripcion")] Empresa empresa)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId", empresa.AepId);
+            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre", empresa.AepId);
             return View(empresa);
         }
 
@@ -83,7 +83,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 return NotFound();
             }
-            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId", empresa.AepId);
+            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre", empresa.AepId);
             return View(empresa);
         }
 
@@ -92,7 +92,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmpId,AepId,EmpNombreEmpresa,EmpEmailRegistro,EmpEmailAcceso,EmpPassword,EmpRuc,EmpRazonSocial,EmpCiudad,EmpTelefono,EmpNumeroTrabajadores,EmpVacantesAnuales")] Empresa empresa)
+        public async Task<IActionResult> Edit(int id, [Bind("EmpId,AepId,EmpNombreEmpresa,EmpEmailRegistro,EmpEmailAcceso,EmpPassword,EmpRuc,EmpRazonSocial,EmpCiudad,EmpTelefono,EmpNumeroTrabajadores,EmpVacantesAnuales,EmpDescripcion")] Empresa empresa)
         {
             if (id != empresa.EmpId)
             {
@@ -119,7 +119,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepId", empresa.AepId);
+            ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre", empresa.AepId);
             return View(empresa);
         }
 

@@ -1,0 +1,32 @@
+﻿.offer-details {
+    max-width: 70%;
+}
+
+.offer-salary {
+    text-align: right;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.postulado {
+    /*Aquí se personaliza la tarjeta en caso de estar postulado*/
+    /* opacity: 0.5; */
+}
+
+custom-a-empresa {
+    text-decoration: none; /* Elimina la línea decorativa */
+    color: #e90066; /* Color rosa inicial */
+    transition: color 0.3s ease; /* Transición suave del color */
+}
+
+.custmo-a-empresa:hover {
+    color: #c2185b; /* Color rosa oscuro al hacer hover */
+}

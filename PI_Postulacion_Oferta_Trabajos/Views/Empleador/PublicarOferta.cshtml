@@ -1,0 +1,203 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Models.Oferta
+
+@{
+    ViewData["Title"] = "Publicar Oferta";
+}
+
+<h2>Publicar Oferta</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="PublicarOferta" method="post" class="bg-light p-4 rounded shadow-sm">
+                <div class="form-group">
+                    <label asp-for="OfeTitulo" class="form-label"></label>
+                    <input asp-for="OfeTitulo" class="form-control" />
+                    <span asp-validation-for="OfeTitulo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeDescripcion" class="form-label"></label>
+                    <textarea asp-for="OfeDescripcion" class="form-control"></textarea>
+                    <span asp-validation-for="OfeDescripcion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeTipoContrato" class="form-label"></label>
+                    <select asp-for="OfeTipoContrato" class="form-control">
+                        <option value="">Seleccione un tipo de contrato</option>
+                        <option value="Por horas">Por horas</option>
+                        <option value="Medio tiempo">Medio tiempo</option>
+                        <option value="Tiempo completo">Tiempo completo</option>
+                        <option value="Temporal">Temporal</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Pasantía">Pasantía</option>
+                        <option value="Por obra o servicio">Por obra o servicio</option>
+                    </select>
+                    <span asp-validation-for="OfeTipoContrato" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeSalario" class="form-label"></label>
+                    <input asp-for="OfeSalario" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="OfeSalario" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeCantidadVacantes" class="form-label"></label>
+                    <input asp-for="OfeCantidadVacantes" class="form-control" type="number" />
+                    <span asp-validation-for="OfeCantidadVacantes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeTiempoExperiencia" class="form-label"></label>
+                    <input asp-for="OfeTiempoExperiencia" class="form-control" type="number" />
+                    <span asp-validation-for="OfeTiempoExperiencia" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeEducacionMinima" class="form-label"></label>
+                    <input asp-for="OfeEducacionMinima" class="form-control" />
+                    <span asp-validation-for="OfeEducacionMinima" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <input asp-for="OfeLicencia" class="form-check-input" type="checkbox" />
+                    <label asp-for="OfeLicencia" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="OfeDisponibilidadViajar" class="form-check-input" type="checkbox" />
+                    <label asp-for="OfeDisponibilidadViajar" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="OfeDisponibilidadCambioResidencia" class="form-check-input" type="checkbox" />
+                    <label asp-for="OfeDisponibilidadCambioResidencia" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="OfeDiscapacidad" class="form-check-input" type="checkbox" />
+                    <label asp-for="OfeDiscapacidad" class="form-check-label"></label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OfeEdadMinima" class="form-label"></label>
+                    <input asp-for="OfeEdadMinima" class="form-control" type="number" />
+                    <span asp-validation-for="OfeEdadMinima" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="ArlId">Área Laboral</label>
+                    <select asp-for="ArlId" class="form-control" id="ArlId">
+                        <option value="">Seleccione un área laboral</option>
+                        @foreach (var area in ViewBag.AreasLaborales as List<PI_Postulacion_Oferta_Trabajos.Models.AreaLaboral>)
+                        {
+                            <option value="@area.ArlId">@area.ArlNombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ArlId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="PulId">Puesto Laboral</label>
+                    <select asp-for="PulId" class="form-control" id="PulId">
+                        <option value="">Seleccione un puesto laboral</option>
+                        @foreach (var puesto in ViewBag.PuestosLaborales as List<PI_Postulacion_Oferta_Trabajos.Models.PuestoLaboral>)
+                        {
+                            <option value="@puesto.PulId">@puesto.PulNombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="PulId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="OfmId">Modalidad</label>
+                    <select asp-for="OfmId" class="form-control" id="OfmId">
+                        <option value="">Seleccione una modalidad</option>
+                        @foreach (var modalidad in ViewBag.OfertaModalidades as List<PI_Postulacion_Oferta_Trabajos.Models.OfertaModalidad>)
+                        {
+                            <option value="@modalidad.OfmId">@modalidad.OfmNombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="OfmId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="CidId">Ciudad</label>
+                    <select asp-for="CidId" class="form-control" id="CidId">
+                        <option value="">Seleccione una ciudad</option>
+                        @foreach (var ciudad in ViewBag.Ciudades as List<PI_Postulacion_Oferta_Trabajos.Models.Ciudad>)
+                        {
+                            <option value="@ciudad.CidId">@ciudad.CidNombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CidId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="ProId">Provincia</label>
+                    <select asp-for="ProId" class="form-control" id="ProId">
+                        <option value="">Seleccione una provincia</option>
+                        @foreach (var provincia in ViewBag.Provincias as List<PI_Postulacion_Oferta_Trabajos.Models.Provincia>)
+                        {
+                            <option value="@provincia.ProId">@provincia.ProNombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ProId" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Publicar Oferta</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!--Método de filtro para puestos laborales-->
+<script>
+    $(document).ready(function () {
+        $('#ArlId').change(function () {
+            var arlId = $(this).val();
+            if (arlId) {
+                $.ajax({
+                    url: '@Url.Action("GetPuestosLaborales", "AreasLaborales")',
+                    type: 'GET',
+                    data: { arlId: arlId },
+                    success: function (data) {
+                        var $pulId = $('#PulId');
+                        $pulId.empty();
+                        $pulId.append('<option value="">Seleccione un puesto</option>');
+                        $.each(data, function (index, item) {
+                            $pulId.append($('<option>').val(item.pulId).text(item.pulNombre));
+                        });
+                    }
+                });
+            } else {
+                $('#PulId').empty();
+            }
+        });
+    });
+</script>
+
+<!--Método de filtro para ciudades-->
+<script>
+    $(document).ready(function () {
+        $('#ProId').change(function () {
+            var proId = $(this).val();
+            if (proId) {
+                $.ajax({
+                    url: '@Url.Action("GetCiudades", "Provincias")',
+                    type: 'GET',
+                    data: { proId: proId },
+                    success: function (data) {
+                        var $cidId = $('#CidId');
+                        $cidId.empty();
+                        $cidId.append('<option value="">Seleccione una ciudad</option>');
+                        $.each(data, function (index, item) {
+                            $cidId.append($('<option>').val(item.cidId).text(item.cidNombre));
+                        });
+                    }
+                });
+            } else {
+                $('#CidId').empty().append('<option value="">Seleccione una ciudad</option>');
+            }
+        });
+    });
+</script>

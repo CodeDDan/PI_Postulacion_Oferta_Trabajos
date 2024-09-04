@@ -1,0 +1,71 @@
+﻿@model IEnumerable<PI_Postulacion_Oferta_Trabajos.Models.Oferta>
+
+@{
+    ViewData["Title"] = "Ver Postulaciones";
+}
+
+<h2>Ver Postulaciones</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Filtros -->
+        <form method="get" class="bg-light p-4 rounded shadow-sm">
+            <!-- Filtro por rango de fechas de publicación -->
+            <div class="form-group">
+                <label for="fechaDesde">Fecha Desde</label>
+                <input type="date" name="fechaDesde" class="form-control" id="fechaDesde" />
+            </div>
+
+            <div class="form-group">
+                <label for="fechaHasta">Fecha Hasta</label>
+                <input type="date" name="fechaHasta" class="form-control" id="fechaHasta" />
+            </div>
+
+            <!-- Filtro por existencia de postulantes -->
+            <div class="form-group">
+                <label for="tienePostulantes">¿Tiene Postulantes?</label>
+                <select id="tienePostulantes" name="tienePostulantes" class="form-control">
+                    <option value="">Seleccione una opción</option>
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+
+            <!-- Filtro por estado de la postulación -->
+            <div class="form-group">
+                <label for="estadoPostulacion">Estado de la Postulación</label>
+                <select name="estadoPostulacion" class="form-control" id="estadoPostulacion">
+                    <option value="">Cualquiera</option>
+                    @foreach (var estado in ViewBag.EstadosPostulacion)
+                    {
+                        <option value="@estado.EspId">@estado.EspNombre</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Filtrar</button>
+        </form>
+    </div>
+
+    <div class="col-md-9">
+        <!-- Ofertas publicadas -->
+        <div class="row">
+            @foreach (var oferta in Model)
+            {
+                var cantidadPostulantes = oferta.Postulaciones.Count();
+
+                <div class="card mb-3" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">@oferta.OfeTitulo</h5>
+                        <p class="card-text">@oferta.OfeDescripcion</p>
+                        <p class="card-text"><strong>Fecha de Publicación:</strong> @oferta.OfeFechaPublicacion.ToShortDateString()</p>
+                        <p class="card-text"><strong>Cantidad de Postulantes:</strong> @cantidadPostulantes</p>
+                        <a href="#" class="btn btn-primary">Ver Postulaciones</a>
+                        <a href="#" class="btn btn-secondary">Editar Oferta</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

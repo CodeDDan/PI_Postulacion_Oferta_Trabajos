@@ -1,18 +1,98 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Montserrat', sans-serif; /* Cambia 'Roboto' al nombre de la fuente que hayas seleccionado */
 }
+
+/* Estilo base para todos los enlaces */
+a {
+    color: #e90066; /* Color del enlace */
+    text-decoration: none; /* Quita el subrayado por defecto */
+    font-weight: 600; /* Opcional: cambia el peso de la fuente */
+    transition: color 0.3s; /* Transición suave para el color */
+}
+
+    /* Estilo para el enlace cuando el cursor está sobre él */
+    a:hover {
+        color: #ff529e; /* Color del enlace aclarado en hover */
+    }
+
+    /* Estilo para el enlace cuando está activo o en foco */
+    a:focus, a:active {
+        color: #ff529e; /* Color aún más claro o diferente para foco/activo */
+    }
+
+.btn-custom {
+    font-weight: 600;
+    color: #ffffff; /* Color del texto */
+    background-color: #e90066; /* Color de fondo rosa */
+    border-color: #e90066; /* Color del borde */
+    /* Estilos al pasar el cursor */
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+    .btn-custom:hover {
+        color: #ffffff; /* Color del texto en hover */
+        background-color: #c20055; /* Rosa más oscuro en hover */
+        border-color: #c20055; /* Borde más oscuro en hover */
+    }
+
+    .btn-custom:focus, .btn-custom:active {
+        color: #ffffff; /* Color del texto en foco y activo */
+        background-color: #c20055; /* Rosa aún más oscuro cuando está activo */
+        border-color: #c20055; /* Borde más oscuro cuando está activo */
+    }
+
+.form-control:focus {
+    border-color: #e90066; /* Cambia el color del borde */
+    box-shadow: 0 0 0 0.3rem rgba(255, 0, 0, 0.25); /* Cambia el color de la sombra del enfoque si es necesario */
+}
+
+/* Para evitar que el autocompletado de Chrome le de un color azul */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #ffd6e8 inset !important;
+}
+
+.nav-link-custom {
+    margin: 0 2px 0 2px;
+    transition: border 0.3s ease, color 0.3s ease;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 10px;
+}
+
+    .nav-link-custom:hover {
+        background-color: #fffafc;
+        border: 2px solid #e90066; /* Añade borde inferior */
+        color: #e90066 !important;
+    }
+
+.nav-link-salir {
+    margin: 0 32px 0 12px;
+    font-weight: bold;
+    transition: border 0.3s ease, color 0.3s ease;
+    border: 2px solid transparent; /* Inicialmente sin borde visible */
+    border-radius: 10px;
+}
+
+    .nav-link-salir:hover {
+        background-color: #fffafc;
+        border: 2px solid #0a26ee; /* Añade borde inferior */
+        color: #0a26ee !important;
+    }

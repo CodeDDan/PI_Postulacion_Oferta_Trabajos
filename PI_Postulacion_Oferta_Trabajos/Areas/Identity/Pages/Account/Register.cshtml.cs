@@ -135,43 +135,106 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
                 };
+                // Validar el modelo Usuario
+                var context = new ValidationContext(user, serviceProvider: null, items: null);
+                var validationResults = new List<ValidationResult>();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                bool isValid = Validator.TryValidateObject(user, context, validationResults, true);
 
-                if (result.Succeeded)
+                if (isValid)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                    await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                    var result = await _userManager.CreateAsync(user, Input.Password);
 
-                    // Aquí asignamos roles
-                    await _userManager.AddToRoleAsync(user, "trabajador");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    if (result.Succeeded)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        _logger.LogInformation("User created a new account with password.");
+
+                        // Aquí asignamos roles
+                        await _userManager.AddToRoleAsync(user, "trabajador");
+
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    else
+                    foreach (var error in result.Errors)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        switch (error.Code)
+                        {
+                            case "DuplicateUserName":
+                                ModelState.AddModelError(string.Empty, $"El correo {Input.Email} ya está registrado.");
+                                break;
+                            case "PasswordTooShort":
+                                ModelState.AddModelError(string.Empty, "La contraseña debe tener al menos 6 caracteres.");
+                                break;
+                            case "PasswordRequiresUpper":
+                                ModelState.AddModelError(string.Empty, "La contraseña debe contener al menos una letra mayúscula.");
+                                break;
+                            case "PasswordRequiresLower":
+                                ModelState.AddModelError(string.Empty, "La contraseña debe contener al menos una letra minúscula.");
+                                break;
+                            case "PasswordRequiresDigit":
+                                ModelState.AddModelError(string.Empty, "La contraseña debe contener al menos un dígito.");
+                                break;
+                            case "PasswordRequiresNonAlphanumeric":
+                                ModelState.AddModelError(string.Empty, "La contraseña debe contener al menos un carácter especial.");
+                                break;
+                            case "UserLockedOut":
+                                ModelState.AddModelError(string.Empty, "Tu cuenta está bloqueada. Por favor, contacta al administrador.");
+                                break;
+                            case "UserNotFound":
+                                ModelState.AddModelError(string.Empty, "El usuario no se encontró.");
+                                break;
+                            case "InvalidToken":
+                                ModelState.AddModelError(string.Empty, "El token de recuperación de contraseña es inválido.");
+                                break;
+                            case "InvalidEmail":
+                                ModelState.AddModelError(string.Empty, "El formato del correo electrónico no es válido.");
+                                break;
+                            case "InvalidPassword":
+                                ModelState.AddModelError(string.Empty, "La contraseña no es válida.");
+                                break;
+                            case "EmailAlreadyConfirmed":
+                                ModelState.AddModelError(string.Empty, "El correo electrónico ya ha sido confirmado.");
+                                break;
+                            case "UserAlreadyInRole":
+                                ModelState.AddModelError(string.Empty, "El usuario ya tiene el rol especificado.");
+                                break;
+                            case "RoleNotFound":
+                                ModelState.AddModelError(string.Empty, "El rol no se encontró.");
+                                break;
+                            default:
+                                ModelState.AddModelError(string.Empty, error.Description);
+                                break;
+                        }
                     }
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    // Si la validación falla, agregar los errores al ModelState
+                    foreach (var validationResult in validationResults)
+                    {
+                        ModelState.AddModelError(string.Empty, validationResult.ErrorMessage);
+                    }
                 }
             }
 

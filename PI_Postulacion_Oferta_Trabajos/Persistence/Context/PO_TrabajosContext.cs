@@ -241,6 +241,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                     .HasColumnType("numeric(18, 0)")
                     .HasColumnName("EMP_VACANTES_ANUALES");
 
+                entity.Property(e => e.EmpDescripcion)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false)
+                    .HasColumnName("EMP_DESCRIPCION");
+
                 entity.HasOne(d => d.Aep)
                     .WithMany(p => p.Empresas)
                     .HasForeignKey(d => d.AepId)

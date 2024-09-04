@@ -22,6 +22,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
         public decimal EmpTelefono { get; set; }
         public decimal? EmpNumeroTrabajadores { get; set; }
         public decimal? EmpVacantesAnuales { get; set; }
+        public string? EmpDescripcion { get; set; }
 
         public virtual AeSectorPrincipal Aep { get; set; } = null!;
         public virtual ICollection<Oferta> Oferta { get; set; }

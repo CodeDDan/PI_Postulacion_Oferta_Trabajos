@@ -85,7 +85,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 if (model.SelectedRole == "empleador")
                 {
                     var empresa = await _context.Empresas
-                        .FirstOrDefaultAsync(e => e.EmpEmailRegistro == model.EmpresaEmail && e.EmpPassword == model.EmpresaPassword);
+                        .FirstOrDefaultAsync(e => e.EmpEmailAcceso == model.EmpresaEmail && e.EmpPassword == model.EmpresaPassword);
 
                     if (empresa == null)
                     {
@@ -169,7 +169,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 if (model.Roles == "empleador")
                 {
                     var empresa = await _context.Empresas
-                        .FirstOrDefaultAsync(e => e.EmpEmailRegistro == model.EmpresaEmail && e.EmpPassword == model.EmpresaPassword);
+                        .FirstOrDefaultAsync(e => e.EmpEmailAcceso == model.EmpresaEmail && e.EmpPassword == model.EmpresaPassword);
 
                     if (empresa == null)
                     {

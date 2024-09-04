@@ -1,0 +1,297 @@
+﻿@model IEnumerable<PI_Postulacion_Oferta_Trabajos.Models.Oferta>
+
+@{
+    var postuladoOfertas = ViewBag.PostuladoOfertas as List<int>;
+}
+
+<link href="~/css/custom-trabajador-ofertas.css" rel="stylesheet" />
+<div class="row">
+    <!-- Filtros a la izquierda con barra de desplazamiento independiente -->
+    <div class="col-md-3" style="height: 100vh; overflow-y: auto; position: sticky; top: 0;">
+        <h4>Filtros</h4>
+        <form method="get" asp-action="Index">
+            <!-- Filtro de Provincia -->
+            <div class="mb-3">
+                <label for="provincia" class="form-label">Provincia</label>
+                <select class="form-select" id="provincia" name="provincia">
+                    <option value="">Seleccione una provincia</option>
+                    @foreach (var provincia in ViewBag.Provincias)
+                    {
+                        <option value="@provincia.ProId">@provincia.ProNombre</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Filtro de Ciudad -->
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <select class="form-select" id="ciudad" name="ciudad">
+                    <option value="">Seleccione una ciudad</option>
+                    @foreach (var ciudad in ViewBag.Ciudades)
+                    {
+                        <option value="@ciudad.CidId">@ciudad.CidNombre</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Filtro de Área Laboral -->
+            <div class="mb-3">
+                <label for="areaLaboral" class="form-label">Área Laboral</label>
+                <select class="form-select" id="areaLaboral" name="areaLaboral">
+                    <option value="">Seleccione un área laboral</option>
+                    @foreach (var areaLaboral in ViewBag.AreasLaborales)
+                    {
+                        <option value="@areaLaboral.ArlId">@areaLaboral.ArlNombre</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Filtro de Puesto Laboral -->
+            <div class="mb-3">
+                <label for="puestoLaboral" class="form-label">Puesto Laboral</label>
+                <select class="form-select" id="puestoLaboral" name="puestoLaboral">
+                    <option value="">Seleccione un puesto laboral</option>
+                    @foreach (var puestoLaboral in ViewBag.PuestosLaborales)
+                    {
+                        <option value="@puestoLaboral.PulId">@puestoLaboral.PulNombre</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Filtro de Modalidad de Oferta -->
+            <div class="mb-3">
+                <label for="ofertaModalidad" class="form-label">Modalidad de Oferta</label>
+                <select class="form-select" id="ofertaModalidad" name="ofertaModalidad">
+                    <option value="">Seleccione una modalidad</option>
+                    @foreach (var modalidad in ViewBag.OfertasModalidades)
+                    {
+                        <option value="@modalidad.OfmId">@modalidad.OfmNombre</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Filtro de Tipo de Contrato -->
+            <div class="mb-3">
+                <label for="tipoContrato" class="form-label">Tipo de Contrato</label>
+                <select class="form-select" id="tipoContrato" name="tipoContrato">
+                    <option value="">Seleccione un tipo de contrato</option>
+                    <option value="Por horas">Por horas</option>
+                    <option value="Medio tiempo">Medio tiempo</option>
+                    <option value="Tiempo completo">Tiempo completo</option>
+                    <option value="Temporal">Temporal</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Pasantía">Pasantía</option>
+                    <option value="Por obra o servicio">Por obra o servicio</option>
+                </select>
+            </div>
+
+            <!-- Filtro de Salario Mínimo -->
+            <div class="mb-3">
+                <label for="salarioMinimo" class="form-label">Salario Mínimo</label>
+                <input type="number" step="0.01" class="form-control" id="salarioMinimo" name="salarioMinimo" placeholder="Ingrese el salario mínimo">
+            </div>
+
+            <!-- Filtro de Salario Máximo -->
+            <div class="mb-3">
+                <label for="salarioMaximo" class="form-label">Salario Máximo</label>
+                <input type="number" step="0.01" class="form-control" id="salarioMaximo" name="salarioMaximo" placeholder="Ingrese el salario máximo">
+            </div>
+
+            <!-- Filtros Booleanos con Checkboxes -->
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="licencia" name="licencia" value="true">
+                <label class="form-check-label" for="licencia">Requiere Licencia</label>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="disponibilidadViajar" name="disponibilidadViajar" value="true">
+                <label class="form-check-label" for="disponibilidadViajar">Disponibilidad para Viajar</label>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="disponibilidadCambioResidencia" name="disponibilidadCambioResidencia" value="true">
+                <label class="form-check-label" for="disponibilidadCambioResidencia">Disponibilidad para Cambio de Residencia</label>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="discapacidad" name="discapacidad" value="true">
+                <label class="form-check-label" for="discapacidad">Discapacidad</label>
+            </div>
+
+            <!-- Filtro de Fecha de Publicación -->
+            <div class="mb-3">
+                <label for="fechaInicio" class="form-label">Fecha de Publicación Desde</label>
+                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
+            </div>
+
+            <div class="mb-3">
+                <label for="fechaFin" class="form-label">Fecha de Publicación Hasta</label>
+                <input type="date" class="form-control" id="fechaFin" name="fechaFin">
+            </div>
+
+            <!-- Botón de Filtrar -->
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+    </div>
+
+    <!-- Ofertas a la derecha con barra de desplazamiento independiente -->
+    <div class="col-md-9" style="height: 100vh; overflow-y: auto; padding: 20px;">
+        <h4><i class="bi bi-megaphone-fill"></i> Ofertas de Trabajo</h4>
+        <div class="list-group">
+            @foreach (var oferta in Model)
+            {
+                // Lo siguiente contiene un booleano por si esta o no postulado
+                var estaPostulado = postuladoOfertas.Contains(oferta.OfeId);
+
+                // Obtener el número de postulaciones para esta oferta (si existe)
+                var numPostulaciones = ViewBag.PostulacionesPorOferta.ContainsKey(oferta.OfeId)
+                ? ViewBag.PostulacionesPorOferta[oferta.OfeId] : 0;
+
+                <div class="card mb-3 shadow-sm @(estaPostulado ? "postulado" : "")">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">
+                                    <i class="bi bi-file-person-fill"></i> @oferta.OfeTitulo
+                                </h5>
+                                <p>
+                                    <a href="#" class="custom-a-empresa" data-bs-toggle="modal" data-bs-target="#empresaModal-@oferta.EmpId">
+                                        <i class="bi bi-building-fill-up"></i> @oferta.Emp.EmpNombreEmpresa
+                                    </a>
+                                </p>
+                                <p class="card-text">
+                                    @if (oferta.OfeDescripcion.Length > 150)
+                                    {
+                                        @(oferta.OfeDescripcion.Substring(0, 150) + "...")
+                                    }
+                                    else
+                                    {
+                                        @oferta.OfeDescripcion
+                                    }
+                                </p>
+                                <p><i class="bi bi-hourglass-split"></i> <strong>Modalidad:</strong> @oferta.Ofm.OfmNombre</p>
+                            </div>
+                            <div class="text-end" style="width: 300px">
+                                <p><i class="bi bi-cash-coin"></i> <strong>Salario:</strong> @oferta.OfeSalario<i class="bi bi-currency-dollar"></i></p>
+                                <p><i class="bi bi-calendar"></i> <strong>Publicado:</strong> @oferta.OfeFechaPublicacion.ToString("dd/MM/yyyy")</p>
+                                <p><i class="bi bi-person-lines-fill"></i> <strong>Postulaciones:</strong> @numPostulaciones</p>
+                                <button class="btn @(estaPostulado ? "btn-warning" : "btn-primary") btn-sm" data-bs-toggle="modal" data-bs-target="#detallesOferta-@oferta.OfeId">
+                                    @(estaPostulado ? "Ya Postulado" : "Ver Detalles")
+                                </button>
+                                @if (estaPostulado)
+                                {
+                                    <button class="btn btn-danger btn-sm" style="margin: 4px 0px" data-bs-toggle="modal" data-bs-target="#cancelarPostulacion-@oferta.OfeId">
+                                        Cancelar Postulación
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de detalles de la oferta -->
+                <div class="modal fade" id="detallesOferta-@oferta.OfeId" tabindex="-1" aria-labelledby="detallesOfertaLabel-@oferta.OfeId" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detallesOfertaLabel-@oferta.OfeId">@oferta.OfeTitulo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Descripción:</strong> @oferta.OfeDescripcion</p>
+                                <p><strong>Salario:</strong> @oferta.OfeSalario</p>
+                                <p><strong>Fecha Publicación:</strong> @oferta.OfeFechaPublicacion.ToString("dd/MM/yyyy")</p>
+                                <p><strong>Tipo de Contrato:</strong> @oferta.OfeTipoContrato</p>
+                                <p><strong>Modalidad:</strong> @oferta.Ofm.OfmNombre</p>
+                                <p><strong>Requiere Licencia:</strong> @(oferta.OfeLicencia ? "Sí" : "No")</p>
+                                <p><strong>Disponibilidad para Viajar:</strong> @(oferta.OfeDisponibilidadViajar ? "Sí" : "No")</p>
+                                <p><strong>Disponibilidad para Cambio de Residencia:</strong> @(oferta.OfeDisponibilidadCambioResidencia ? "Sí" : "No")</p>
+                                <p><strong>Discapacidad:</strong> @(oferta.OfeDiscapacidad ? "Sí" : "No")</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" asp-action="Postularse" asp-route-ofeId="@oferta.OfeId">
+                                    <button type="submit" class="btn btn-success" @(estaPostulado ? "disabled" : "")>Postularse</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de cancelar postulación -->
+                <div class="modal fade" id="cancelarPostulacion-@oferta.OfeId" tabindex="-1" aria-labelledby="cancelarPostulacionLabel-@oferta.OfeId" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cancelarPostulacionLabel-@oferta.OfeId">Cancelar Postulación</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Deseas cancelar tu postulación?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" asp-action="CancelarPostulacion" asp-route-ofeId="@oferta.OfeId">
+                                    <input type="hidden" name="ofeId" value="@oferta.OfeId" />
+                                    <button type="submit" class="btn btn-danger">Cancelar Postulación</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de detalles de la empresa -->
+                <div class="modal fade" id="empresaModal-@oferta.EmpId" tabindex="-1" aria-labelledby="empresaModalLabel-@oferta.EmpId" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="empresaModalLabel-@oferta.EmpId">@oferta.Emp.EmpNombreEmpresa</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Razón Social:</strong> @oferta.Emp.EmpRazonSocial</p>
+                                <p><strong>Email de Contacto:</strong> @oferta.Emp.EmpEmailAcceso</p>
+                                <p><strong>Teléfono:</strong> @oferta.Emp.EmpTelefono</p>
+                                <p><strong>Ciudad:</strong> @oferta.Emp.EmpCiudad</p>
+                                <p><strong>Número de Trabajadores:</strong> @oferta.Emp.EmpNumeroTrabajadores</p>
+                                <p><strong>Descripción:</strong> @oferta.Emp.EmpDescripcion</p>
+                                <p><strong>Área Económica - Sector Principal:</strong> @oferta.Emp.Aep.AepNombre</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (TempData["PostulacionExitosa"] != null)
+{
+    <div id="postulacion-notificacion" class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        @TempData["PostulacionExitosa"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["PostulacionCancelada"] != null)
+{
+    <div id="postulacion-notificacion" class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        @TempData["PostulacionCancelada"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<script>
+    // Desaparece la notificación después de 5 segundos
+    setTimeout(function () {
+        var notificacion = document.getElementById('postulacion-notificacion');
+        if (notificacion) {
+            var alert = new bootstrap.Alert(notificacion);
+            alert.close();
+        }
+    }, 5000); // 5000 milisegundos = 5 segundos
+</script>
+

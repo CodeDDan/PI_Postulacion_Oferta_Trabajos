@@ -34,6 +34,11 @@
                 <span asp-validation-for="EmpEmailAcceso" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="EmpDescripcion" class="control-label"></label>
+                <textarea asp-for="EmpDescripcion" class="form-control"></textarea>
+                <span asp-validation-for="EmpDescripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="EmpPassword" class="control-label"></label>
                 <input asp-for="EmpPassword" class="form-control" />
                 <span asp-validation-for="EmpPassword" class="text-danger"></span>

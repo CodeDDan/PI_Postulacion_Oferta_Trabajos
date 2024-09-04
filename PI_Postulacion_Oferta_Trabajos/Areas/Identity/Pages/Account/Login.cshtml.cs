@@ -129,7 +129,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Intento de ingreso inválido");
                     return Page();
                 }
             }

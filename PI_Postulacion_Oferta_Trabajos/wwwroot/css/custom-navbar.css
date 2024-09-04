@@ -1,0 +1,19 @@
+﻿/* Estilos personalizados para el título */
+.navbar .navbar-brand.custom-navbar-brand{
+    color: #e90066; /* Cambia el color del texto */
+    font-size: 2rem; /* Cambia el tamaño de la fuente */
+    font-weight: bold; /* Establece el peso de la fuente */
+}
+
+.navbar-logo {
+    max-height: 50px; /* Ajusta la altura de la imagen */
+    width: auto;
+    margin-right: 10px; /* Espacio entre la imagen y el texto */
+    margin-left: 30px;
+    transition: transform 0.3s ease-in-out; /* Transición suave para la escala */
+}
+
+/* Efecto de hover para la imagen */
+.custom-navbar-brand:hover .navbar-logo {
+    transform: scale(1.1); /* Aumenta el tamaño de la imagen en un 10% */
+}
