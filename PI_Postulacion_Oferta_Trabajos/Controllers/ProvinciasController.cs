@@ -11,6 +11,7 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize]
     public class ProvinciasController : Controller
     {
         private readonly PO_TrabajosContext _context;

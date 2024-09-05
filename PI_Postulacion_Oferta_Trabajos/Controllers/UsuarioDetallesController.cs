@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +19,163 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         public UsuarioDetallesController(PO_TrabajosContext context)
         {
             _context = context;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateUserData(UsuarioDetalle usuarioDetalle, string Email, string PhoneNumber, string Cedula)
+        {
+            
+            try
+            {
+                // Obtener el usuario existente por su ID
+                var usuarioExistente = _context.UsuarioDetalles
+                    .Include(u => u.Usu)
+                    .FirstOrDefault(u => u.UsuarioId == usuarioDetalle.UsuarioId);
+
+                if (usuarioExistente != null)
+                {
+                    // Actualizar los campos de UsuarioDetalle
+                    usuarioExistente.UsdFechaNacimiento = usuarioDetalle.UsdFechaNacimiento;
+                    usuarioExistente.UsdEstadoCivil = usuarioDetalle.UsdEstadoCivil;
+                    usuarioExistente.UsdCiudad = usuarioDetalle.UsdCiudad;
+                    usuarioExistente.UsdGenero = usuarioDetalle.UsdGenero;
+
+                    // Actualizar los campos de Usuario (Email, PhoneNumber y Cedula)
+                    usuarioExistente.Usu.Email = Email;
+                    usuarioExistente.Usu.PhoneNumber = PhoneNumber;
+                    usuarioExistente.Usu.UsuCedula = Cedula;
+
+                    // Guardar cambios en la base de datos
+                    _context.SaveChanges();
+
+                    return Json(new { success = true, message = "Datos actualizados correctamente." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Usuario no encontrado." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al actualizar los datos: " + ex.Message });
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult GetUserData(string userId)
+        {
+            var usuarioDetalle = _context.UsuarioDetalles
+                .Where(u => u.UsuarioId == userId)
+                .Select(u => new
+                {
+                    u.UsuarioId,
+                    u.UsdCiudad,
+                    u.UsdGenero,
+                    u.UsdEstadoCivil,
+                    u.UsdFechaNacimiento
+                    // Otros campos de usuarioDetalle que necesites
+                })
+                .FirstOrDefault();
+
+            if (usuarioDetalle != null)
+            {
+                var provincias = _context.Provincias
+                    .Select(p => new
+                    {
+                        p.ProId,
+                        p.ProNombre
+                    })
+                    .ToList();
+
+                var tal = usuarioDetalle.UsdCiudad;
+
+                var ciudad = _context.Ciudades
+                    .Where(c => c.CidNombre == tal)
+                    .Select(c => new
+                    {
+                        c.CidId,
+                        c.CidNombre,
+                        c.ProId
+                    })
+                    .FirstOrDefault();
+
+                int? proId = ciudad?.ProId;
+
+                // Obtener información adicional del usuario desde AspNetUsers
+                var userInfo = _context.Users
+                    .Where(u => u.Id == userId)
+                    .Select(u => new
+                    {
+                        u.Email,
+                        u.PhoneNumber,
+                        u.UsuCedula,
+                        u.UsuNombre,
+                        u.UsuApellido
+                    })
+                    .FirstOrDefault();
+
+                // Combina la información
+                return Json(new { usuarioDetalle, provincias, proId, userInfo });
+            }
+
+            return Json(null);
+        }
+
+
+
+
+        [HttpPost]
+        public IActionResult UploadProfileImage(IFormFile file, string usuarioId)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var usuario = _context.UsuarioDetalles.FirstOrDefault(u => u.UsuarioId == usuarioId);
+                if (usuario != null)
+                {
+                    // Ruta donde se almacenan las imágenes
+                    var photoDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/fotoPerfil");
+
+                    // Si el usuario ya tiene una foto de perfil, eliminarla
+                    if (!string.IsNullOrEmpty(usuario.UsdFoto))
+                    {
+                        var oldFilePath = Path.Combine(photoDirectory, usuario.UsdFoto);
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
+
+                    // Guardar la nueva foto de perfil
+                    var extension = Path.GetExtension(file.FileName);
+                    var fileName = $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")}{extension}";
+                    var filePath = Path.Combine(photoDirectory, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    // Actualizar la base de datos
+                    usuario.UsdFoto = fileName;
+                    _context.SaveChanges();
+
+                    var imageUrl = Url.Content("~/fotoPerfil/" + fileName);
+                    return Json(new { success = true, imageUrl });
+                }
+            }
+
+            return Json(new { success = false, message = "Error al subir la imagen" });
+        }
+        [HttpGet]
+        public IActionResult GetProfileImageUrl(string usuarioId)
+        {
+            var usuarioDetalle = _context.UsuarioDetalles
+                .Where(u => u.UsuarioId == usuarioId)
+                .Select(u => u.UsdFoto)
+                .FirstOrDefault();
+            var imageUrl = Url.Content("~/fotoPerfil/" + usuarioDetalle);
+            return Json(new { url = imageUrl });
         }
 
         // GET: UsuarioDetalles
@@ -53,14 +212,25 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // POST: UsuarioDetalles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UsdId,UsuarioId,UsdFechaNacimiento,UsdEstadoCivil,UsdFoto,UsdCiudad,UsdGenero")] UsuarioDetalle usuarioDetalle)
+        public async Task<IActionResult> Create(
+            [Bind("UsdId,UsuarioId,UsdFechaNacimiento,UsdEstadoCivil,UsdCiudad,UsdGenero")] UsuarioDetalle usuarioDetalle,
+            IFormFile usdFoto) // Agregar el parámetro para el archivo
         {
             if (ModelState.IsValid)
             {
+                // Maneja la carga del archivo
+                if (usdFoto != null && usdFoto.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", Path.GetFileName(usdFoto.FileName));
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await usdFoto.CopyToAsync(stream);
+                    }
+                    usuarioDetalle.UsdFoto = "/images/" + Path.GetFileName(usdFoto.FileName); // Guarda la ruta del archivo en la base de datos
+                }
+
                 _context.Add(usuarioDetalle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,8 +257,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // POST: UsuarioDetalles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UsdId,UsuarioId,UsdFechaNacimiento,UsdEstadoCivil,UsdFoto,UsdCiudad,UsdGenero")] UsuarioDetalle usuarioDetalle)
@@ -155,14 +323,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 _context.UsuarioDetalles.Remove(usuarioDetalle);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UsuarioDetalleExists(int id)
         {
-          return (_context.UsuarioDetalles?.Any(e => e.UsdId == id)).GetValueOrDefault();
+            return (_context.UsuarioDetalles?.Any(e => e.UsdId == id)).GetValueOrDefault();
         }
     }
 }

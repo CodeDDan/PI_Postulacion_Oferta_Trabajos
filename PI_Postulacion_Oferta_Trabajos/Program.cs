@@ -11,8 +11,16 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<PO_TrabajosContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Por defecto viene en true
-builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireConfirmedAccount = false)
+// Configura la identidad con la política de bloqueo de cuentas
+builder.Services.AddDefaultIdentity<Usuario>(options =>
+{
+    // Configuración del bloqueo de cuenta
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Tiempo de bloqueo
+    options.Lockout.MaxFailedAccessAttempts = 3; // Máximo de intentos fallidos antes de bloquear
+    options.Lockout.AllowedForNewUsers = true; // Permitir bloqueo para nuevos usuarios
+
+    options.SignIn.RequireConfirmedAccount = false;
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PO_TrabajosContext>();
 
@@ -30,8 +38,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Si usamos identity se debe agregar si o si lo siguiente
@@ -39,6 +46,6 @@ app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Inicio}/{id?}");
 
 app.Run();

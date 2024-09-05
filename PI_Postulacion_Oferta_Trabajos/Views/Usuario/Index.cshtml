@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Panel de Usuario";
+}
+
+<div class="container">
+
+     <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Buscar empleo por puesto o palabra clave">
+        <select class="location-select">
+            <option value="">Lugar de empleo</option>
+            <!-- Añade más opciones según sea necesario -->
+        </select>
+        <button class="search-button">
+            <img  alt="Search Icon">
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="profile-section">
+                <img src="~/images/profile-placeholder.png" alt="Profile Picture" class="profile-img">
+                <h2>Anthony Muñoz</h2>
+                <a href="@Url.Action("HV","Usuario")" class="btn btn-primary">Ir a mi HV</a>
+
+                <p>Última modificación de la HV: Hoy</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="favorite-section">
+                <h3>Empleos favoritos</h3>
+                <div class="favorite-box">
+                    <p>Guarda empleos para postularte más tarde</p>
+                    <a href="#">Ver empleos</a>
+                </div>
+                <h3>Empresas favoritas</h3>
+                <div class="favorite-box">
+                    <p>Guarda las empresas que más te interesen</p>
+                    <a href="#">Ver empresas</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="activity-section">
+                <h3>Mi actividad</h3>
+                <p>0 Postulaciones esta semana</p>
+                <p>0 HV leída</p>
+                <p>0 Visualizaciones de mi HV</p>
+                <a href="#" class="btn btn-link">Ir a mis postulaciones</a>
+                <div class="salary-section">
+                    <h4>Salario pretendido</h4>
+                    <p>Para conocer tu posible salario, postúlate a un aviso</p>
+                    <a href="#">Ver empleos</a>
+                </div>
+                <div class="recommended-section">
+                    <h3>Empresas recomendadas</h3>
+                    <div class="recommended-company">
+                        <h4>Marcseal</h4>
+                        <p>3.4 <span>★ ★ ★ ☆ ☆</span></p>
+                        <p>6 avisos activos</p>
+                        <p>Manufactura</p>
+                        <p>Pichincha</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

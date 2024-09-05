@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\CV\" />
+    <Folder Include="wwwroot\fotoPerfil\" />
   </ItemGroup>
 
 </Project>

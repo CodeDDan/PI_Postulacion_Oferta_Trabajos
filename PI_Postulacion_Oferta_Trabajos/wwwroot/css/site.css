@@ -1,18 +1,121 @@
-html {
-  font-size: 14px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-@media (min-width: 768px) {
-  html {
+.profile-section, .favorite-section, .activity-section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.profile-section h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.profile-section .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.availability-section h4 {
     font-size: 16px;
-  }
+    margin-bottom: 5px;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.availability-btn {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
-body {
-  margin-bottom: 60px;
+.favorite-section h3, .activity-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.favorite-box, .recommended-company {
+    background-color: #f9f9f9;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.activity-section p {
+    margin-bottom: 5px;
+}
+
+.activity-section .btn-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.salary-section, .recommended-section {
+    margin-top: 20px;
+}
+
+.recommended-company h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.recommended-company span {
+    color: gold;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.location-select {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: #fff;
+}
+
+.search-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Elimina el padding adicional */
+}
+
+.search-image {
+    width: 20px; /* Asegúrate de que la imagen tenga el tamaño adecuado */
+    height: 20px;
 }

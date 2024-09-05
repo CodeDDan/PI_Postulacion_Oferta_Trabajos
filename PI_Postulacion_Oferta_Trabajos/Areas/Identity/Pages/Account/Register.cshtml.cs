@@ -145,7 +145,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     // Aquí asignamos roles
-                    await _userManager.AddToRoleAsync(user, "trabajador");
+                    await _userManager.AddToRoleAsync(user, "Usuario");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

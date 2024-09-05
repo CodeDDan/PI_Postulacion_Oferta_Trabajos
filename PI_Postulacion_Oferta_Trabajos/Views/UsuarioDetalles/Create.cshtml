@@ -4,43 +4,150 @@
     ViewData["Title"] = "Create";
 }
 
+<style>
+    /* General Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        margin: 50px auto;
+        max-width: 900px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    form {
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+            .form-group input[type="submit"] {
+                width: auto;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .form-group input[type="submit"]:hover {
+                    background-color: #0056b3;
+                }
+
+    .text-danger {
+        color: #dc3545;
+    }
+
+    a {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+    /* Table Styles */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+</style>
+
 <h1>Create</h1>
 
 <h4>UsuarioDetalle</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class ="form-control" asp-items="ViewBag.UsuarioId"></select>
+                <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
             </div>
+
             <div class="form-group">
                 <label asp-for="UsdFechaNacimiento" class="control-label"></label>
                 <input asp-for="UsdFechaNacimiento" class="form-control" />
                 <span asp-validation-for="UsdFechaNacimiento" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="UsdEstadoCivil" class="control-label"></label>
                 <input asp-for="UsdEstadoCivil" class="form-control" />
                 <span asp-validation-for="UsdEstadoCivil" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="UsdFoto" class="control-label"></label>
-                <input asp-for="UsdFoto" class="form-control" />
+                <input asp-for="UsdFoto" type="file" class="form-control" accept="image/*" />
                 <span asp-validation-for="UsdFoto" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="UsdCiudad" class="control-label"></label>
                 <input asp-for="UsdCiudad" class="form-control" />
                 <span asp-validation-for="UsdCiudad" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="UsdGenero" class="control-label"></label>
-                <input asp-for="UsdGenero" class="form-control" />
+                <select asp-for="UsdGenero" class="form-control">
+                    <option value="">Select Gender</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                </select>
                 <span asp-validation-for="UsdGenero" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -53,5 +160,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
