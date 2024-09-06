@@ -7,8 +7,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Models
     {
         public int UspId { get; set; }
         public string UsuarioId { get; set; } = null!;
-        public string UspAspiracionLarboral { get; set; } = null!;
-        public decimal UspPreferenciaSalarial { get; set; }
+        public string? UspAspiracionLarboral { get; set; }
+        public decimal? UspPreferenciaSalarial { get; set; }
         public string? UspHojaVida { get; set; }
         public string? UspDiscapacidad { get; set; }
 

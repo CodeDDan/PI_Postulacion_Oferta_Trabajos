@@ -18,21 +18,62 @@
                 <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId"></select>
                 <span asp-validation-for="UsuarioId" class="text-danger"></span>
             </div>
+            <!-- USE_TIPO_FORMACION -->
             <div class="form-group">
-                <label asp-for="UseTipoFormacion" class="control-label"></label>
-                <input asp-for="UseTipoFormacion" class="form-control" />
-                <span asp-validation-for="UseTipoFormacion" class="text-danger"></span>
+                <label asp-for="USE_TIPO_FORMACION" class="control-label"></label>
+                <input asp-for="USE_TIPO_FORMACION" class="form-control" />
+                <span asp-validation-for="USE_TIPO_FORMACION" class="text-danger"></span>
             </div>
+
+            <!-- USE_DOCUMENTO -->
             <div class="form-group">
-                <label asp-for="UseDocumento" class="control-label"></label>
-                <input asp-for="UseDocumento" class="form-control" />
-                <span asp-validation-for="UseDocumento" class="text-danger"></span>
+                <label asp-for="USE_DOCUMENTO" class="control-label"></label>
+                <input asp-for="USE_DOCUMENTO" class="form-control" />
+                <span asp-validation-for="USE_DOCUMENTO" class="text-danger"></span>
             </div>
+
+            <!-- USE_TITULO -->
             <div class="form-group">
-                <label asp-for="UseDescripcion" class="control-label"></label>
-                <input asp-for="UseDescripcion" class="form-control" />
-                <span asp-validation-for="UseDescripcion" class="text-danger"></span>
+                <label asp-for="USE_TITULO" class="control-label"></label>
+                <input asp-for="USE_TITULO" class="form-control" />
+                <span asp-validation-for="USE_TITULO" class="text-danger"></span>
             </div>
+
+            <!-- USE_AREA -->
+            <div class="form-group">
+                <label asp-for="USE_AREA" class="control-label"></label>
+                <input asp-for="USE_AREA" class="form-control" />
+                <span asp-validation-for="USE_AREA" class="text-danger"></span>
+            </div>
+
+            <!-- USE_INSTITUCION -->
+            <div class="form-group">
+                <label asp-for="USE_INSTITUCION" class="control-label"></label>
+                <input asp-for="USE_INSTITUCION" class="form-control" />
+                <span asp-validation-for="USE_INSTITUCION" class="text-danger"></span>
+            </div>
+
+            <!-- USE_ESTADO -->
+            <div class="form-group">
+                <label asp-for="USE_ESTADO" class="control-label"></label>
+                <input asp-for="USE_ESTADO" class="form-control" />
+                <span asp-validation-for="USE_ESTADO" class="text-danger"></span>
+            </div>
+
+            <!-- USE_FECHAI -->
+            <div class="form-group">
+                <label asp-for="USE_FECHAI" class="control-label"></label>
+                <input asp-for="USE_FECHAI" type="date" class="form-control" />
+                <span asp-validation-for="USE_FECHAI" class="text-danger"></span>
+            </div>
+
+            <!-- USE_FECHAF -->
+            <div class="form-group">
+                <label asp-for="USE_FECHAF" class="control-label"></label>
+                <input asp-for="USE_FECHAF" type="date" class="form-control" />
+                <span asp-validation-for="USE_FECHAF" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

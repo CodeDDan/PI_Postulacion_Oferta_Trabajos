@@ -36,6 +36,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
         public virtual DbSet<UsuarioEducacion> UsuarioEducacions { get; set; } = null!;
         public virtual DbSet<UsuarioExperienciaLaboral> UsuarioExperienciaLaborals { get; set; } = null!;
         public virtual DbSet<UsuarioPerfil> UsuarioPerfils { get; set; } = null!;
+        public virtual DbSet<UsuarioIdioma> UsuarioIdiomas { get; set; } = null!;
+
+        public virtual DbSet<UsuarioEducacion> UsuarioEducaciones { get; set; } = null!;
+        public virtual DbSet<CV> CV { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -54,6 +59,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
             base.OnModelCreating(modelBuilder);
             // Crearemos los roles
             // Las siguientes instrucciones crearán la migración con inserciones al usar Add-Migration
+
+            modelBuilder.Entity<UsuarioIdioma>().ToTable("USUARIO_IDIOMA");
+            modelBuilder.Entity<CV>().ToTable("USUARIO_CV");
 
             var admin = new IdentityRole("admin");
             admin.NormalizedName = "admin";
@@ -540,21 +548,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                 entity.HasIndex(e => e.UsuarioId, "FK_EDUCACION_USUARIO_FK");
 
                 entity.Property(e => e.UseId).HasColumnName("USE_ID");
-
-                entity.Property(e => e.UseDescripcion)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("USE_DESCRIPCION");
-
-                entity.Property(e => e.UseDocumento)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("USE_DOCUMENTO");
-
-                entity.Property(e => e.UseTipoFormacion)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("USE_TIPO_FORMACION");
 
                 entity.Property(e => e.UsuarioId).IsRequired();
 

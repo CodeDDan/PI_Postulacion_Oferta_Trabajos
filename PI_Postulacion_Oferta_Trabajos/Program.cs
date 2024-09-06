@@ -17,10 +17,16 @@ builder.Services.AddControllers(
 builder.Services.AddDbContext<PO_TrabajosContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Por defecto viene en true
-builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<PO_TrabajosContext>();
+// Configura la identidad con la política de bloqueo de cuentas
+builder.Services.AddDefaultIdentity<Usuario>(options =>
+{
+    // Configuración del bloqueo de cuenta
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Tiempo de bloqueo
+    options.Lockout.MaxFailedAccessAttempts = 3; // Verificar
+    options.Lockout.AllowedForNewUsers = false; // Permitir bloqueo para nuevos usuarios
+
+    options.SignIn.RequireConfirmedAccount = false;
+}).AddRoles<IdentityRole>().AddEntityFrameworkStores<PO_TrabajosContext>();
 
 var app = builder.Build();
 
@@ -36,8 +42,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Si usamos identity se debe agregar si o si lo siguiente

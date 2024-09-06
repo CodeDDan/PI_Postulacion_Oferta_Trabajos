@@ -19,6 +19,128 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             _context = context;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AgregarEducacion([Bind("UsuarioId,USE_TIPO_FORMACION,USE_DOCUMENTO,USE_TITULO,USE_AREA,USE_INSTITUCION,USE_ESTADO,USE_FECHAI,USE_FECHAF")] UsuarioEducacion educacion)
+        {
+
+            try
+            {
+                // Agrega la nueva educación al contexto
+                _context.UsuarioEducaciones.Add(educacion);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Educación añadida exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                return Json(new { success = false, message = "Error al agregar la educación: " + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetEducacion(string usuarioId)
+        {
+            var educaciones = _context.UsuarioEducaciones
+                .Where(e => e.UsuarioId == usuarioId)
+                .Select(e => new
+                {
+                    e.UseId,
+                    e.USE_TITULO,
+                    e.USE_TIPO_FORMACION,
+                    e.USE_AREA,
+                    e.USE_ESTADO,
+                    e.USE_FECHAI,
+                    e.USE_FECHAF,
+                    e.USE_INSTITUCION
+                })
+                .ToList();
+
+            return Json(educaciones);
+        }
+        [HttpGet]
+        public IActionResult GetEducacionEdit(int usuarioId)
+        {
+            var educaciones = _context.UsuarioEducaciones
+                .Where(e => e.UseId == usuarioId)
+                .Select(e => new
+                {
+                    e.UseId,
+                    e.USE_TITULO,
+                    e.USE_TIPO_FORMACION,
+                    e.USE_AREA,
+                    e.USE_ESTADO,
+                    e.USE_FECHAI,
+                    e.USE_FECHAF,
+                    e.USE_INSTITUCION
+                })
+                .ToList();
+
+            return Json(educaciones);
+        }
+        [HttpPost]
+        public IActionResult UpdateEducacion(IFormCollection form)
+        {
+            int useId = int.Parse(form["UseId"]);
+
+            // Busca el registro existente en la base de datos
+            var educacion = _context.UsuarioEducaciones.FirstOrDefault(e => e.UseId == useId);
+
+            if (educacion == null)
+            {
+                return NotFound();
+            }
+
+            // Asigna los valores del formulario a las propiedades del modelo
+            educacion.USE_TITULO = form["USE_TITULOEdit"];
+            educacion.USE_TIPO_FORMACION = form["USE_TIPO_FORMACIONEdit"];
+            educacion.USE_AREA = form["USE_AREAEdit"];
+            educacion.USE_ESTADO = form["USE_ESTADOEdit"];
+            educacion.USE_INSTITUCION = form["USE_INSTITUCIONEdit"];
+            educacion.USE_FECHAI = form["USE_FECHAIEdit"];
+            educacion.USE_FECHAF = form["USE_FECHAFEdit"];
+
+            // Guarda los cambios en la base de datos
+            _context.SaveChanges();
+
+            // Retorna una respuesta exitosa
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EliminarEstudio(int UseId)
+        {
+            if (UseId <= 0)
+            {
+                return Json(new { success = false, message = "ID inválido" });
+            }
+
+            try
+            {
+                // Busca el estudio usando una consulta LINQ
+                var estudio = await _context.UsuarioEducaciones
+                    .Where(e => e.UseId == UseId)
+                    .FirstOrDefaultAsync();
+
+                if (estudio == null)
+                {
+                    return Json(new { success = false, message = "Estudio no encontrado" });
+                }
+
+                // Elimina el estudio
+                _context.UsuarioEducaciones.Remove(estudio);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al eliminar el estudio: " + ex.Message });
+            }
+        }
+
+
+
         // GET: UsuarioEducaciones
         public async Task<IActionResult> Index()
         {
@@ -155,14 +277,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 _context.UsuarioEducacions.Remove(usuarioEducacion);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UsuarioEducacionExists(int id)
         {
-          return (_context.UsuarioEducacions?.Any(e => e.UseId == id)).GetValueOrDefault();
+            return (_context.UsuarioEducacions?.Any(e => e.UseId == id)).GetValueOrDefault();
         }
     }
 }

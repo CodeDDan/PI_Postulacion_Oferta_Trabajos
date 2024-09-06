@@ -17,6 +17,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         {
             return View();
         }
+        public IActionResult Inicio()
+        {
+            return View();
+        }
+
 
         public IActionResult Privacy()
         {

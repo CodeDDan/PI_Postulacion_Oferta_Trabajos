@@ -19,6 +19,91 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             _context = context;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SaveExperience(UsuarioExperienciaLaboral experienciaLaboral)
+        {
+            try
+            {
+                // Añadir la nueva experiencia laboral a la base de datos
+                _context.UsuarioExperienciaLaborals.Add(experienciaLaboral);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                return Json(new { success = false, message = "Datos no válidos." });
+            }
+
+        }
+
+        [HttpPost]
+        public IActionResult DeleteExperience(int id)
+        {
+            var experiencia = _context.UsuarioExperienciaLaborals
+                .FirstOrDefault(e => e.UsxId == id);
+
+            if (experiencia != null)
+            {
+                _context.UsuarioExperienciaLaborals.Remove(experiencia);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public IActionResult EditExperience(UsuarioExperienciaLaboral model)
+        {
+            try { 
+
+                var experiencia = _context.UsuarioExperienciaLaborals
+                    .FirstOrDefault(e => e.UsxId == model.UsxId);
+
+                if (experiencia != null)
+                {
+                    experiencia.UsxEmpresa = model.UsxEmpresa;
+                    experiencia.UsxArea = model.UsxArea;
+                    experiencia.UsxPuesto = model.UsxPuesto;
+                    experiencia.UsxFechaInicio = model.UsxFechaInicio;
+                    experiencia.UsxFechaFin = model.UsxFechaFin;
+                    experiencia.UsxNivelExperiencia = model.UsxNivelExperiencia;
+
+                    _context.SaveChanges();
+                }
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones
+                return Json(new { success = false });
+            }
+        }
+        [HttpGet]
+        public IActionResult GetExperienceById(int id)
+        {
+            var experiencia = _context.UsuarioExperienciaLaborals
+                .FirstOrDefault(e => e.UsxId == id);
+
+            if (experiencia == null)
+                return NotFound();
+
+            return Json(experiencia);
+        }
+        [HttpGet]
+        public JsonResult GetExperienciasLaborales(string usuarioId)
+        {
+            var experiencias = _context.UsuarioExperienciaLaborals
+                .Where(x => x.UsuarioId == usuarioId)
+                .ToList();
+
+            return Json(experiencias);
+        }
         // GET: UsuarioExperienciasLaborales
         public async Task<IActionResult> Index()
         {

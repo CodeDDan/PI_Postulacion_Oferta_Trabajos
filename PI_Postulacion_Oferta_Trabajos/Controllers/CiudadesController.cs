@@ -26,6 +26,23 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             return View(await pO_TrabajosContext.ToListAsync());
         }
 
+        // Acción para obtener las ciudades por el ID de la provincia
+        [HttpGet]
+        public IActionResult GetCiudadesPorProvincia(int provinciaId)
+        {
+            var ciudades = _context.Ciudades
+                .Where(c => c.ProId == provinciaId)
+                .Select(c => new
+                {
+                    c.CidId,
+                    c.CidNombre
+                })
+                .ToList();
+
+            return Json(ciudades);
+        }
+
+
         // GET: Ciudades/Details/5
         public async Task<IActionResult> Details(int? id)
         {

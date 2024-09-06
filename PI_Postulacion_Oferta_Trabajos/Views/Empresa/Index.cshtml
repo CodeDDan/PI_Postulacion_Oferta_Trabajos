@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Panel de Empresa";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p>Bienvenido al panel de administración.</p>
+            <p>Aquí puedes gestionar usuarios, revisar estadísticas y realizar otras tareas administrativas.</p>
+
+            <h3>Funciones Disponibles:</h3>
+            <ul>
+                <li><a asp-controller="Usuarios" asp-action="Index">Gestión de Usuarios</a></li>
+                <li><a asp-controller="Estadisticas" asp-action="Index">Revisión de Estadísticas</a></li>
+                <li><a asp-controller="Configuracion" asp-action="Index">Configuración del Sistema</a></li>
+                <!-- Agrega más enlaces según las funcionalidades de tu aplicación -->
+            </ul>
+        </div>
+    </div>
+</div>

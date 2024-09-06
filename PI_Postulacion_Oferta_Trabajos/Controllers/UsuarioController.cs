@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
+using System.Security.Claims;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
@@ -22,11 +23,15 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly PO_TrabajosContext _context;
 
-        public UsuarioController(UserManager<Usuario> userManager, RoleManager<IdentityRole> roleManager, PO_TrabajosContext context)
+        private readonly SignInManager<Usuario> _signInManager;
+
+        public UsuarioController(UserManager<Usuario> userManager, RoleManager<IdentityRole> roleManager, PO_TrabajosContext context,
+            SignInManager<Usuario> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
+            _signInManager = signInManager;
         }
 
         // GET: Usuario
@@ -270,6 +275,42 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             };
 
             return View("Delete", viewModel);
+        }
+        public async Task<IActionResult> HV()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
+
+            // Obtener el listado de UsuarioIdioma para el usuario actual
+            var usuarioIdiomas = await _context.UsuarioIdiomas
+                .Where(ui => ui.UsuarioId == userId)
+                .ToListAsync();
+
+            return View(usuarioIdiomas); // Pasar la lista a la vista
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(string usuarioId, string oldPassword, string newPassword, string confirmNewPassword)
+        {
+            if (newPassword != confirmNewPassword)
+            {
+                return Json(new { success = false, message = "Las contraseñas nuevas no coinciden." });
+            }
+
+            var user = await _userManager.FindByIdAsync(usuarioId);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "Usuario no encontrado." });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return Json(new { success = true, message = "Contraseña cambiada exitosamente." });
+            }
+
+            return Json(new { success = false, message = string.Join(", ", result.Errors.Select(e => e.Description)) });
         }
     }
 }
