@@ -80,7 +80,92 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             return View(oferta);
         }
 
-        public async Task<IActionResult> VerPostulaciones(DateTime? fechaDesde, DateTime? fechaHasta, int? estadoPostulacion, bool? tienePostulantes)
+        // GET: Cargar formulario para editar oferta
+        public async Task<IActionResult> EditarOferta(int id)
+        {
+            var oferta = await _context.Ofertas.FindAsync(id);
+            if (oferta == null)
+            {
+                return NotFound();
+            }
+
+            // Cargar los datos necesarios para los dropdowns
+            ViewBag.AreasLaborales = await _context.AreasLaborales.ToListAsync();
+            ViewBag.PuestosLaborales = await _context.PuestosLaborales.ToListAsync();
+            ViewBag.OfertaModalidades = await _context.OfertaModalidads.ToListAsync();
+            ViewBag.Provincias = await _context.Provincias.ToListAsync();
+            ViewBag.Ciudades = await _context.Ciudades.ToListAsync();
+
+            return View(oferta);
+        }
+
+        // POST: Actualizar oferta
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarOferta(int id, Oferta oferta)
+        {
+            if (id != oferta.OfeId)
+            {
+                return BadRequest();
+            }
+
+            var ofertaExistente = await _context.Ofertas.AsNoTracking().FirstOrDefaultAsync(o => o.OfeId == id);
+
+            if (ofertaExistente == null)
+            {
+                return NotFound();
+            }
+
+            oferta.EmpId = _context.Ofertas.AsNoTracking()
+              .Where(o => o.OfeId == id)
+              .Select(o => o.EmpId)
+              .FirstOrDefault();
+
+            // Preservar la fecha de publicación original
+            oferta.OfeFechaPublicacion = ofertaExistente.OfeFechaPublicacion;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Actualizar la oferta en la base de datos
+                    _context.Update(oferta);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Home"); // Redirigir a la vista principal del empleador
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OfertaExists(oferta.OfeId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            // Recargar los dropdowns en caso de error
+            ViewBag.AreasLaborales = await _context.AreasLaborales.ToListAsync();
+            ViewBag.PuestosLaborales = await _context.PuestosLaborales.ToListAsync();
+            ViewBag.OfertaModalidades = await _context.OfertaModalidads.ToListAsync();
+            ViewBag.Provincias = await _context.Provincias.ToListAsync();
+            ViewBag.Ciudades = await _context.Ciudades.ToListAsync();
+
+            return View(oferta);
+        }
+
+        private bool OfertaExists(int id)
+        {
+            return _context.Ofertas.Any(e => e.OfeId == id);
+        }
+
+        public async Task<IActionResult> VerPostulaciones(DateTime? fechaDesde, DateTime? fechaHasta, int? estadoPostulacion, bool? tienePostulantes,
+                                                  int? provincia, int? ciudad, int? areaLaboral, int? puestoLaboral,
+                                                  int? ofertaModalidad, decimal? salarioMinimo, decimal? salarioMaximo,
+                                                  string? tipoContrato)
         {
             var usuario = await _userManager.GetUserAsync(User);
 
@@ -114,6 +199,47 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     ofertas = ofertas.Where(o => o.OfeFechaPublicacion.Date <= fechaHasta.Value.Date);
                 }
 
+                // Filtros adicionales
+                if (provincia.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.ProId == provincia.Value);
+                }
+
+                if (ciudad.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.CidId == ciudad.Value);
+                }
+
+                if (areaLaboral.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.ArlId == areaLaboral.Value);
+                }
+
+                if (puestoLaboral.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.PulId == puestoLaboral.Value);
+                }
+
+                if (ofertaModalidad.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.OfmId == ofertaModalidad.Value);
+                }
+
+                if (salarioMinimo.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.OfeSalario >= salarioMinimo.Value);
+                }
+
+                if (salarioMaximo.HasValue)
+                {
+                    ofertas = ofertas.Where(o => o.OfeSalario <= salarioMaximo.Value);
+                }
+
+                if (!string.IsNullOrEmpty(tipoContrato))
+                {
+                    ofertas = ofertas.Where(o => o.OfeTipoContrato == tipoContrato);
+                }
+
                 if (estadoPostulacion.HasValue)
                 {
                     ofertas = ofertas.Where(o => o.Postulaciones.Any(p => p.EspId == estadoPostulacion.Value));
@@ -133,7 +259,13 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
                 var modelo = await ofertas.ToListAsync();
 
+                // Cargar listas de filtros
                 ViewBag.EstadosPostulacion = await _context.EstadoPostulacions.ToListAsync();
+                ViewBag.Provincias = await _context.Provincias.ToListAsync();
+                ViewBag.Ciudades = await _context.Ciudades.ToListAsync();
+                ViewBag.AreasLaborales = await _context.AreasLaborales.ToListAsync();
+                ViewBag.PuestosLaborales = await _context.PuestosLaborales.ToListAsync();
+                ViewBag.OfertasModalidades = await _context.OfertaModalidads.ToListAsync();
 
                 return View(modelo);
             }

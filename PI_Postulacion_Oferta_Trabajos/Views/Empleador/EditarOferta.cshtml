@@ -1,12 +1,12 @@
 ﻿@model PI_Postulacion_Oferta_Trabajos.Models.Oferta
 
 @{
-    ViewData["Title"] = "Publicar Oferta";
-    ViewBag.FormAction = "PublicarOferta"; // Acción del formulario
-    ViewBag.SubmitButtonText = "Publicar Oferta"; // Texto del botón
+    ViewData["Title"] = "Editar Oferta";
+    ViewBag.FormAction = "EditarOferta"; // Acción del formulario
+    ViewBag.SubmitButtonText = "Guardar Cambios"; // Texto del botón
 }
 
-<h2>Publicar Oferta</h2>
+<h2>Editar Oferta</h2>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -20,7 +20,6 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <!-- Incluir aquí los scripts adicionales, como los métodos de filtro para dropdowns -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!--Método de filtro para puestos laborales-->
@@ -75,4 +74,3 @@
         });
     </script>
 }
-
