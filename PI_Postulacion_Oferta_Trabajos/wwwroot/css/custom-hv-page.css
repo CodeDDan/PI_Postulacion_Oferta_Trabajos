@@ -1,0 +1,249 @@
+﻿body {
+    background-color: rgb(237, 241, 247);
+}
+
+.i-trash {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('/images/trash.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+}
+
+.i-pencil {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('/images/pencil.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    background-color: red; /* Temporal para verificar si la clase se aplica */
+}
+
+
+.container {
+    width: 100%;
+    margin: auto;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+}
+
+.profile-section, .doc-section {
+    width: 35%;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    max-height: 900px;
+}
+
+.doc-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    /* Añade más estilos si es necesario */
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.content-section {
+    width: 1000px;
+    padding: 20px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+    .tabs button {
+        background: none;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .tabs button.active {
+            border-bottom: 2px solid #ff4081;
+            color: #ff4081;
+        }
+
+.section-content {
+    display: none;
+}
+
+    .section-content.active {
+        display: block;
+    }
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .section-header h2 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+.section .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+    .section .item i {
+        font-size: 24px;
+        color: #ccc;
+    }
+
+    .section .item button {
+        background: none;
+        border: none;
+        color: #ff4081;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+        .section .item button i {
+            margin-right: 5px;
+        }
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+    .form-group select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .item .icons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .item button {
+        margin: 5px 0; /* Espacio entre los botones */
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .item div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        height: 100%; /* Asegura que ocupe el espacio disponible */
+    }
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-title {
+    color: #1a73e8;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #1a73e8;
+}
+
+.form-control {
+    border: 2px solid #1a73e8;
+    border-radius: 4px;
+}
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #1a73e8;
+    }
+
+.modal-footer .btn-secondary {
+    color: #ff4081;
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+}
+
+.modal-footer .btn-primary {
+    background-color: #808080;
+    border: none;
+    font-weight: bold;
+}
+
+    .modal-footer .btn-primary:hover {
+        background-color: #4c4c4c;
+    }
+
+.required {
+    color: red;
+}
+
+.select2-container {
+    z-index: 2050 !important; /* Asegúrate de que este valor sea mayor que el z-index del modal */
+}
+/* Asegura que el dropdown de select2 esté correctamente posicionado */
+.select2-container--open {
+    z-index: 2050 !important; /* Un z-index más alto que el modal */
+}
+
+.select2-search__field {
+    width: 100% !important;
+}
+
+/* Para evitar interferencias, puedes forzar el comportamiento de Select2 dentro del modal */
+.select2-container--default .select2-results > .select2-results__options {
+    max-height: 150px; /* Ajusta esto según tus necesidades */
+    overflow-y: auto;
+}
+
+#institucion {
+    width: 100%; /* O ajusta a un valor fijo, como 250px */
+    height: 40px; /* Aumenta la altura */
+}
