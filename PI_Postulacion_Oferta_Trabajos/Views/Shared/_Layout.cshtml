@@ -42,10 +42,10 @@
                         @if (User.Identity.IsAuthenticated && User.IsInRole("empleador"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="PublicarOferta">Publicar Oferta</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="PublicarOferta"><i class="bi bi-journal-arrow-up"></i> Publicar Oferta</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="VerPostulaciones">Ver Postulaciones</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="VerPostulaciones"><i class="bi bi-journal-check"></i> Ver Postulaciones</a>
                             </li>
                         }
                     </ul>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
@@ -92,6 +93,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     .Include(o => o.Postulaciones)
                     .Where(o => o.EmpId == empresaId)
                     .AsQueryable();
+
+                var empresa = await _context.Empresas
+                    .FirstOrDefaultAsync(e => e.EmpId == usuario.UsuarioIdEmpresa.Value);
+
+                ViewBag.NombreEmpresa = empresa?.EmpNombreEmpresa;
 
                 // Filtros
                 if (fechaDesde.HasValue && fechaHasta.HasValue)

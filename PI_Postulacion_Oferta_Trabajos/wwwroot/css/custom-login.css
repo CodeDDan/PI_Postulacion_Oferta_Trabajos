@@ -4,16 +4,16 @@
     border-color: #ced4da; /* Color del borde por defecto */
 }
 
-.form-check-input:checked {
-    background-color: #e90066; /* Color de fondo cuando está seleccionado */
-    border-color: #e90066; /* Color del borde cuando está seleccionado */
-}
+    .form-check-input:checked {
+        background-color: #e90066; /* Color de fondo cuando está seleccionado */
+        border-color: #e90066; /* Color del borde cuando está seleccionado */
+    }
 
-.form-check-input:active {
-    background-color: #e90066; /* Color de fondo cuando está seleccionado */
-    border-color: #e90066; /* Color del borde cuando está seleccionado */
-}
+    .form-check-input:active {
+        background-color: #e90066; /* Color de fondo cuando está seleccionado */
+        border-color: #e90066; /* Color del borde cuando está seleccionado */
+    }
 
-.form-check-input:focus {
-    box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25); /* Color de la sombra del enfoque */
-}
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25); /* Color de la sombra del enfoque */
+    }
