@@ -1,0 +1,83 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Models.Empresa
+
+@{
+    ViewData["Title"] = "Editar Empresa";
+}
+
+<h2>Editar Empresa</h2>
+
+<form asp-action="EditarEmpresa" method="post">
+    <div class="form-group">
+        <label asp-for="EmpNombreEmpresa" class="control-label"></label>
+        <input asp-for="EmpNombreEmpresa" class="form-control" />
+        <span asp-validation-for="EmpNombreEmpresa" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpEmailRegistro" class="control-label"></label>
+        <input asp-for="EmpEmailRegistro" class="form-control" />
+        <span asp-validation-for="EmpEmailRegistro" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpEmailAcceso" class="control-label"></label>
+        <input asp-for="EmpEmailAcceso" class="form-control" />
+        <span asp-validation-for="EmpEmailAcceso" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpPassword" class="control-label"></label>
+        <input asp-for="EmpPassword" class="form-control" type="password" />
+        <span asp-validation-for="EmpPassword" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpRuc" class="control-label"></label>
+        <input asp-for="EmpRuc" class="form-control" />
+        <span asp-validation-for="EmpRuc" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpRazonSocial" class="control-label"></label>
+        <input asp-for="EmpRazonSocial" class="form-control" />
+        <span asp-validation-for="EmpRazonSocial" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpCiudad" class="control-label"></label>
+        <input asp-for="EmpCiudad" class="form-control" />
+        <span asp-validation-for="EmpCiudad" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpTelefono" class="control-label"></label>
+        <input asp-for="EmpTelefono" class="form-control" />
+        <span asp-validation-for="EmpTelefono" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpNumeroTrabajadores" class="control-label"></label>
+        <input asp-for="EmpNumeroTrabajadores" class="form-control" />
+        <span asp-validation-for="EmpNumeroTrabajadores" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpVacantesAnuales" class="control-label"></label>
+        <input asp-for="EmpVacantesAnuales" class="form-control" />
+        <span asp-validation-for="EmpVacantesAnuales" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmpDescripcion" class="control-label"></label>
+        <textarea asp-for="EmpDescripcion" class="form-control"></textarea>
+        <span asp-validation-for="EmpDescripcion" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AepId" class="control-label"></label>
+        <select asp-for="AepId" class="form-control" asp-items="@(new SelectList(ViewBag.SectoresPrincipales, "AepId", "AepNombre"))"></select>
+        <span asp-validation-for="AepId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+</form>

@@ -16,9 +16,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand custom-navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand custom-navbar-brand" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                     <img src="~/images/logo-multiempleo-1024x1024.jfif" alt="Logo" class="navbar-logo rounded float-start" />
-                    multiempleos
+                    <span>multiempleos</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -53,12 +53,65 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="VerPostulaciones"><i class="bi bi-journal-check"></i> Ver Postulaciones</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="EditarEmpresa">
+                                    <i class="bi bi-building"></i> Editar Empresa
+                                </a>
+                            </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
+
+        <!-- Offcanvas Component -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel" 
+                style=" color: #e90066; font-size: 2rem; font-weight: bold;">
+                    multiempleos
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-fill"></i> Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="bi bi-shield-shaded"></i> Privacidad</a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("trabajador"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Trabajador" asp-action="Index">
+                                <i class="bi bi-briefcase-fill"></i> Ver Ofertas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("HV","Usuario")" class="nav-link text-dark">
+                                <i class="bi bi-journal-bookmark-fill"></i> Ir a mi HV
+                            </a>
+                        </li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("empleador"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="PublicarOferta"><i class="bi bi-journal-arrow-up"></i> Publicar Oferta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="VerPostulaciones"><i class="bi bi-journal-check"></i> Ver Postulaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleador" asp-action="EditarEmpresa">
+                                <i class="bi bi-building"></i> Editar Empresa
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

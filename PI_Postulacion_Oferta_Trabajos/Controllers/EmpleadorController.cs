@@ -18,6 +18,75 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             _userManager = userManager;
         }
 
+        //GET: Datos de la empresa
+        [HttpGet]
+
+        public async Task<IActionResult> EditarEmpresa()
+        {
+            var usuario = await _userManager.GetUserAsync(User);
+
+            if (usuario.UsuarioIdEmpresa == null)
+            {
+                return BadRequest("El usuario no está asociado a ninguna empresa.");
+            }
+
+            var empresa = await _context.Empresas
+                .Include(e => e.Aep) // Incluye los datos del sector económico si es necesario
+                .FirstOrDefaultAsync(e => e.EmpId == usuario.UsuarioIdEmpresa);
+
+            if (empresa == null)
+            {
+                return NotFound("Empresa no encontrada.");
+            }
+
+            ViewBag.SectoresPrincipales = await _context.AeSectoresPrincipales.ToListAsync();
+
+            return View(empresa);
+        }
+
+        //POST: Guardar la edición del formulario de empresa
+        [HttpPost]
+        public async Task<IActionResult> EditarEmpresa(Empresa empresa)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(empresa);
+            }
+
+            var usuario = await _userManager.GetUserAsync(User);
+
+            if (usuario.UsuarioIdEmpresa == null)
+            {
+                //Badrequest sirve como mensaje
+                return BadRequest("El usuario no está asociado a ninguna empresa.");
+            }
+
+            var empresaExistente = await _context.Empresas.FindAsync(usuario.UsuarioIdEmpresa);
+
+            if (empresaExistente == null)
+            {
+                return NotFound("Empresa no encontrada.");
+            }
+
+            empresaExistente.EmpNombreEmpresa = empresa.EmpNombreEmpresa;
+            empresaExistente.EmpEmailRegistro = empresa.EmpEmailRegistro;
+            empresaExistente.EmpEmailAcceso = empresa.EmpEmailAcceso;
+            empresaExistente.EmpPassword = empresa.EmpPassword;
+            empresaExistente.EmpRuc = empresa.EmpRuc;
+            empresaExistente.EmpRazonSocial = empresa.EmpRazonSocial;
+            empresaExistente.EmpCiudad = empresa.EmpCiudad;
+            empresaExistente.EmpTelefono = empresa.EmpTelefono;
+            empresaExistente.EmpNumeroTrabajadores = empresa.EmpNumeroTrabajadores;
+            empresaExistente.EmpVacantesAnuales = empresa.EmpVacantesAnuales;
+            empresaExistente.EmpDescripcion = empresa.EmpDescripcion;
+            empresaExistente.AepId = empresa.AepId; // Actualiza el sector económico principal
+
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("VerPostulaciones", "Empleador");
+        }
+
         // GET: Formulario para publicar oferta
         public async Task<IActionResult> PublicarOferta()
         {
@@ -132,7 +201,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     _context.Update(oferta);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Home"); // Redirigir a la vista principal del empleador
+                    return RedirectToAction("VerPostulaciones", "Empleador"); // Redirigir a la vista principal del empleador
                 }
                 catch (DbUpdateConcurrencyException)
                 {

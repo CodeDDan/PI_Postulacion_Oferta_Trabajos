@@ -17,3 +17,17 @@
 .custom-navbar-brand:hover .navbar-logo {
     transform: scale(1.1); /* Aumenta el tamaño de la imagen en un 10% */
 }
+
+/* Oculta el texto del logo en pantallas pequeñas */
+@media (max-width: 1300px) {
+    .navbar-brand span {
+        display: none;
+    }
+}
+
+/* Muestra el texto del logo en pantallas grandes */
+@media (min-width: 1301px) {
+    .navbar-brand span {
+        display: inline;
+    }
+}
