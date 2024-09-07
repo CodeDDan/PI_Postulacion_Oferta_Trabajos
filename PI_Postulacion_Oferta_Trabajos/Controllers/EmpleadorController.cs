@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
+using PI_Postulacion_Oferta_Trabajos.Models.ViewModel;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
@@ -342,5 +343,67 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> VerCandidatos(int ofertaId, int? edadDesde, int? edadHasta, string? genero, string? estadoCivil)
+        {
+            // Obtener la oferta con detalles relacionados
+            var oferta = await _context.Ofertas
+                .Include(o => o.Pro) // Incluye la provincia
+                .Include(o => o.Cid) // Incluye la ciudad
+                .FirstOrDefaultAsync(o => o.OfeId == ofertaId);
+
+            if (oferta == null)
+            {
+                return NotFound();
+            }
+
+            // Obtener las postulaciones relacionadas
+            var postulaciones = _context.Postulaciones
+                .Include(p => p.Usu)
+                .ThenInclude(u => u.UsuarioDetalles)
+                .Include(p => p.Usu)
+                .ThenInclude(u => u.UsuarioPerfils)
+                .Where(p => p.OfeId == ofertaId)
+                .AsQueryable();
+
+            // Aplicar filtros por género
+            if (!string.IsNullOrEmpty(genero))
+            {
+                postulaciones = postulaciones
+                    .Where(p => p.Usu.UsuarioDetalles.Any(d => d.UsdGenero == genero));
+            }
+
+            // Aplicar filtros por edad
+            if (edadDesde.HasValue || edadHasta.HasValue)
+            {
+                var fechaHoy = DateTime.Now;
+                if (edadDesde.HasValue)
+                {
+                    var fechaDesde = fechaHoy.AddYears(-edadDesde.Value);
+                    postulaciones = postulaciones
+                        .Where(p => p.Usu.UsuarioDetalles.Any(d => d.UsdFechaNacimiento <= fechaDesde));
+                }
+                if (edadHasta.HasValue)
+                {
+                    var fechaHasta = fechaHoy.AddYears(-edadHasta.Value);
+                    postulaciones = postulaciones
+                        .Where(p => p.Usu.UsuarioDetalles.Any(d => d.UsdFechaNacimiento >= fechaHasta));
+                }
+            }
+
+
+            var listaPostulaciones = await postulaciones.ToListAsync();
+
+            // Crear el ViewModel
+            var modelo = new CandidatosViewModel(
+                ofertaId: ofertaId,
+                nombreOferta: oferta.OfeTitulo,
+                provinciaOferta: oferta.Pro.ProNombre,
+                ciudadOferta: oferta.Cid.CidNombre,
+                postulaciones: listaPostulaciones
+            );
+
+            return View(modelo);
+        }
     }
 }

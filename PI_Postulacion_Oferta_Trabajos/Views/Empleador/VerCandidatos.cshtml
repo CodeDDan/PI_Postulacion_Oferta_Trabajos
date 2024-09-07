@@ -1,0 +1,131 @@
+﻿@model PI_Postulacion_Oferta_Trabajos.Models.ViewModel.CandidatosViewModel
+
+@{
+    ViewData["Title"] = "Ver Candidatos";
+}
+
+<h2 class="my-3"><i class="bi bi-person-bounding-box"></i> Ver Candidatos - @Model.NombreOferta - @Model.ProvinciaOferta - @Model.CiudadOferta</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Filtros para postulantes -->
+        <form method="get" class="bg-light p-4 rounded shadow-sm">
+            <!-- Campo oculto para ofertaId -->
+            <input type="hidden" name="ofertaId" value="@Model.OfertaId" />
+
+            <!-- Filtro por edad -->
+            <div class="form-group">
+                <label for="edadDesde">Edad Desde</label>
+                <input type="number" name="edadDesde" class="form-control" id="edadDesde" />
+            </div>
+
+            <div class="form-group">
+                <label for="edadHasta">Edad Hasta</label>
+                <input type="number" name="edadHasta" class="form-control" id="edadHasta" />
+            </div>
+
+            <!-- Filtro por género -->
+            <div class="form-group">
+                <label for="genero">Género</label>
+                <select class="form-select" id="genero" name="genero">
+                    <option value="">Seleccione un género</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <!-- Filtro por estado civil -->
+            <div class="form-group">
+                <label for="estadoCivil">Estado Civil</label>
+                <select class="form-select" id="estadoCivil" name="estadoCivil">
+                    <option value="">Seleccione un estado civil</option>
+                    <option value="Soltero">Soltero</option>
+                    <option value="Casado">Casado</option>
+                    <option value="Divorciado">Divorciado</option>
+                    <option value="Viudo">Viudo</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-custom mt-3">Filtrar</button>
+        </form>
+    </div>
+
+    <div class="col-md-9">
+        <!-- Candidatos -->
+        <div class="row">
+            @foreach (var postulacion in Model.Postulaciones)
+            {
+                var usuario = postulacion.Usu;
+                var detalle = usuario.UsuarioDetalles.FirstOrDefault();
+                var perfil = usuario.UsuarioPerfils.FirstOrDefault();
+
+                <div class="card mb-3" style="width: 100%;">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                @if (!string.IsNullOrEmpty(detalle?.UsdFoto))
+                                {
+                                    var fotoUrl = Url.Content($"~/fotoPerfil/{detalle.UsdFoto}");
+                                    <img src="@fotoUrl" alt="Foto de @usuario.UsuNombre" class="img-thumbnail" style="width: 100px; height: 100px;" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-fill" style="font-size: 100px;"></i> <!-- Ícono por defecto -->
+                                }
+                            </div>
+                            <div>
+                                <h5 class="card-title"><i class="bi bi-person-fill"></i> @usuario.UsuNombre @usuario.UsuApellido</h5>
+                                <p class="card-text">
+                                    @if (detalle?.UsdFechaNacimiento != null)
+                                    {
+                                        // Calcular la edad
+                                        var edad = DateTime.Now.Year - detalle.UsdFechaNacimiento.Year;
+                                        if (DateTime.Now.DayOfYear < detalle.UsdFechaNacimiento.DayOfYear)
+                                        {
+                                            edad--;
+                                        }
+
+                                    <p>Edad: @edad</p>
+                                    }
+                                    else
+                                    {
+                                    <p>Edad: Sin especificar</p>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(detalle?.UsdCiudad))
+                                    {
+                                    <p>Ciudad: @detalle.UsdCiudad</p>
+                                    }
+                                    else
+                                    {
+                                    <p>Ciudad: Sin especificar</p>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(detalle?.UsdGenero))
+                                    {
+                                    <p>Género: @detalle.UsdGenero</p>
+                                    }
+                                    else
+                                    {
+                                    <p>Género: Sin especificar</p>
+                                    }
+
+                                    @if (perfil?.UspPreferenciaSalarial != null)
+                                    {
+                                    <p>Preferencia Salarial: @perfil.UspPreferenciaSalarial.Value.ToString("C")</p>
+                                    }
+                                    else
+                                    {
+                                    <p>Preferencia Salarial: Sin especificar</p>
+                                    }
+                                </p>
+                                <a href="#" class="btn btn-outline-dark">Ver Perfil</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -158,7 +158,7 @@
                         <p class="card-text"><i class="bi bi-calendar2-heart-fill"></i>  <strong>Fecha de Publicación:</strong> @oferta.OfeFechaPublicacion.ToShortDateString()</p>
                         <p class="card-text"><i class="bi bi-people-fill"></i>  <strong>Cantidad de Postulantes:</strong> @cantidadPostulantes</p>
                         <p class="card-text"><i class="bi bi-hourglass-bottom"></i>  <strong>Tipo de Contrato:</strong> @oferta.OfeTipoContrato</p>
-                        <a href="#" class="btn btn-custom">Ver Postulaciones</a>
+                        <a href="@Url.Action("VerCandidatos", "Empleador", new { ofertaId = oferta.OfeId })" class="btn btn-custom">Ver Candidatos</a>
                         <a href="@Url.Action("EditarOferta", "Empleador", new { id = oferta.OfeId })" class="btn btn-outline-dark">Editar Oferta</a>
                     </div>
                 </div>
