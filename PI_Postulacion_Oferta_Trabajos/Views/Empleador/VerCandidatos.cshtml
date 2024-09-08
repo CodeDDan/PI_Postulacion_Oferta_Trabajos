@@ -59,22 +59,29 @@
                 var usuario = postulacion.Usu;
                 var detalle = usuario.UsuarioDetalles.FirstOrDefault();
                 var perfil = usuario.UsuarioPerfils.FirstOrDefault();
+                var estadoActual = postulacion.Esp.EspNombre;
 
                 <div class="card mb-3" style="width: 100%;">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                @if (!string.IsNullOrEmpty(detalle?.UsdFoto))
-                                {
-                                    var fotoUrl = Url.Content($"~/fotoPerfil/{detalle.UsdFoto}");
-                                    <img src="@fotoUrl" alt="Foto de @usuario.UsuNombre" class="img-thumbnail" style="width: 100px; height: 100px;" />
-                                }
-                                else
-                                {
-                                    <i class="bi bi-person-fill" style="font-size: 100px;"></i> <!-- Ícono por defecto -->
-                                }
+                        <div class="row">
+                            <!-- Primera columna: Foto y botón de ver perfil -->
+                            <div class="col-md-3 d-flex flex-column align-items-center">
+                                <div class="mb-3">
+                                    @if (!string.IsNullOrEmpty(detalle?.UsdFoto))
+                                    {
+                                        var fotoUrl = Url.Content($"~/fotoPerfil/{detalle.UsdFoto}");
+                                        <img src="@fotoUrl" alt="Foto de @usuario.UsuNombre" class="img-thumbnail" style="width: 150px; height: 150px;" />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-person-circle" style="font-size:100px"></i> <!-- Ícono por defecto -->
+                                    }
+                                </div>
+                                <a href="@Url.Action("VerPerfil", "Empleador", new { id = postulacion.UsuarioId })" class="btn btn-outline-dark">Ver Perfil</a>
                             </div>
-                            <div>
+
+                            <!-- Segunda columna: Descripciones -->
+                            <div class="col-md-6">
                                 <h5 class="card-title"><i class="bi bi-person-fill"></i> @usuario.UsuNombre @usuario.UsuApellido</h5>
                                 <p class="card-text">
                                     @if (detalle?.UsdFechaNacimiento != null)
@@ -85,7 +92,6 @@
                                         {
                                             edad--;
                                         }
-
                                     <p>Edad: @edad</p>
                                     }
                                     else
@@ -120,7 +126,57 @@
                                     <p>Preferencia Salarial: Sin especificar</p>
                                     }
                                 </p>
-                                <a href="#" class="btn btn-outline-dark">Ver Perfil</a>
+                            </div>
+
+                            <!-- Tercera columna: Select y estado de la postulación -->
+                            <div class="col-md-3 d-flex flex-column">
+                                <!-- Formulario para cambiar el estado de la postulación -->
+                                <form method="post" action="@Url.Action("CambiarEstado", "Empleador")" class="mb-3 estado-form">
+                                    <input type="hidden" name="postulacionId" value="@postulacion.PosId" />
+                                    <div class="d-flex flex-column">
+                                        <select name="nuevoEstado" class="form-select mb-2 estado-select">
+                                            <option value="" selected disabled>Seleccione una opción</option>
+                                            @foreach (var estado in Model.EstadosPostulacion)
+                                            {
+                                                <option value="@estado.EspId">@estado.EspNombre</option>
+                                            }
+                                        </select>
+                                        <button type="submit" class="btn btn-primary confirmar-btn">Cambiar</button>
+                                    </div>
+                                </form>
+
+                                <!-- Mostrar el estado actual de la postulación -->
+                                <div class="text-end mt-auto text-end">
+                                    @{
+                                        // Determinar la clase del badge basado en el estado actual
+                                        string claseBadge;
+
+                                        switch (estadoActual)
+                                        {
+                                            case "Aceptado":
+                                                claseBadge = "bg-success";   // Verde
+                                                break;
+                                            case "Rechazado":
+                                                claseBadge = "bg-danger";    // Rojo
+                                                break;
+                                            case "En revisión":
+                                                claseBadge = "bg-warning";   // Amarillo
+                                                break;
+                                            case "En evaluación":
+                                                claseBadge = "bg-info";     // Azul claro
+                                                break;
+                                            case "Postulado":
+                                                claseBadge = "bg-primary";     // Azul claro
+                                                break;
+                                            default:
+                                                claseBadge = "bg-secondary"; // Gris por defecto
+                                                break;
+                                        }
+                                    }
+                                    <h5>
+                                        <span class="badge @claseBadge">@estadoActual</span>
+                                    </h5>   
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -129,3 +185,43 @@
         </div>
     </div>
 </div>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div id="alerta-postulacion" class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<script>
+    // JavaScript para habilitar o deshabilitar el botón de envío basado en la selección del estado
+    document.querySelectorAll('.estado-form').forEach(function (form) {
+        var estadoSelects = form.querySelectorAll('.estado-select');
+        var confirmarBtn = form.querySelector('.confirmar-btn');
+
+        // Función para actualizar el estado del botón
+        function actualizarEstadoBoton() {
+            var todasSeleccionadas = Array.from(estadoSelects).every(select => select.value !== "");
+            confirmarBtn.disabled = !todasSeleccionadas;
+        }
+
+        // Añadir listeners a los select para actualizar el botón en cada cambio
+        estadoSelects.forEach(select => {
+            select.addEventListener('change', actualizarEstadoBoton);
+        });
+
+        // Inicializar el estado del botón en el momento de cargar la página
+        actualizarEstadoBoton();
+    });
+</script>
+
+<script>
+    // Desaparece la notificación después de 5 segundos
+    setTimeout(function () {
+        var notificacion = document.getElementById('alerta-postulacion');
+        if (notificacion) {
+            var alert = new bootstrap.Alert(notificacion);
+            alert.close();
+        }
+    }, 5000); // 5000 milisegundos = 5 segundos
+</script>

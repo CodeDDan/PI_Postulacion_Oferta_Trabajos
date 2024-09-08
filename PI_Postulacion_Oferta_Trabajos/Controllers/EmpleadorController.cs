@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Models.ViewModel;
@@ -357,6 +358,10 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 return NotFound();
             }
 
+            // Obtener la lista de estados de postulación
+            var estadoPostulacion = await _context.EstadoPostulacions
+                .ToListAsync();
+
             // Obtener las postulaciones relacionadas
             var postulaciones = _context.Postulaciones
                 .Include(p => p.Usu)
@@ -400,10 +405,57 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 nombreOferta: oferta.OfeTitulo,
                 provinciaOferta: oferta.Pro.ProNombre,
                 ciudadOferta: oferta.Cid.CidNombre,
-                postulaciones: listaPostulaciones
+                postulaciones: listaPostulaciones,
+                estadosPostulacion: estadoPostulacion
             );
 
             return View(modelo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CambiarEstado(int postulacionId, int nuevoEstado)
+        {
+            // Buscar la postulación e incluir la oferta asociada
+            var postulacion = await _context.Postulaciones
+                .Include(p => p.Ofe) // Asegúrate de que la oferta se cargue junto con la postulación
+                .FirstOrDefaultAsync(p => p.PosId == postulacionId);
+
+            if (postulacion == null)
+            {
+                return NotFound();
+            }
+
+            // Si el nuevo estado es "Aceptado" (EspId = 5)
+            if (nuevoEstado == 5)
+            {
+                // Contar cuántas postulaciones ya tienen el estado "Aceptado" para la oferta actual
+                int postulacionesAceptadas = await _context.Postulaciones
+                    .Where(p => p.OfeId == postulacion.OfeId && p.EspId == 5) // Filtrar por oferta y estado "Aceptado"
+                    .CountAsync();
+
+                // Obtener la cantidad de vacantes de la oferta
+                int cantidadVacantes = (int)postulacion.Ofe.OfeCantidadVacantes;
+
+                // Verificar si ya se alcanzó el límite de vacantes aceptadas
+                if (postulacionesAceptadas >= cantidadVacantes)
+                {
+                    // Mostrar un mensaje de error o advertencia
+                    TempData["ErrorMessage"] = "No se puede aceptar a más candidatos. La oferta ya ha alcanzado el número máximo de vacantes.";
+
+                    // Redirigir de vuelta a la vista de candidatos sin cambiar el estado
+                    return RedirectToAction("VerCandidatos", new { ofertaId = postulacion.OfeId });
+                }
+            }
+
+            // Cambiar el estado de la postulación
+            postulacion.EspId = nuevoEstado;
+
+            // Guardar los cambios en la base de datos
+            _context.Update(postulacion);
+            await _context.SaveChangesAsync();
+
+            // Redirigir de vuelta a la vista de candidatos
+            return RedirectToAction("VerCandidatos", new { ofertaId = postulacion.OfeId });
         }
     }
 }

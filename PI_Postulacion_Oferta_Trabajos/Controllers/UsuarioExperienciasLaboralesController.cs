@@ -34,7 +34,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             catch (Exception ex)
             {
                 // Manejo de excepciones
-                return Json(new { success = false, message = "Datos no válidos." });
+                return Json(new { success = false, message = "Datos no válidos." + ex.Message });
             }
 
         }
@@ -81,7 +81,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             catch (Exception ex)
             {
                 // Manejo de excepciones
-                return Json(new { success = false });
+                return Json(new { success = false, message = ex.Message });
             }
         }
         [HttpGet]

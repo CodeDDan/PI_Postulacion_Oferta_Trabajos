@@ -24,10 +24,10 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         {
             // Vamos a obtener el Id de las ofertas a las cuales el usuario está postulado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Obtener ID del usuario actual
-            var postuladoOfertas = _context.Postulaciones
-                                           .Where(p => p.UsuarioId == userId && p.EspId == 1)
-                                           .Select(p => p.OfeId)
-                                           .ToList();
+            // Obtener todas las postulaciones del usuario y sus estados
+            var postulacionesUsuario = _context.Postulaciones
+                                               .Where(p => p.UsuarioId == userId)
+                                               .ToList();
             // Cargar la lista de ofertas con los filtros aplicados, aqui se especifican relaciones profundas entre tablas
             var query = _context.Ofertas
                 .Include(o => o.Emp)
@@ -83,8 +83,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             if (!string.IsNullOrEmpty(tipoContrato))
                 query = query.Where(o => o.OfeTipoContrato == tipoContrato);
 
-            ViewBag.PostuladoOfertas = postuladoOfertas; // Pasar las ofertas en las que el usuario ya se postuló
-
             // Ejecutar la consulta y pasar los resultados a la vista
             var ofertas = await query.ToListAsync();
 
@@ -96,6 +94,13 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
             // Convertir la lista a un diccionario para un acceso rápido en la vista
             var postulacionesDict = postulacionesPorOferta.ToDictionary(p => p.OfeId, p => p.Count);
+
+            var postuladoOfertas = postulacionesUsuario.ToDictionary(p => p.OfeId, p => p.EspId);
+            // Pasar el diccionario a la vista mediante ViewBag
+            ViewBag.PostuladoOfertas = postuladoOfertas;
+
+            //ViewBag.PostuladoOfertas = postulacionesUsuario; // Pasar las ofertas en las que el usuario ya se postuló
+            // Crear un diccionario con las ofertas postuladas y su estado
 
             ViewBag.PostulacionesPorOferta = postulacionesDict;
 
@@ -116,19 +121,38 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             // Obtener el usuario logeado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Crear una nueva postulación
-            var postulacion = new Postulacion
+            // Verificar si ya existe una postulación para esta oferta
+            var postulacionExistente = await _context.Postulaciones
+                .FirstOrDefaultAsync(p => p.OfeId == ofeId && p.UsuarioId == userId);
+
+            // Si existe una postulación y su estado es "rechazado" (ID = 4), no permitir postularse de nuevo
+            if (postulacionExistente != null && postulacionExistente.EspId == 4)
             {
-                OfeId = ofeId,
-                UsuarioId = userId,
-                EspId = 1,  // Estado inicial de postulación
-                PosFechaPostulacion = DateTime.Now
-            };
+                TempData["ErrorMessage"] = "No puedes volver a postularte a esta oferta porque tu postulación fue rechazada.";
+                return RedirectToAction("Index");
+            }
+            // Si no hay una postulación existente o está en un estado diferente a "rechazado"
+            if (postulacionExistente == null)
+            {
+                // Crear una nueva postulación
+                var nuevaPostulacion = new Postulacion
+                {
+                    OfeId = ofeId,
+                    UsuarioId = userId,
+                    EspId = 1,  // Estado inicial de postulación
+                    PosFechaPostulacion = DateTime.Now
+                };
 
-            _context.Postulaciones.Add(postulacion);
-            await _context.SaveChangesAsync();
+                _context.Postulaciones.Add(nuevaPostulacion);
+                await _context.SaveChangesAsync();
 
-            TempData["PostulacionExitosa"] = "¡Postulación Exitosa!";
+                TempData["PostulacionExitosa"] = "¡Postulación Exitosa!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Ya estás postulado a esta oferta.";
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -136,6 +160,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         public async Task<IActionResult> CancelarPostulacion(int ofeId)
         {
             var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Buscar la postulación que está en estado "postulado" (ID = 1)
             var postulacion = await _context.Postulaciones
                 .FirstOrDefaultAsync(p => p.OfeId == ofeId && p.UsuarioId == usuarioId && p.EspId == 1);
 
@@ -143,10 +169,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             {
                 _context.Postulaciones.Remove(postulacion);
                 await _context.SaveChangesAsync();
+
+                TempData["PostulacionCancelada"] = "Postulación cancelada!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se puede cancelar la postulación en el estado actual.";
             }
 
-            // Redirigir al Index con un mensaje de éxito
-            TempData["PostulacionCancelada"] = "Postulación cancelada!";
             return RedirectToAction("Index");
         }
     }

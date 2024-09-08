@@ -168,14 +168,61 @@
         <div class="list-group">
             @foreach (var oferta in Model)
             {
-                // Lo siguiente contiene un booleano por si esta o no postulado
-                var estaPostulado = postuladoOfertas.Contains(oferta.OfeId);
+                // Obtener el estado de la postulación si existe, de lo contrario, se asume que no está postulado
+                int? estadoPostulacion = ViewBag.PostuladoOfertas.ContainsKey(oferta.OfeId) ? ViewBag.PostuladoOfertas[oferta.OfeId] : (int?)null;
+
+                // Definir clases de estado según la postulación
+                string estadoClase = estadoPostulacion switch
+                {
+                    1 => "estado-postulado",
+                    2 => "estado-en-revision",
+                    3 => "estado-en-evaluacion",
+                    4 => "estado-rechazado",
+                    5 => "estado-aceptado",
+                    _ => ""
+                };
+
+                // Definir el texto del botón principal
+                string botonTexto = estadoPostulacion switch
+                {
+                    1 or 2 or 3 or 5 => "Ya Postulado",
+                    4 => "Rechazado",
+                    _ => "Ver Detalles"
+                };
+
+                // Definir el texto y clase del badge
+                string badgeText = estadoPostulacion switch
+                {
+                    1 => "Postulado",
+                    2 => "En revisión",
+                    3 => "En evaluación",
+                    4 => "Rechazado",
+                    5 => "Aceptado",
+                    _ => "Postúlate" // Por defecto, de momento solo hay 5 estados en las postulaciones.
+                };
+
+                string badgeClass = estadoPostulacion switch
+                {
+                    1 => "bg-primary",
+                    2 => "bg-warning",
+                    3 => "bg-info",
+                    4 => "bg-danger",
+                    5 => "bg-success",
+                    _ => "bg-secondary"
+                };
+
+                // Verificar si el botón de cancelación debe mostrarse
+                bool mostrarBotonCancelar = estadoPostulacion == 1 || estadoPostulacion == 2 || estadoPostulacion == 3;
+
+                // Verificar si el botón de postulación debe estar deshabilitado
+                bool deshabilitarPostulacion = estadoPostulacion.HasValue;
 
                 // Obtener el número de postulaciones para esta oferta (si existe)
                 var numPostulaciones = ViewBag.PostulacionesPorOferta.ContainsKey(oferta.OfeId)
                 ? ViewBag.PostulacionesPorOferta[oferta.OfeId] : 0;
 
-                <div class="card mb-3 shadow-sm @(estaPostulado ? "postulado" : "")">
+                @* Aquí se le da la clase *@
+                <div class="card mb-3 shadow-sm @estadoClase">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
@@ -202,6 +249,7 @@
                                     <i class="bi bi-globe-americas"></i> <strong>Provincia:</strong> @oferta.Pro.ProNombre
                                     <i class="bi bi-geo-alt-fill"></i> <strong>Ciudad:</strong> @oferta.Cid.CidNombre
                                 </p>
+                                <span class="badge @badgeClass">@badgeText</span>
                             </div>
                             <div class="d-flex flex-column justify-content-between text-end" style="width: 500px">
                                 <p><i class="bi bi-cash-coin"></i> <strong>Salario:</strong> @oferta.OfeSalario<i class="bi bi-currency-dollar"></i></p>
@@ -209,10 +257,11 @@
                                 <p><i class="bi bi-book-fill"></i> <strong>Contrato:</strong> @oferta.OfeTipoContrato</p>
                                 <p><i class="bi bi-person-lines-fill"></i> <strong>Postulaciones:</strong> @numPostulaciones</p>
                                 <div class="d-inline-block">
-                                    <button class="btn @(estaPostulado ? "btn-warning" : "btn-primary") btn-sm" data-bs-toggle="modal" data-bs-target="#detallesOferta-@oferta.OfeId">
-                                        @(estaPostulado ? "Ya Postulado" : "Ver Detalles")
+                                    <button class="btn @(estadoPostulacion.HasValue ? "btn-warning" : "btn-primary") btn-sm" data-bs-toggle="modal" data-bs-target="#detallesOferta-@oferta.OfeId">
+                                        @botonTexto
                                     </button>
-                                    @if (estaPostulado)
+
+                                    @if (mostrarBotonCancelar)
                                     {
                                         <button class="btn btn-danger btn-sm" style="margin: 4px 0px" data-bs-toggle="modal" data-bs-target="#cancelarPostulacion-@oferta.OfeId">
                                             Cancelar Postulación
@@ -292,7 +341,7 @@
                             </div>
                             <div class="modal-footer">
                                 <form method="post" asp-action="Postularse" asp-route-ofeId="@oferta.OfeId">
-                                    <button type="submit" class="btn btn-success" @(estaPostulado ? "disabled" : "")>Postularse</button>
+                                    <button type="submit" class="btn btn-success" @(deshabilitarPostulacion ? "disabled" : "")>Postularse</button>
                                 </form>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             </div>

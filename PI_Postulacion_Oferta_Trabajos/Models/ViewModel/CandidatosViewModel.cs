@@ -2,20 +2,22 @@
 {
     public class CandidatosViewModel
     {
-
         public int OfertaId { get; set; } 
         public string NombreOferta { get; set; }
         public string ProvinciaOferta { get; set; }
         public string CiudadOferta { get; set; }
         public IEnumerable<Postulacion> Postulaciones { get; set; }
+        public IEnumerable<EstadoPostulacion> EstadosPostulacion { get; set; }
 
-        public CandidatosViewModel(int ofertaId, string nombreOferta, string provinciaOferta, string ciudadOferta, IEnumerable<Postulacion> postulaciones)
+        public CandidatosViewModel(int ofertaId, string nombreOferta, string provinciaOferta, 
+            string ciudadOferta, IEnumerable<Postulacion> postulaciones, IEnumerable<EstadoPostulacion> estadosPostulacion)
         {
             OfertaId = ofertaId;
             NombreOferta = nombreOferta ?? throw new ArgumentNullException(nameof(nombreOferta));
             ProvinciaOferta = provinciaOferta ?? throw new ArgumentNullException(nameof(provinciaOferta));
             CiudadOferta = ciudadOferta ?? throw new ArgumentNullException(nameof(ciudadOferta));
             Postulaciones = postulaciones ?? throw new ArgumentNullException(nameof(postulaciones));
+            EstadosPostulacion = estadosPostulacion ?? throw new ArgumentNullException(nameof(postulaciones));
         }
     }
 }
