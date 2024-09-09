@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 using Microsoft.AspNetCore.Identity;
+using PI_Postulacion_Oferta_Trabajos.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +18,10 @@ builder.Services.AddControllers(
 builder.Services.AddDbContext<PO_TrabajosContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configura la identidad con la política de bloqueo de cuentas
+// Configura la identidad con la polï¿½tica de bloqueo de cuentas
 builder.Services.AddDefaultIdentity<Usuario>(options =>
 {
-    // Configuración del bloqueo de cuenta
+    // Configuraciï¿½n del bloqueo de cuenta
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Tiempo de bloqueo
     options.Lockout.MaxFailedAccessAttempts = 3; // Verificar
     options.Lockout.AllowedForNewUsers = true; // Permitir bloqueo para nuevos usuarios
@@ -29,9 +31,13 @@ builder.Services.AddDefaultIdentity<Usuario>(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.ExpireTimeSpan = TimeSpan.FromDays(14); // Duración del cookie con "Remember Me"
-    options.SlidingExpiration = true; // Renovar el tiempo de expiración si el usuario interactúa antes de que expire
+    options.ExpireTimeSpan = TimeSpan.FromDays(14); // Duraciï¿½n del cookie con "Remember Me"
+    options.SlidingExpiration = true; // Renovar el tiempo de expiraciï¿½n si el usuario interactï¿½a antes de que expire
 });
+
+// Registrar el servicio de EmailSender
+//builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+//builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
