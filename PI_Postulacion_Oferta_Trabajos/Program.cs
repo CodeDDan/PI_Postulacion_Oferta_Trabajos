@@ -23,10 +23,16 @@ builder.Services.AddDefaultIdentity<Usuario>(options =>
     // Configuración del bloqueo de cuenta
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Tiempo de bloqueo
     options.Lockout.MaxFailedAccessAttempts = 3; // Verificar
-    options.Lockout.AllowedForNewUsers = false; // Permitir bloqueo para nuevos usuarios
+    options.Lockout.AllowedForNewUsers = true; // Permitir bloqueo para nuevos usuarios
 
     options.SignIn.RequireConfirmedAccount = false;
 }).AddRoles<IdentityRole>().AddEntityFrameworkStores<PO_TrabajosContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromDays(14); // Duración del cookie con "Remember Me"
+    options.SlidingExpiration = true; // Renovar el tiempo de expiración si el usuario interactúa antes de que expire
+});
 
 var app = builder.Build();
 

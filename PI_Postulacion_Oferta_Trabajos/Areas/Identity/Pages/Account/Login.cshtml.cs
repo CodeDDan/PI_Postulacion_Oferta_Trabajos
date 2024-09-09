@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using PI_Postulacion_Oferta_Trabajos.Models;
+using Microsoft.Extensions.Options;
 
 namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
 {
@@ -23,12 +24,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly UserManager<Usuario> _userManager;
+        private readonly IOptions<IdentityOptions> _identityOptions;
 
-        public LoginModel(SignInManager<Usuario> signInManager, ILogger<LoginModel> logger, UserManager<Usuario> userManager)
+        public LoginModel(SignInManager<Usuario> signInManager, ILogger<LoginModel> logger, UserManager<Usuario> userManager, IOptions<IdentityOptions> identityOptions)
         {
             _signInManager = signInManager;
             _logger = logger;
             _userManager = userManager;
+            _identityOptions = identityOptions;
         }
 
         [BindProperty]
@@ -43,15 +46,15 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Ingrese su correo electrónico.")]
+            [EmailAddress(ErrorMessage = "Dirección de correo no válida.")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Ingrese su contraseña.")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Recordar sesión")]
             public bool RememberMe { get; set; }
         }
 
@@ -83,7 +86,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Intento de ingreso no válido.");
                     return Page();
                 }
 
@@ -116,21 +119,31 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    _logger.LogWarning("La cuenta del usuario está bloqueada.");
+
+                    // Obtener el tiempo de expiración del bloqueo
+                    var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+                    if (lockoutEnd.HasValue)
+                    {
+                        var timeRemaining = lockoutEnd.Value - DateTimeOffset.UtcNow;
+                        ModelState.AddModelError(string.Empty, $"Tu cuenta está bloqueada. Intenta nuevamente en {timeRemaining.Minutes} minutos y {timeRemaining.Seconds} segundos.");
+                    }
+
+                    return Page();
                 }
                 else
                 {
-                    await _userManager.AccessFailedAsync(user);
                     var failedAttempts = await _userManager.GetAccessFailedCountAsync(user);
-                    if (failedAttempts >= 3)
+                    var maxAttempts = _identityOptions.Value.Lockout.MaxFailedAccessAttempts; // El número máximo de intentos fallidos antes de bloquear
+                    var attemptsLeft = maxAttempts - failedAttempts;
+                    if (failedAttempts >= maxAttempts)
                     {
                         ModelState.AddModelError(string.Empty, "Intento de ingreso inválido");
                         ModelState.AddModelError(string.Empty, "Tu cuenta ha sido bloqueada debido a demasiados intentos fallidos.");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Intento de inicio de sesión inválido.");
+                        ModelState.AddModelError(string.Empty, $"Intento de inicio de sesión inválido. Te quedan {attemptsLeft} intentos antes de que tu cuenta sea bloqueada.");
                     }
                     return Page();
                 }

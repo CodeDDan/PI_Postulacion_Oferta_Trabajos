@@ -5,7 +5,27 @@
 }
 
 <h1>@ViewData["Title"] <i class="bi bi-person-plus"></i> </h1>
+<style>
+    /* Color de fondo del checkbox no marcado */
+    .form-check-input {
+        background-color: #ffffff; /* Color de fondo blanco por defecto */
+        border-color: #ced4da; /* Color del borde por defecto */
+    }
 
+        .form-check-input:checked {
+            background-color: #e90066; /* Color de fondo cuando está seleccionado */
+            border-color: #e90066; /* Color del borde cuando está seleccionado */
+        }
+
+        .form-check-input:active {
+            background-color: #e90066; /* Color de fondo cuando está seleccionado */
+            border-color: #e90066; /* Color del borde cuando está seleccionado */
+        }
+
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25); /* Color de la sombra del enfoque */
+        }
+</style>
 <div class="row">
     <div class="col-md-4">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -47,6 +67,29 @@
                 <label asp-for="Input.PhoneNumber"><i class="bi bi-phone-fill"></i> Celular</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
+
+            <!-- Campos para la creación de usuario empleador--><!-- Switch para usuario empleador -->
+            <div class="form-check form-switch my-2">
+                <input asp-for="Input.esEmpleador" class="form-check-input" type="checkbox" id="esEmpleador" />
+                <label class="form-check-label" for="aceptoTerminos">
+                    @Html.DisplayNameFor(model => model.Input.esEmpleador)
+                </label>
+                <span asp-validation-for="Input.esEmpleador" class="text-danger"></span>
+            </div>
+
+            <!-- Campos adicionales para empresa, inicialmente ocultos -->
+            <div id="employerFields" style="display: none;">
+                <div class="form-floating">
+                    <input asp-for="Input.EmpEmailAcceso" class="form-control my-2" />
+                    <label asp-for="Input.EmpEmailAcceso"><i class="bi bi-envelope-at-fill"></i> Email de la Empresa</label>
+                    <span asp-validation-for="Input.EmpEmailAcceso" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Input.EmpPassword" class="form-control my-2" type="password" />
+                    <label asp-for="Input.EmpPassword"><i class="bi bi-file-lock-fill"></i> Contraseña de la Empresa</label>
+                    <span asp-validation-for="Input.EmpPassword" class="text-danger"></span>
+                </div>
+            </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-custom my-2">Registrarse</button>
         </form>
     </div>
@@ -61,4 +104,26 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Función para manejar la visibilidad de los campos adicionales
+        function toggleEmployerFields() {
+            var employerFields = document.getElementById('employerFields');
+            var esEmpleador = document.getElementById('esEmpleador').checked;
+            if (esEmpleador) {
+                employerFields.style.display = 'block';
+            } else {
+                employerFields.style.display = 'none';
+            }
+        }
+
+        // Ejecutar la verificación al cargar la página
+        window.onload = function () {
+            toggleEmployerFields();
+        };
+
+        // Ejecutar la verificación cada vez que se cambie el estado del checkbox
+        document.getElementById('esEmpleador').addEventListener('change', function () {
+            toggleEmployerFields();
+        });
+    </script>
 }

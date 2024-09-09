@@ -17,13 +17,16 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PI_Postulacion_Oferta_Trabajos.Models;
+using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+        private readonly PO_TrabajosContext _context;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly UserManager<Usuario> _userManager;
         private readonly IUserStore<Usuario> _userStore;
@@ -32,12 +35,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            PO_TrabajosContext context,
             UserManager<Usuario> userManager,
             IUserStore<Usuario> userStore,
             SignInManager<Usuario> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _context = context;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -72,24 +77,24 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
         public class InputModel
         {
             // Aquí definimos los campos para el ingreso de nuestro modelo
-            [Required]
+            [Required(ErrorMessage = "El nombre es obligatorio.")]
             public string UsuNombre { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "El apellido es obligatorio.")]
             public string UsuApellido { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "La cédula es obligatoria.")]
             public string UsuCedula { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "El número de teléfono es obligatorio.")]
             public string PhoneNumber { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "El correo es obligatorio.")]
+            [EmailAddress(ErrorMessage = "Ingrese una dirección de correo electrónico válida.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -97,8 +102,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Ingrese la contraseña.")]
+            [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} caracteres y no más de {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -108,9 +113,19 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirar contraseña")]
+            [Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
             public string ConfirmPassword { get; set; }
+
+            // Campos para el registro de usuario empelador
+            // Campos para la validación de empresa
+            public string? EmpEmailAcceso { get; set; }
+            public string? EmpPassword { get; set; }
+
+            // Nueva propiedad para el switch o check
+            [Required]
+            [Display(Name = "Crear como usuario empresa")]
+            public bool esEmpleador { get; set; }
         }
 
 
@@ -124,6 +139,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = new Usuario()
@@ -135,6 +151,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
                 };
+
+                bool valor = Input.esEmpleador;
+
                 // Validar el modelo Usuario
                 var context = new ValidationContext(user, serviceProvider: null, items: null);
                 var validationResults = new List<ValidationResult>();
@@ -143,6 +162,31 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
 
                 if (isValid)
                 {
+                    string rolAsignado = "";
+
+                    // Comprobaremos que rol debemos asignar
+                    if (valor)
+                    {
+                        // Verificar si la empresa existe en la base de datos con el email y la contraseña dados
+                        var empresa = await _context.Empresas
+                            .FirstOrDefaultAsync(e => e.EmpEmailAcceso == Input.EmpEmailAcceso && e.EmpPassword == Input.EmpPassword);
+
+                        if (empresa == null)
+                        {
+                            // Si no se encuentra la empresa, se retorna un error
+                            ModelState.AddModelError(string.Empty, "El email o la contraseña de la empresa son incorrectos.");
+                            return Page();
+                        }
+
+                        rolAsignado = "empleador";
+                        // Si la empresa es válida, asignamos el ID de la empresa al usuario
+                        user.UsuarioIdEmpresa = empresa.EmpId;
+                    }
+                    else
+                    {
+                        rolAsignado = "trabajador";
+                    }
+                    // Creamos el usuario después de las validaciones
                     await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                     await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                     var result = await _userManager.CreateAsync(user, Input.Password);
@@ -151,8 +195,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created a new account with password.");
 
-                        // Aquí asignamos roles
-                        await _userManager.AddToRoleAsync(user, "trabajador");
+                        // Creamos el usuario con el rol
+                        await _userManager.AddToRoleAsync(user, rolAsignado);
 
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
