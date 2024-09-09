@@ -17,7 +17,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.31")
+                .HasAnnotation("ProductVersion", "6.0.33")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -51,22 +51,22 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1962c77e-b509-4b1c-a377-70e0eaf9dd3d",
-                            ConcurrencyStamp = "473b9bb0-a8f8-49b8-9ffb-67d34a7bf277",
+                            Id = "e2ac89c5-87ed-4356-a34d-b04117db0055",
+                            ConcurrencyStamp = "02faf841-c54a-4237-b6f8-b921e84555a3",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "7cf341e3-f214-4372-8897-dcea283ae777",
-                            ConcurrencyStamp = "3d1fecca-52a7-42c8-bfa2-a34d68e1c0bd",
+                            Id = "363beda3-7cc8-43af-9123-e813a46d6a2b",
+                            ConcurrencyStamp = "be055cf9-f354-4218-880e-90aae9f085e3",
                             Name = "trabajador",
                             NormalizedName = "trabajador"
                         },
                         new
                         {
-                            Id = "09524f16-ab53-4b7f-bce4-a7d35d4f83f5",
-                            ConcurrencyStamp = "443ee3c4-da4e-4c24-8b48-39b5510744f6",
+                            Id = "1fa5bed2-d336-433a-b5c0-4a35b034f034",
+                            ConcurrencyStamp = "40804cee-20d1-4ed3-8111-40ce63e866be",
                             Name = "empleador",
                             NormalizedName = "empleador"
                         });
@@ -125,10 +125,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -165,10 +167,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -176,56 +180,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.Administrador", b =>
-                {
-                    b.Property<int>("AdmId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ADM_ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdmId"), 1L, 1);
-
-                    b.Property<string>("AdmApellido")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(64)")
-                        .HasColumnName("ADM_APELLIDO");
-
-                    b.Property<string>("AdmCorreo")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(128)")
-                        .HasColumnName("ADM_CORREO");
-
-                    b.Property<string>("AdmDireccion")
-                        .HasMaxLength(128)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(128)")
-                        .HasColumnName("ADM_DIRECCION");
-
-                    b.Property<string>("AdmNombre")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(64)")
-                        .HasColumnName("ADM_NOMBRE");
-
-                    b.Property<string>("AdmPassword")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(128)")
-                        .HasColumnName("ADM_PASSWORD");
-
-                    b.HasKey("AdmId");
-
-                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("AdmId"), false);
-
-                    b.ToTable("ADMINISTRADORES", (string)null);
                 });
 
             modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.AeSectorPrincipal", b =>
@@ -332,6 +286,27 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.ToTable("CIUDADES", (string)null);
                 });
 
+            modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.CV", b =>
+                {
+                    b.Property<int>("UCV_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UCV_ID"), 1L, 1);
+
+                    b.Property<string>("UCV_NOMBRE")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UCV_ID");
+
+                    b.ToTable("USUARIO_CV", (string)null);
+                });
+
             modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.Empresa", b =>
                 {
                     b.Property<int>("EmpId")
@@ -350,6 +325,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(128)")
                         .HasColumnName("EMP_CIUDAD");
+
+                    b.Property<string>("EmpDescripcion")
+                        .HasMaxLength(1000)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("EMP_DESCRIPCION");
 
                     b.Property<string>("EmpEmailAcceso")
                         .IsRequired()
@@ -465,12 +446,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .HasColumnType("int")
                         .HasColumnName("EMP_ID");
 
-                    b.Property<string>("OfeAreaLaboral")
-                        .HasMaxLength(64)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(64)")
-                        .HasColumnName("OFE_AREA_LABORAL");
-
                     b.Property<decimal>("OfeCantidadVacantes")
                         .HasColumnType("numeric(18,0)")
                         .HasColumnName("OFE_CANTIDAD_VACANTES");
@@ -539,6 +514,10 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .HasColumnType("int")
                         .HasColumnName("OFM_ID");
 
+                    b.Property<int>("ProId")
+                        .HasColumnType("int")
+                        .HasColumnName("PRO_ID");
+
                     b.Property<int>("PulId")
                         .HasColumnType("int")
                         .HasColumnName("PUL_ID");
@@ -554,6 +533,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.HasIndex(new[] { "CidId" }, "FK_OFERTAS_CIUDAD_FK");
 
                     b.HasIndex(new[] { "OfmId" }, "FK_OFERTAS_OFERTA_MODALIDAD_FK");
+
+                    b.HasIndex(new[] { "ProId" }, "FK_OFERTAS_PROVINCIAS_FK");
 
                     b.HasIndex(new[] { "PulId" }, "FK_OFERTAS_PUESTOS_LABORALES_FK");
 
@@ -739,6 +720,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<int?>("UsuarioIdEmpresa")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -813,26 +797,36 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UseId"), 1L, 1);
 
-                    b.Property<string>("UseDescripcion")
+                    b.Property<string>("USE_AREA")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(128)")
-                        .HasColumnName("USE_DESCRIPCION");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UseDocumento")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(128)")
-                        .HasColumnName("USE_DOCUMENTO");
+                    b.Property<string>("USE_DOCUMENTO")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UseTipoFormacion")
+                    b.Property<string>("USE_ESTADO")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(64)")
-                        .HasColumnName("USE_TIPO_FORMACION");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("USE_FECHAF")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("USE_FECHAI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("USE_INSTITUCION")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("USE_TIPO_FORMACION")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("USE_TITULO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsuarioId")
                         .IsRequired()
@@ -905,6 +899,35 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.ToTable("USUARIO_EXPERIENCIA_LABORAL", (string)null);
                 });
 
+            modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.UsuarioIdioma", b =>
+                {
+                    b.Property<int>("IDI_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDI_ID"), 1L, 1);
+
+                    b.Property<string>("IDI_ESCRITO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IDI_IDIOMA")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IDI_ORAL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IDI_ID");
+
+                    b.ToTable("USUARIO_IDIOMA", (string)null);
+                });
+
             modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.UsuarioPerfil", b =>
                 {
                     b.Property<int>("UspId")
@@ -915,7 +938,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UspId"), 1L, 1);
 
                     b.Property<string>("UspAspiracionLarboral")
-                        .IsRequired()
                         .HasMaxLength(128)
                         .IsUnicode(false)
                         .HasColumnType("varchar(128)")
@@ -933,7 +955,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .HasColumnType("varchar(128)")
                         .HasColumnName("USP_HOJA_VIDA");
 
-                    b.Property<decimal>("UspPreferenciaSalarial")
+                    b.Property<decimal?>("UspPreferenciaSalarial")
                         .HasColumnType("decimal(10,2)")
                         .HasColumnName("USP_PREFERENCIA_SALARIAL");
 
@@ -1060,6 +1082,12 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_OFERTAS_FK_OFERTA_OFERTA_M");
 
+                    b.HasOne("PI_Postulacion_Oferta_Trabajos.Models.Provincia", "Pro")
+                        .WithMany("Ofertas")
+                        .HasForeignKey("ProId")
+                        .IsRequired()
+                        .HasConstraintName("FK_OFERTAS_FK_PROVINCIAS");
+
                     b.HasOne("PI_Postulacion_Oferta_Trabajos.Models.PuestoLaboral", "Pul")
                         .WithMany("Oferta")
                         .HasForeignKey("PulId")
@@ -1073,6 +1101,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.Navigation("Emp");
 
                     b.Navigation("Ofm");
+
+                    b.Navigation("Pro");
 
                     b.Navigation("Pul");
                 });
@@ -1094,6 +1124,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     b.HasOne("PI_Postulacion_Oferta_Trabajos.Models.Usuario", "Usu")
                         .WithMany("Postulaciones")
                         .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_POSTULAC_FK_USUARI_USUARIOS");
 
@@ -1201,6 +1232,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
             modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.Provincia", b =>
                 {
                     b.Navigation("Ciudades");
+
+                    b.Navigation("Ofertas");
                 });
 
             modelBuilder.Entity("PI_Postulacion_Oferta_Trabajos.Models.PuestoLaboral", b =>

@@ -18,8 +18,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
             : base(options)
         {
         }
-
-        public virtual DbSet<Administrador> Administradores { get; set; } = null!;
         public virtual DbSet<AeSectorPrincipal> AeSectoresPrincipales { get; set; } = null!;
         public virtual DbSet<AeSubdivision> AeSubdivisions { get; set; } = null!;
         public virtual DbSet<AreaLaboral> AreasLaborales { get; set; } = null!;
@@ -73,41 +71,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
             empleador.NormalizedName = "empleador";
 
             modelBuilder.Entity<IdentityRole>().HasData(admin, trabajador, empleador);
-
-            modelBuilder.Entity<Administrador>(entity =>
-            {
-                entity.HasKey(e => e.AdmId)
-                    .IsClustered(false);
-
-                entity.ToTable("ADMINISTRADORES");
-
-                entity.Property(e => e.AdmId).HasColumnName("ADM_ID");
-
-                entity.Property(e => e.AdmApellido)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("ADM_APELLIDO");
-
-                entity.Property(e => e.AdmCorreo)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("ADM_CORREO");
-
-                entity.Property(e => e.AdmDireccion)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("ADM_DIRECCION");
-
-                entity.Property(e => e.AdmNombre)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
-                    .HasColumnName("ADM_NOMBRE");
-
-                entity.Property(e => e.AdmPassword)
-                    .HasMaxLength(128)
-                    .IsUnicode(false)
-                    .HasColumnName("ADM_PASSWORD");
-            });
 
             modelBuilder.Entity<AeSectorPrincipal>(entity =>
             {
@@ -450,7 +413,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Persistence.Context
                 entity.HasOne(d => d.Usu)
                     .WithMany(p => p.Postulaciones)
                     .HasForeignKey(d => d.UsuarioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_POSTULAC_FK_USUARI_USUARIOS");
             });
 

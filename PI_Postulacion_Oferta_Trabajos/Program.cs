@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 using Microsoft.AspNetCore.Identity;
-using PI_Postulacion_Oferta_Trabajos.CustomValidations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,5 +56,8 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Seed the database
+await SeedData.InitializeAsync(app.Services);
 
 app.Run();

@@ -5,28 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PI_Postulacion_Oferta_Trabajos.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class Inicio : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "ADMINISTRADORES",
-                columns: table => new
-                {
-                    ADM_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ADM_NOMBRE = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: false),
-                    ADM_APELLIDO = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: false),
-                    ADM_CORREO = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: false),
-                    ADM_PASSWORD = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: false),
-                    ADM_DIRECCION = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ADMINISTRADORES", x => x.ADM_ID)
-                        .Annotation("SqlServer:Clustered", false);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AE_SECTORES_PRINCIPALES",
                 columns: table => new
@@ -77,6 +59,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     UsuNombre = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     UsuApellido = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     UsuCedula = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UsuarioIdEmpresa = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -141,6 +124,36 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "USUARIO_CV",
+                columns: table => new
+                {
+                    UCV_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UCV_NOMBRE = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_USUARIO_CV", x => x.UCV_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "USUARIO_IDIOMA",
+                columns: table => new
+                {
+                    IDI_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IDI_IDIOMA = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IDI_ESCRITO = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IDI_ORAL = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_USUARIO_IDIOMA", x => x.IDI_ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AE_SUBDIVISION",
                 columns: table => new
                 {
@@ -176,7 +189,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     EMP_CIUDAD = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: true),
                     EMP_TELEFONO = table.Column<decimal>(type: "numeric(18,0)", nullable: false),
                     EMP_NUMERO_TRABAJADORES = table.Column<decimal>(type: "numeric(18,0)", nullable: true),
-                    EMP_VACANTES_ANUALES = table.Column<decimal>(type: "numeric(18,0)", nullable: true)
+                    EMP_VACANTES_ANUALES = table.Column<decimal>(type: "numeric(18,0)", nullable: true),
+                    EMP_DESCRIPCION = table.Column<string>(type: "varchar(1000)", unicode: false, maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -255,8 +269,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -300,8 +314,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -346,9 +360,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     USE_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    USE_TIPO_FORMACION = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: false),
-                    USE_DOCUMENTO = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: false),
-                    USE_DESCRIPCION = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: false)
+                    USE_TIPO_FORMACION = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    USE_DOCUMENTO = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    USE_TITULO = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    USE_AREA = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    USE_INSTITUCION = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    USE_ESTADO = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    USE_FECHAI = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    USE_FECHAF = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -393,8 +412,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     USP_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    USP_ASPIRACION_LARBORAL = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: false),
-                    USP_PREFERENCIA_SALARIAL = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    USP_ASPIRACION_LARBORAL = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: true),
+                    USP_PREFERENCIA_SALARIAL = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     USP_HOJA_VIDA = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: true),
                     USP_DISCAPACIDAD = table.Column<string>(type: "varchar(32)", unicode: false, maxLength: 32, nullable: true)
                 },
@@ -440,6 +459,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     PUL_ID = table.Column<int>(type: "int", nullable: false),
                     CID_ID = table.Column<int>(type: "int", nullable: false),
                     ARL_ID = table.Column<int>(type: "int", nullable: false),
+                    PRO_ID = table.Column<int>(type: "int", nullable: false),
                     OFE_TITULO = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: false),
                     OFE_DESCRIPCION = table.Column<string>(type: "varchar(128)", unicode: false, maxLength: 128, nullable: false),
                     OFE_TIPO_CONTRATO = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: false),
@@ -452,8 +472,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                     OFE_DISPONIBILIDAD_VIAJAR = table.Column<bool>(type: "bit", nullable: false),
                     OFE_DISPONIBILIDAD_CAMBIO_RESIDENCIA = table.Column<bool>(type: "bit", nullable: false),
                     OFE_DISCAPACIDAD = table.Column<bool>(type: "bit", nullable: false),
-                    OFE_EDAD_MINIMA = table.Column<int>(type: "int", nullable: true),
-                    OFE_AREA_LABORAL = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: true)
+                    OFE_EDAD_MINIMA = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -484,6 +503,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         column: x => x.PUL_ID,
                         principalTable: "PUESTOS_LABORALES",
                         principalColumn: "PUL_ID");
+                    table.ForeignKey(
+                        name: "FK_OFERTAS_FK_PROVINCIAS",
+                        column: x => x.PRO_ID,
+                        principalTable: "PROVINCIAS",
+                        principalColumn: "PRO_ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -515,23 +539,24 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                         name: "FK_POSTULAC_FK_USUARI_USUARIOS",
                         column: x => x.UsuarioId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "09524f16-ab53-4b7f-bce4-a7d35d4f83f5", "443ee3c4-da4e-4c24-8b48-39b5510744f6", "empleador", "empleador" });
+                values: new object[] { "1fa5bed2-d336-433a-b5c0-4a35b034f034", "40804cee-20d1-4ed3-8111-40ce63e866be", "empleador", "empleador" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "1962c77e-b509-4b1c-a377-70e0eaf9dd3d", "473b9bb0-a8f8-49b8-9ffb-67d34a7bf277", "admin", "admin" });
+                values: new object[] { "363beda3-7cc8-43af-9123-e813a46d6a2b", "be055cf9-f354-4218-880e-90aae9f085e3", "trabajador", "trabajador" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "7cf341e3-f214-4372-8897-dcea283ae777", "3d1fecca-52a7-42c8-bfa2-a34d68e1c0bd", "trabajador", "trabajador" });
+                values: new object[] { "e2ac89c5-87ed-4356-a34d-b04117db0055", "02faf841-c54a-4237-b6f8-b921e84555a3", "admin", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "FK_SECTORES_PRINCIPALES_SUBDIVISION_FK",
@@ -608,6 +633,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                 column: "OFM_ID");
 
             migrationBuilder.CreateIndex(
+                name: "FK_OFERTAS_PROVINCIAS_FK",
+                table: "OFERTAS",
+                column: "PRO_ID");
+
+            migrationBuilder.CreateIndex(
                 name: "FK_OFERTAS_PUESTOS_LABORALES_FK",
                 table: "OFERTAS",
                 column: "PUL_ID");
@@ -656,9 +686,6 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ADMINISTRADORES");
-
-            migrationBuilder.DropTable(
                 name: "AE_SUBDIVISION");
 
             migrationBuilder.DropTable(
@@ -680,6 +707,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
                 name: "POSTULACIONES");
 
             migrationBuilder.DropTable(
+                name: "USUARIO_CV");
+
+            migrationBuilder.DropTable(
                 name: "USUARIO_DETALLES");
 
             migrationBuilder.DropTable(
@@ -687,6 +717,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Migrations
 
             migrationBuilder.DropTable(
                 name: "USUARIO_EXPERIENCIA_LABORAL");
+
+            migrationBuilder.DropTable(
+                name: "USUARIO_IDIOMA");
 
             migrationBuilder.DropTable(
                 name: "USUARIO_PERFIL");
