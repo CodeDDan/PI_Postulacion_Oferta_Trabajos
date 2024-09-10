@@ -21,6 +21,21 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
             _context = context;
         }
 
+        // Acción para obtener provincias y ciudades
+        [HttpGet]
+        public IActionResult GetProvincias()
+        {
+            var provincias = _context.Provincias
+                .Select(p => new
+                {
+                    p.ProId,
+                    p.ProNombre
+                })
+                .ToList();
+
+            return Json(provincias);
+        }
+
         // GET: Provincias
         public async Task<IActionResult> Index()
         {
