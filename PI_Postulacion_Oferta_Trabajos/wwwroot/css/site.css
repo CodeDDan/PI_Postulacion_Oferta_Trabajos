@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 html {
     font-size: 14px;
 }
@@ -13,16 +14,18 @@ html {
     min-height: 100%;
 }
 
+/* Fuente y Tamaño de la letra */
 body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif; /* Cambia 'Roboto' al nombre de la fuente que hayas seleccionado */
+    font-weight: 500;
 }
 
 /* Estilo base para todos los enlaces */
 a {
     color: #e90066; /* Color del enlace */
     text-decoration: none; /* Quita el subrayado por defecto */
-    font-weight: 600; /* Opcional: cambia el peso de la fuente */
+    font-weight: 700; /* Opcional: cambia el peso de la fuente */
     transition: color 0.3s; /* Transición suave para el color */
 }
 

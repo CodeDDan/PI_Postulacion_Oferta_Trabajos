@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PI_Postulacion_Oferta_Trabajos.CustomValidations;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
@@ -84,6 +85,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
             public string UsuApellido { get; set; }
 
             [Required(ErrorMessage = "La cédula es obligatoria.")]
+            [CedulaEcuatoriana(ErrorMessage = "Cédula ecuatoriana no válida.")]
             public string UsuCedula { get; set; }
 
             [Required(ErrorMessage = "El número de teléfono es obligatorio.")]
@@ -142,6 +144,16 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // Verificar la unicidad del campo UsuCedula
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.UsuCedula == Input.UsuCedula);
+
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError(string.Empty, $"La cédula {Input.UsuCedula} ya está registrada.");
+                    return Page();
+                }
+
                 var user = new Usuario()
                 {
                     UsuNombre = Input.UsuNombre,

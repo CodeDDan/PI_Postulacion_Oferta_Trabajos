@@ -104,7 +104,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     }
                     else if (await _userManager.IsInRoleAsync(user, "trabajador"))
                     {
-                        return LocalRedirect("~/Home/Index");
+                        return LocalRedirect("~/Trabajador/Index");
                     }
                     else if (await _userManager.IsInRoleAsync(user, "empleador"))
                     {

@@ -24,6 +24,12 @@ namespace PI_Postulacion_Oferta_Trabajos.CustomValidations
                 return new ValidationResult("La cédula ecuatoriana debe tener 10 dígitos numéricos.");
             }
 
+            int codigoRegion = int.Parse(cedula.Substring(0, 2));
+            if (codigoRegion < 1 || codigoRegion > 30)
+            {
+                return new ValidationResult("La cédula no pertenece a una región válida.");
+            }
+
             // Validación del dígito verificador
             int[] coeficientes = { 2, 1, 2, 1, 2, 1, 2, 1, 2 };
             int suma = 0;
