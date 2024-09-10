@@ -65,6 +65,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         [HttpGet]
         public IActionResult GetUserData(string userId)
         {
+            // Obtener información del usuario desde UsuarioDetalles, si existe
             var usuarioDetalle = _context.UsuarioDetalles
                 .Where(u => u.UsuarioId == userId)
                 .Select(u => new
@@ -74,24 +75,27 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     u.UsdGenero,
                     u.UsdEstadoCivil,
                     u.UsdFechaNacimiento
-                    // Otros campos de usuarioDetalle que necesites
                 })
                 .FirstOrDefault();
 
+            // Obtener provincias siempre
+            var provincias = _context.Provincias
+                .Select(p => new
+                {
+                    p.ProId,
+                    p.ProNombre
+                })
+                .ToList();
+
+            int? proId = null;
+
             if (usuarioDetalle != null)
             {
-                var provincias = _context.Provincias
-                    .Select(p => new
-                    {
-                        p.ProId,
-                        p.ProNombre
-                    })
-                    .ToList();
+                var ciudadNombre = usuarioDetalle.UsdCiudad;
 
-                var tal = usuarioDetalle.UsdCiudad;
-
+                // Obtener la provincia de la ciudad, si existe
                 var ciudad = _context.Ciudades
-                    .Where(c => c.CidNombre == tal)
+                    .Where(c => c.CidNombre == ciudadNombre)
                     .Select(c => new
                     {
                         c.CidId,
@@ -100,27 +104,27 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     })
                     .FirstOrDefault();
 
-                int? proId = ciudad?.ProId;
-
-                // Obtener información adicional del usuario desde AspNetUsers
-                var userInfo = _context.Users
-                    .Where(u => u.Id == userId)
-                    .Select(u => new
-                    {
-                        u.Email,
-                        u.PhoneNumber,
-                        u.UsuCedula,
-                        u.UsuNombre,
-                        u.UsuApellido
-                    })
-                    .FirstOrDefault();
-
-                // Combina la información
-                return Json(new { usuarioDetalle, provincias, proId, userInfo });
+                // Obtener el ID de la provincia asociada, si la ciudad fue encontrada
+                proId = ciudad?.ProId;
             }
 
-            return Json(null);
+            // Obtener información del usuario desde AspNetUsers
+            var userInfo = _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new
+                {
+                    u.Email,
+                    u.PhoneNumber,
+                    u.UsuCedula,
+                    u.UsuNombre,
+                    u.UsuApellido
+                })
+                .FirstOrDefault();
+
+            // Combina la información
+            return Json(new { usuarioDetalle, provincias, proId, userInfo });
         }
+
 
 
 
@@ -169,14 +173,19 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
         [HttpGet]
         public IActionResult GetProfileImageUrl(string usuarioId)
-        {
-            var usuarioDetalle = _context.UsuarioDetalles
-                .Where(u => u.UsuarioId == usuarioId)
-                .Select(u => u.UsdFoto)
-                .FirstOrDefault();
-            var imageUrl = Url.Content("~/fotoPerfil/" + usuarioDetalle);
-            return Json(new { url = imageUrl });
-        }
+{
+    var usuarioDetalle = _context.UsuarioDetalles
+        .Where(u => u.UsuarioId == usuarioId)
+        .Select(u => u.UsdFoto)
+        .FirstOrDefault();
+
+    // Asigna la imagen por defecto si no hay una imagen guardada en la base de datos
+    var imageUrl = string.IsNullOrEmpty(usuarioDetalle)
+        ? Url.Content("~/images/profile-placeholder.png")
+        : Url.Content("~/fotoPerfil/" + usuarioDetalle);
+
+    return Json(new { url = imageUrl });
+}
 
         // GET: UsuarioDetalles
         public async Task<IActionResult> Index()

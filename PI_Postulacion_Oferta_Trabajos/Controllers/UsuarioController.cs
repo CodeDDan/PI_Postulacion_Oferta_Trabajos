@@ -40,6 +40,18 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
             return View(usuarioIdiomas); // Pasar la lista a la vista
         }
+        public async Task<IActionResult> vista_perfil()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
+
+            // Obtener el listado de UsuarioIdioma para el usuario actual
+            var usuarioIdiomas = await _context.UsuarioIdiomas
+                .Where(ui => ui.UsuarioId == userId)
+                .ToListAsync();
+
+            return View(usuarioIdiomas); // Pasar la lista a la vista
+        }
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string usuarioId, string oldPassword, string newPassword, string confirmNewPassword)
