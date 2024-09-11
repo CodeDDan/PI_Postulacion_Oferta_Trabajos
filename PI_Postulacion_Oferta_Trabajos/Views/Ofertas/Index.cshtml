@@ -1,143 +1,89 @@
 ﻿@model IEnumerable<PI_Postulacion_Oferta_Trabajos.Models.Oferta>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ofertas de Trabajo";
 }
 
-<h1>Index</h1>
+<h1 class="mb-4 text-center">@ViewData["Title"] <i class="bi bi-briefcase"></i></h1>
 
+<!-- Botón para crear nueva oferta -->
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-custom btn-lg mb-3">
+        <i class="bi bi-plus-circle-fill"></i> Crear Nueva Oferta
+    </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeTitulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeDescripcion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeTipoContrato)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeSalario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeFechaPublicacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeCantidadVacantes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeTiempoExperiencia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeEducacionMinima)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeLicencia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeDisponibilidadViajar)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeDisponibilidadCambioResidencia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeDiscapacidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfeEdadMinima)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Arl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Emp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ofm)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pul)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pro)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeTitulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeDescripcion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeTipoContrato)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeSalario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeFechaPublicacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeCantidadVacantes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeTiempoExperiencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeEducacionMinima)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeLicencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeDisponibilidadViajar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeDisponibilidadCambioResidencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeDiscapacidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfeEdadMinima)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Arl.ArlNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cid.CidNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Emp.EmpNombreEmpresa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ofm.OfmNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pul.PulNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pro.ProNombre)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OfeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OfeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OfeId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<!-- Tabla de ofertas de trabajo -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Salario</th>
+                    <th>Publicación</th>
+                    <th>Empresa</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.OfeTitulo)</td>
+
+                        <!-- Mostrar solo un resumen de la descripción -->
+                        <td>
+                            @if (item.OfeDescripcion.Length > 100)
+                            {
+                                @(item.OfeDescripcion.Substring(0, 100)
+                                    + "...")
+                            }
+                            else
+                            {
+                                @item.OfeDescripcion
+                            }
+                        </td>
+
+                        <td>@Html.DisplayFor(modelItem => item.OfeSalario)</td>
+                        <td>@Html.DisplayFor(modelItem => item.OfeFechaPublicacion)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Emp.EmpNombreEmpresa)</td>
+                        <td class="text-center">
+                            <!-- Botones de acción con iconos -->
+                            <a asp-action="Edit" asp-route-id="@item.OfeId" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.OfeId" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-info-circle"></i> Detalles
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.OfeId" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Estilos personalizados -->
+<style>
+    .btn-outline-warning, .btn-outline-info, .btn-outline-danger {
+        margin-right: 5px;
+    }
+
+    .table {
+        font-size: 1.1rem;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .table-dark th {
+        background-color: #343a40;
+        color: #fff;
+    }
+</style>

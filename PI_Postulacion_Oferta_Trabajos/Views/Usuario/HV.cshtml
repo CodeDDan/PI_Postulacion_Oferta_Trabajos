@@ -2908,7 +2908,7 @@
                                                                 </div>`;
                             objectiveList.append(noObjectiveHtml);
                         }
-                        if (data[0].uspPreferenciaSalarial && data[0].uspPreferenciaSalarial.trim() !== "") {
+                        if (data[0].uspPreferenciaSalarial && typeof data[0].uspPreferenciaSalarial === 'number' && data[0].uspPreferenciaSalarial > 0) {
 
                             const delete_edit2 = `<button class="btn btn-link edit-salary-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editSalaryModal">
                                             <!-- Icono de lápiz para editar -->

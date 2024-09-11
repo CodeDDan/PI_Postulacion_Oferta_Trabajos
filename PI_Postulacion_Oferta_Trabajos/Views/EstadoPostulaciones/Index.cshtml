@@ -1,41 +1,84 @@
 ﻿@model IEnumerable<PI_Postulacion_Oferta_Trabajos.Models.EstadoPostulacion>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Estados de Postulación";
 }
 
-<h1>Index</h1>
+<h1 class="mb-4 text-center">@ViewData["Title"] <i class="bi bi-clipboard-check"></i></h1>
 
+<!-- Botón para crear un nuevo estado -->
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-custom btn-lg mb-3">
+        <i class="bi bi-plus-circle-fill"></i> Crear Nuevo Estado
+    </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EspNombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EspDescripcion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EspNombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EspDescripcion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EspId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EspId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EspId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<!-- Tabla con los estados de postulación -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-hover table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.EspNombre)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.EspDescripcion)
+                    </th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.EspNombre)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.EspDescripcion)
+                        </td>
+                        <td class="text-center">
+                            <!-- Botones de acción con iconos de Bootstrap -->
+                            <a asp-action="Edit" asp-route-id="@item.EspId" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.EspId" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-info-circle"></i> Detalles
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.EspId" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Estilos adicionales -->
+<style>
+    h1 {
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .table {
+        font-size: 1.1rem;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .table-dark th {
+        background-color: #343a40;
+        color: #fff;
+    }
+</style>
