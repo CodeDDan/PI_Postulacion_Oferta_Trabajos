@@ -574,7 +574,7 @@
                 <form id="salaryForm">
                     <input type="text" id="UsuarioId" name="UsuarioId" class="form-control" value="@ViewBag.UserId" hidden />
                     <div class="mb-3">
-                        <input type="number" class="form-control" id="UspPreferenciaSalarial" required>
+                        <input type="number" class="form-control" id="UspPreferenciaSalarial" name="UspPreferenciaSalarial" step="0.01" min="0" max="9999.99" required>
                     </div>
                     <button type="submit" class="btn btn-primary" style="background-color: #ff4081; border-color: #ff4081;">Guardar</button>
                 </form>
@@ -1113,6 +1113,21 @@
 
 @section Scripts {
     <script>
+        document.getElementById('UspPreferenciaSalarial').addEventListener('input', function (e) {
+            let value = e.target.value;
+            // Expresión regular para verificar el formato: hasta 4 dígitos enteros y hasta 2 decimales, usando ',' como separador decimal
+            const regex = /^\d{0,4}(,\d{0,2})?$/;
+
+            // Reemplaza el punto por coma si hay puntos en el valor actual
+            value = value.replace('.', ',');
+
+            // Si el valor no cumple con el formato, lo recorta
+            if (!regex.test(value)) {
+                value = value.slice(0, -1);
+            }
+
+            e.target.value = value;
+        });
         const usuarioId = '@ViewBag.UserId';
         $('#profileImg').on('click', function () {
             $('#imageUpload').click();
@@ -1174,6 +1189,36 @@
                 }
             });
         }
+        function cargarProvincias() {
+            $.ajax({
+                url: '@Url.Action("GetProvincias", "Provincias")',
+                type: 'GET',
+                success: function (provincias) {
+                    var selectProvincia = $('#provincia');
+                    selectProvincia.empty();  // Limpiar las opciones actuales
+
+                    // Iterar sobre las provincias obtenidas y agregarlas como opciones
+                    $.each(provincias, function (index, provincia) {
+                        var option = $('<option>', {
+                            value: provincia.proId,
+                            text: provincia.proNombre
+                        });
+
+                        // Seleccionar la primera provincia de la lista automáticamente
+                        if (index === 0) {
+                            option.prop('selected', true);  // Marcar la primera opción como seleccionada
+                            cargarCiudades(provincia.proId); // Cargar las ciudades de la primera provincia seleccionada
+                        }
+
+                        selectProvincia.append(option);
+                    });
+                },
+                error: function () {
+                    console.log('Error al obtener las provincias.');
+                }
+            });
+        }
+
         // Evento para manejar el cambio en el select de provincias
         $(document).on('change', '#provincia', function () {
             var provinciaId = $(this).val();
@@ -1862,31 +1907,40 @@
             // Establecer la fecha máxima y mínima en el campo de fecha de nacimiento
             $('#fechaNacimiento').attr('max', maxDate);
             $('#fechaNacimiento').attr('min', minDate);
+            personalData();
+           function personalData(){
+                $.ajax({
+                    url: '@Url.Action("GetUserData", "UsuarioDetalles")',
+                    type: 'GET',
+                    data: { userId: usuarioId },
+                    success: function (response) {
+                        if (response !== null) {
+                            // Nombre completo
+                            var nombreCompleto = (response.userInfo?.usuNombre + " " + response.userInfo?.usuApellido).toUpperCase();
+                            $('#nombreApellido').text(nombreCompleto);
 
+                            // Fecha de nacimiento
+                            var fechaNacimiento = response.usuarioDetalle?.usdFechaNacimiento;
+                            if (fechaNacimiento) {
+                                $('#fechaNacimientoDisplay').text(fechaNacimiento.split('T')[0]);
+                            } else {
+                                // Mostrar "No disponible" si no hay fecha de nacimiento
+                                $('#fechaNacimientoDisplay').text("No disponible");
+                            }
 
-            $.ajax({
-                url: '@Url.Action("GetUserData", "UsuarioDetalles")',
-                type: 'GET',
-                data: { userId: usuarioId },
-                success: function (response) {
-                    if (response !== null) {
-                        var nombreCompleto = (response.userInfo.usuNombre + " " + response.userInfo.usuApellido).toUpperCase();
-                        $('#nombreApellido').text(nombreCompleto);
-
-                        // Otros detalles personales
-                        $('#fechaNacimientoDisplay').text(response.usuarioDetalle.usdFechaNacimiento.split('T')[0]);
-                        $('#generoDisplay').text(response.usuarioDetalle.usdGenero);
-                        $('#estadoCivilDisplay').text(response.usuarioDetalle.usdEstadoCivil);
-                        $('#cedulaDisplay').text(response.userInfo.usuCedula);
-                        $('#emailDisplay').text(response.userInfo.email);
+                            // Otros detalles personales
+                            $('#generoDisplay').text(response.usuarioDetalle?.usdGenero || 'No disponible');
+                            $('#estadoCivilDisplay').text(response.usuarioDetalle?.usdEstadoCivil || 'No disponible');
+                            $('#cedulaDisplay').text(response.userInfo?.usuCedula || 'No disponible');
+                            $('#emailDisplay').text(response.userInfo?.email || 'No disponible');
+                        }
+                    },
+                    error: function () {
+                        console.log('Error al obtener los datos del usuario.');
                     }
-                },
-                error: function () {
-                    console.log('Error al obtener los datos del usuario.');
-                }
-            });
-
-
+                });
+           }
+            
             $(document).on('click', '#editDatos', function () {
                 var userId = '@ViewBag.UserId'; // Obtenemos el UserId
                 $('#personalForm').submit(function (e) {
@@ -1908,6 +1962,7 @@
                                     showConfirmButton: false,
                                     timerProgressBar: true
                                 });
+                                personalData(); // Asumiendo que esta función actualiza los datos del usuario en la interfaz
                             } else {
                                 Swal.fire({
                                     title: 'Error',
@@ -1928,89 +1983,182 @@
                     });
                 });
                 $.ajax({
-                    url: '@Url.Action("GetUserData", "UsuarioDetalles")',
-                    type: 'GET',
-                    data: { userId: userId },
-                    success: function (data) {
-                        if (data) {
-                            // Llenar el select de estado civil con opciones predefinidas
-                            var estadoCivilSelect = $('#estadoCivil');
-                            var estadoCivilOptions = [
-                                'Soltero/a',
-                                'Casado/a',
-                                'Divorciado/a',
-                                'Pareja de Hecho',
-                                'Viudo/a',
-                                'Unión Libre'
-                            ];
+    url: '@Url.Action("GetUserData", "UsuarioDetalles")',
+    type: 'GET',
+    data: { userId: userId },
+    success: function (data) {
+        // Opciones predefinidas para Estado Civil, Género y provincias
+        var estadoCivilOptions = [
+            'Soltero/a',
+            'Casado/a',
+            'Divorciado/a',
+            'Pareja de Hecho',
+            'Viudo/a',
+            'Unión Libre'
+        ];
+        var generoOptions = [
+            'Masculino',
+            'Femenino',
+            'Otro'
+        ];
 
-                            estadoCivilSelect.empty(); // Limpiar opciones actuales
+        var estadoCivilSelect = $('#estadoCivil');
+        var generoSelect = $('#genero');
+        var selectProvincia = $('#provincia');
+        var selectCiudad = $('#ciudad'); // Asegúrate de tener un select para la ciudad
 
-                            $.each(estadoCivilOptions, function (index, option) {
-                                var newOption = $('<option>', {
-                                    value: option,
-                                    text: option
-                                });
-
-                                // Seleccionar la opción si coincide con usdEstadoCivil
-                                if (option === data.usuarioDetalle.usdEstadoCivil) {
-                                    newOption.prop('selected', true);
-                                }
-
-                                estadoCivilSelect.append(newOption);
-                            });
-
-                            // Llenar el select de provincias
-                            var selectProvincia = $('#provincia');
-                            selectProvincia.empty(); // Limpiar opciones actuales
-                            var provinciaSeleccionada = data.proId; // ID de la provincia que debe estar seleccionada
-                            var ciudadSeleccionada = data.usuarioDetalle.usdCiudad;
-
-                            $.each(data.provincias, function (index, provincia) {
-                                var option = $('<option>', {
-                                    value: provincia.proId,
-                                    text: provincia.proNombre
-                                });
-
-                                if (provincia.proId === provinciaSeleccionada) {
-                                    option.prop('selected', true);
-                                    cargarCiudades(provincia.proId, ciudadSeleccionada); // Cargar las ciudades de la provincia seleccionada
-                                }
-
-                                selectProvincia.append(option);
-                            });
-
-                            // Llenar el select de género con opciones predefinidas
-                            var generoSelect = $('#genero');
-                            var generoOptions = [
-                                'Masculino',
-                                'Femenino',
-                                'Otro'
-                            ];
-
-                            generoSelect.empty(); // Limpiar opciones actuales
-
-                            $.each(generoOptions, function (index, option) {
-                                var newOption = $('<option>', {
-                                    value: option,
-                                    text: option
-                                });
-
-                                // Seleccionar la opción si coincide con usdGenero
-                                if (option === data.usuarioDetalle.usdGenero) {
-                                    newOption.prop('selected', true);
-                                }
-
-                                generoSelect.append(newOption);
-                            });
-
-                            $('#fechaNacimiento').val(data.usuarioDetalle.usdFechaNacimiento.split('T')[0]);
-                            $('#email').val(data.userInfo.email);
-                            $('#phoneNumber').val(data.userInfo.phoneNumber);
-                            $('#cedula').val(data.userInfo.usuCedula);
-                        }
-                    }
+        // Si hay datos disponibles, llenar los selects con los valores correspondientes
+        if (data != null && data.usuarioDetalle != null) {
+            // Llenar el select de estado civil
+            estadoCivilSelect.empty();
+            $.each(estadoCivilOptions, function (index, option) {
+                var newOption = $('<option>', {
+                    value: option,
+                    text: option
                 });
+
+                if (option === data.usuarioDetalle.usdEstadoCivil) {
+                    newOption.prop('selected', true);
+                }
+
+                estadoCivilSelect.append(newOption);
+            });
+
+            // Llenar el select de provincias
+            selectProvincia.empty();
+            var provinciaSeleccionada = data.proId;
+            var ciudadSeleccionada = data.usuarioDetalle.usdCiudad;
+            $.each(data.provincias, function (index, provincia) {
+                var option = $('<option>', {
+                    value: provincia.proId,
+                    text: provincia.proNombre
+                });
+                                console.log(provinciaSeleccionada);
+                                if (provincia.proId === provinciaSeleccionada) {
+                    option.prop('selected', true);
+                    if (ciudadSeleccionada!=null) {
+                        cargarCiudades(provincia.proId, ciudadSeleccionada); // Cargar las ciudades de la provincia seleccionada
+                    } else {
+                        cargarCiudades(provincia.proId); // Cargar las ciudades de la provincia seleccionada
+                    }
+                }
+
+                selectProvincia.append(option);
+            });
+
+            // Llenar el select de género
+            generoSelect.empty();
+            $.each(generoOptions, function (index, option) {
+                var newOption = $('<option>', {
+                    value: option,
+                    text: option
+                });
+
+                if (option === data.usuarioDetalle.usdGenero) {
+                    newOption.prop('selected', true);
+                }
+
+                generoSelect.append(newOption);
+            });
+
+            // Llenar otros campos
+            var fechaNacimiento = data.usuarioDetalle?.usdFechaNacimiento;
+
+            if (fechaNacimiento) {
+                // Si existe fecha de nacimiento, usa esa fecha
+                $('#fechaNacimiento').val(fechaNacimiento.split('T')[0]);
+            } else {
+                // Si no existe fecha de nacimiento, calcula una fecha para una persona de 18 años o más
+                var today = new Date();
+                var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                var formattedDate = eighteenYearsAgo.toISOString().split('T')[0];
+
+                // Establecer la fecha por defecto
+                $('#fechaNacimiento').val(formattedDate);
+            }
+            $('#email').val(data.userInfo.email);
+            $('#phoneNumber').val(data.userInfo.phoneNumber);
+            $('#cedula').val(data.userInfo.usuCedula);
+        } else {
+            estadoCivilSelect.empty();
+            $.each(estadoCivilOptions, function (index, option) {
+                var newOption = $('<option>', {
+                    value: option,
+                    text: option
+                });
+
+                // Seleccionar la primera opción como predeterminada
+                if (index === 0) {
+                    newOption.prop('selected', true);
+                }
+
+                estadoCivilSelect.append(newOption);
+            });
+
+            generoSelect.empty();
+            $.each(generoOptions, function (index, option) {
+                var newOption = $('<option>', {
+                    value: option,
+                    text: option
+                });
+
+                // Seleccionar la primera opción como predeterminada
+                if (index === 0) {
+                    newOption.prop('selected', true);
+                }
+
+                generoSelect.append(newOption);
+            });
+
+            // Cargar provincias y ciudades
+            cargarProvincias();
+            
+            // Si no hay ciudad seleccionada, carga la primera ciudad de la provincia seleccionada
+
+            if (!data.usuarioDetalle || !data.usuarioDetalle.usdCiudad) {
+                var primeraCiudad = data.provincias.length > 0 ? data.provincias[0].ciudades[0] : null;
+                if (primeraCiudad) {
+                    selectCiudad.empty();
+                    $.each(data.provincias[0].ciudades, function (index, ciudad) {
+                        var option = $('<option>', {
+                            value: ciudad.ciudadId,
+                            text: ciudad.ciudadNombre
+                        });
+                        if (ciudad.ciudadId === primeraCiudad.ciudadId) {
+                            option.prop('selected', true);
+                        }
+
+                        selectCiudad.append(option);
+                    });
+                }
+            } else {
+                // Si ya existe una ciudad seleccionada, cargar las ciudades correspondientes
+                cargarCiudades(data.provincias.find(p => p.proId === data.proId).proId, data.usuarioDetalle.usdCiudad);
+            }
+
+            var fechaNacimiento = data.usuarioDetalle?.usdFechaNacimiento;
+            if (fechaNacimiento) {
+                // Si existe fecha de nacimiento, usa esa fecha
+                $('#fechaNacimiento').val(fechaNacimiento.split('T')[0]);
+            } else {
+                // Si no existe fecha de nacimiento, calcula una fecha para una persona de 18 años o más
+                var today = new Date();
+                var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                var formattedDate = eighteenYearsAgo.toISOString().split('T')[0];
+
+                // Establecer la fecha por defecto
+                $('#fechaNacimiento').val(formattedDate);
+            }
+            $('#email').val(data.userInfo.email);
+            $('#phoneNumber').val(data.userInfo.phoneNumber);
+            $('#cedula').val(data.userInfo.usuCedula);
+        }
+    },
+    error: function () {
+        console.log('Error al obtener los datos.');
+    }
+});
+
             });
             function updateProfileImage() {
                 $.ajax({
@@ -2357,29 +2505,40 @@
                 data: { usuarioId: usuarioId },
                 success: function (data) {
                     let itemsHtml = '';
-                    data.forEach(function (item) {
-                        itemsHtml += `
-                                        <div class="item">
-                                            <span>${item.usE_TITULO}</span>
-                                            <div>
-                                               <p>${item.usE_INSTITUCION}</p>
-                                               <p>${item.usE_TIPO_FORMACION} - ${item.usE_ESTADO}</p>
-                                            </div>
-                                                    <div class="icons">
-                                                         <button class="btn btn-link" id="educacionEdit" value="${item.useId}" data-toggle="modal" data-target="#educacionEditModal">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                        </svg>
-                                                    </button>
-                                                    <button id="deleteEducacion" class="btn btn-link" value="${item.useId}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                        </div>
-                                    `;
-                    });
+
+                    if (data.length === 0) {
+                        // Si no hay datos, mostrar mensaje predeterminado
+                        itemsHtml = `
+                        <div class="item">
+                            <span>Agrega tu experiencia laboral</span>
+                        </div>
+                    `;
+                    } else {
+                        // Si hay datos, construir los elementos
+                        data.forEach(function (item) {
+                            itemsHtml += `
+                            <div class="item">
+                                <span>${item.usE_TITULO}</span>
+                                <div>
+                                    <p>${item.usE_INSTITUCION}</p>
+                                    <p>${item.usE_TIPO_FORMACION} - ${item.usE_ESTADO}</p>
+                                </div>
+                                <div class="icons">
+                                    <button class="btn btn-link" id="educacionEdit" value="${item.useId}" data-toggle="modal" data-target="#educacionEditModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                        </svg>
+                                    </button>
+                                    <button id="deleteEducacion" class="btn btn-link" value="${item.useId}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        });
+                    }
 
                     $('#educationList').html(itemsHtml); // Insertar datos en el contenedor específico
                 },
@@ -2551,41 +2710,6 @@
 
         });
 
-        // Validación de cédula ecuatoriana
-        function validarCedula(cedula) {
-            if (cedula.length !== 10) return false;
-
-            let total = 0;
-            let digito = parseInt(cedula.charAt(9));
-            let coeficiente;
-
-            for (let i = 0; i < 9; i++) {
-                coeficiente = i % 2 === 0 ? 2 : 1;
-                let valor = parseInt(cedula.charAt(i)) * coeficiente;
-                total += valor > 9 ? valor - 9 : valor;
-            }
-
-            let mod = total % 10;
-            let verificador = mod === 0 ? 0 : 10 - mod;
-
-            return verificador === digito;
-        }
-
-        // Validar el formulario antes de enviar
-        document.getElementById('personalForm').addEventListener('submit', function (event) {
-            let cedula = document.getElementById('cedula').value;
-            let phoneNumber = document.getElementById('phoneNumber').value;
-
-            if (!validarCedula(cedula)) {
-                alert('La cédula es inválida.');
-                event.preventDefault(); // Evita el envío del formulario
-            }
-
-            // Validación adicional para el número de teléfono si es necesario
-            // (Aquí puedes agregar más lógica si lo deseas)
-
-        });
-
         // ####################################################################################################
         // ####################################################################################################
         // ###################################### Funciones de EXP Laboral ####################################
@@ -2672,39 +2796,9 @@
                     botonesObj.empty();
                     botonesSal.empty();
                     botonesDis.empty();
-
-                    if (!empty(data[0].uspAspiracionLarboral)) {
-                        const delete_edit = `<button class="btn btn-link edit-objetive-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editObjetiveModal">
-                                        <!-- Icono de lápiz para editar -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                        </svg>
-                                    </button>
-                                    <button id="deleteObjective" class="btn btn-link" value="${data[0].usuarioId}">
-                                        <!-- Icono de basura para eliminar -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                                        </svg>
-                                </button>`;
-                        botonesObj.append(delete_edit);
-                        
-                        data.forEach(objective => {
-                            const objectiveHtml = `
-                                                    <div class="card mb-3">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between align-items-start">
-                                                                        <div>
-                                                                            <p class="card-text">
-                                                                                     ${data[0].uspAspiracionLarboral}
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                    </div>`;
-                            objectiveList.append(objectiveHtml);
-                        });
-                    }else{
-                        const tal = `
+                    console.log(data[0]);
+                    if (typeof data[0] === 'undefined') { 
+                    const tal = `
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addObjetiveModal"
                                                 style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
                                             Escribir objetivo laboral
@@ -2720,84 +2814,22 @@
                                                     </div>
                                                 </div>`;
                         objectiveList.append(noObjectiveHtml);
-                    }
-                    if (!empty(data[0].uspPreferenciaSalarial)) {
 
-                        const delete_edit2 = `<button class="btn btn-link edit-salary-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editSalaryModal">
-                            <!-- Icono de lápiz para editar -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                            </svg>
-                        </button>
-                                <button id="deleteSalario" class="btn btn-link" value="${data[0].usuarioId}">
-                            <!-- Icono de basura para eliminar -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                            </svg>
-                        </button>`;
-                        botonesSal.append(delete_edit2);
-                        data.forEach(salary => {
-                            const salaryHtml = `
-                                <div class="card mb-3">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <p class="card-text">
-                                                                            ${data[0].uspPreferenciaSalarial}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                </div>`;
-                            salaryList.append(salaryHtml);
-                        });
-                    } else {
                         const tal2 = `
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSalaryModal"
-                        style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
-                        Escribir preferencia salarial
-                            </button>`;
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSalaryModal"
+                                style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                Escribir preferencia salarial
+                                    </button>`;
                         botonesSal.append(tal2);
                         const noSalaryHtml = `
-                            <div class="card text-center">
-                                <div class="card-body">
-                                            <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
-                                      Cuéntanos cuáles son tus expectativas profesionales
-                                    </p>
-                                </div>
-                            </div>`;
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                                    <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                              Cuéntanos cuáles son tus expectativas profesionales
+                                            </p>
+                                        </div>
+                                    </div>`;
                         salaryList.append(noSalaryHtml);
-                    }
-                    if (!empty(data[0].uspDiscapacidad)) {
-                        const delete_edit3 = `<button class="btn btn-link edit-disability-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editDisabilityModal">
-                                                                    <!-- Icono de lápiz para editar -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                                                    </svg>
-                                                                </button>
-                                                                        <button id="deleteDiscapacidad" class="btn btn-link" value="${data[0].usuarioId}">
-                                                                    <!-- Icono de basura para eliminar -->
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                                                                    </svg>
-                                                                </button>`;
-                        botonesDis.append(delete_edit3);
-                        data.forEach(salary => {
-                            const disabilityHtml = `
-                                        <div class="card mb-3">
-                                                    <div class="card-body">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <p class="card-text">
-                                                                                            ${data[0].uspDiscapacidad}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                        </div>`;
-                            disabilityList.append(disabilityHtml);
-                        });
-                    } else {
                         const tal3 = `
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDisabilityModal"
                                             style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
@@ -2813,6 +2845,148 @@
                                         </div>
                                     </div>`;
                         disabilityList.append(noDisabilityHtml);
+                    }else{
+                        if (data[0].uspAspiracionLarboral && data[0].uspAspiracionLarboral.trim() !== "") {
+                            const delete_edit = `<button class="btn btn-link edit-objetive-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editObjetiveModal">
+                                                <!-- Icono de lápiz para editar -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                </svg>
+                                            </button>
+                                            <button id="deleteObjective" class="btn btn-link" value="${data[0].usuarioId}">
+                                                <!-- Icono de basura para eliminar -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                                </svg>
+                                        </button>`;
+                            botonesObj.append(delete_edit);
+
+                            data.forEach(objective => {
+                                const objectiveHtml = `
+                                                            <div class="card mb-3">
+                                                                        <div class="card-body">
+                                                                            <div class="d-flex justify-content-between align-items-start">
+                                                                                <div>
+                                                                                    <p class="card-text">
+                                                                                             ${data[0].uspAspiracionLarboral}
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                            </div>`;
+                                objectiveList.append(objectiveHtml);
+                            });
+                        } else {
+                            const tal = `
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addObjetiveModal"
+                                                        style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                                    Escribir objetivo laboral
+                                                    </button>`;
+                            botonesObj.append(tal);
+
+                            const noObjectiveHtml = `
+                                                        <div class="card text-center">
+                                                            <div class="card-body">
+                                                                        <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                                                          Cuéntanos cuáles son tus expectativas profesionales
+                                                                </p>
+                                                            </div>
+                                                        </div>`;
+                            objectiveList.append(noObjectiveHtml);
+                        }
+                        if (data[0].uspPreferenciaSalarial && data[0].uspPreferenciaSalarial.trim() !== "") {
+
+                            const delete_edit2 = `<button class="btn btn-link edit-salary-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editSalaryModal">
+                                    <!-- Icono de lápiz para editar -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                    </svg>
+                                </button>
+                                        <button id="deleteSalario" class="btn btn-link" value="${data[0].usuarioId}">
+                                    <!-- Icono de basura para eliminar -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                    </svg>
+                                </button>`;
+                            botonesSal.append(delete_edit2);
+                            data.forEach(salary => {
+                                const salaryHtml = `
+                                        <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <div>
+                                                                <p class="card-text">
+                                                                                    ${data[0].uspPreferenciaSalarial}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                        </div>`;
+                                salaryList.append(salaryHtml);
+                            });
+                        } else {
+                            const tal2 = `
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSalaryModal"
+                                style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                Escribir preferencia salarial
+                                    </button>`;
+                            botonesSal.append(tal2);
+                            const noSalaryHtml = `
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                                    <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                              Cuéntanos cuáles son tus expectativas profesionales
+                                            </p>
+                                        </div>
+                                    </div>`;
+                            salaryList.append(noSalaryHtml);
+                        }
+                        if (data[0].uspDiscapacidad && data[0].uspDiscapacidad.trim() !== "") {
+                            const delete_edit3 = `<button class="btn btn-link edit-disability-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editDisabilityModal">
+                                                                            <!-- Icono de lápiz para editar -->
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                                            </svg>
+                                                                        </button>
+                                                                                <button id="deleteDiscapacidad" class="btn btn-link" value="${data[0].usuarioId}">
+                                                                            <!-- Icono de basura para eliminar -->
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                                                            </svg>
+                                                                        </button>`;
+                            botonesDis.append(delete_edit3);
+                            data.forEach(salary => {
+                                const disabilityHtml = `
+                                                <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <div class="d-flex justify-content-between align-items-start">
+                                                                    <div>
+                                                                        <p class="card-text">
+                                                                                                    ${data[0].uspDiscapacidad}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                </div>`;
+                                disabilityList.append(disabilityHtml);
+                            });
+                        } else {
+                            const tal3 = `
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDisabilityModal"
+                                                    style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                                Agregar discapacidad
+                                                </button>`;
+                            botonesDis.append(tal3);
+                            const noDisabilityHtml = `
+                                            <div class="card text-center">
+                                                <div class="card-body">
+                                                            <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                                              Si tienes alguna discapacidad, no es obligatorio que la declares. Pero si lo haces, te ayudará a encontrar puestos que mejor se adapten a tus necesidades.
+                                                    </p>
+                                                </div>
+                                            </div>`;
+                            disabilityList.append(noDisabilityHtml);
+                        }
                     }
                 },
                 error: function () {
