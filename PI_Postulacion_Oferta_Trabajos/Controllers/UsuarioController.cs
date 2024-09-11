@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
@@ -299,14 +301,17 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
             return View(usuarioIdiomas); // Pasar la lista a la vista
         }
-        public async Task<IActionResult> vista_perfil()
+        public async Task<IActionResult> vista_perfil(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.UserId = userId;
+            // Validar que el id no sea nulo o vacío
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound(); // O redirige a una página de error si es necesario
+            }
 
             // Obtener el listado de UsuarioIdioma para el usuario actual
             var usuarioIdiomas = await _context.UsuarioIdiomas
-                .Where(ui => ui.UsuarioId == userId)
+                .Where(ui => ui.UsuarioId == id)
                 .ToListAsync();
 
             return View(usuarioIdiomas); // Pasar la lista a la vista
@@ -315,9 +320,16 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string usuarioId, string oldPassword, string newPassword, string confirmNewPassword)
         {
+            // Validar que la nueva contraseña y la confirmación coincidan
             if (newPassword != confirmNewPassword)
             {
                 return Json(new { success = false, message = "Las contraseñas nuevas no coinciden." });
+            }
+
+            // Validar que la nueva contraseña cumpla con los requisitos de seguridad
+            if (!IsValidPassword(newPassword))
+            {
+                return Json(new { success = false, message = "La nueva contraseña debe tener al menos 6 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial." });
             }
 
             var user = await _userManager.FindByIdAsync(usuarioId);
@@ -326,6 +338,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 return Json(new { success = false, message = "Usuario no encontrado." });
             }
 
+            // Cambiar la contraseña
             var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             if (result.Succeeded)
             {
@@ -335,5 +348,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
             return Json(new { success = false, message = string.Join(", ", result.Errors.Select(e => e.Description)) });
         }
+
+        // Método para validar la nueva contraseña
+        private bool IsValidPassword(string password)
+        {
+            // Expresión regular para validar la contraseña
+            var passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$";
+            return Regex.IsMatch(password, passwordPattern);
+        }
+
     }
 }
