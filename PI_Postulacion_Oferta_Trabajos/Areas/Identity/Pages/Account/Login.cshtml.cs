@@ -100,7 +100,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     // Verificar roles y redirigir
                     if (await _userManager.IsInRoleAsync(user, "admin"))
                     {
-                        return LocalRedirect("~/Usuario/Index");
+                        return LocalRedirect("~/Admin/Index");
                     }
                     else if (await _userManager.IsInRoleAsync(user, "trabajador"))
                     {
@@ -108,7 +108,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
                     }
                     else if (await _userManager.IsInRoleAsync(user, "empleador"))
                     {
-                        return LocalRedirect("~/Ofertas/Index");
+                        return LocalRedirect("~/Empleador/VerPostulaciones");
                     }
 
                     return LocalRedirect(returnUrl);

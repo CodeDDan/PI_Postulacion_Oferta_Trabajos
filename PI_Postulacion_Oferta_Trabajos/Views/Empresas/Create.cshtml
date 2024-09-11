@@ -1,87 +1,119 @@
 ﻿@model PI_Postulacion_Oferta_Trabajos.Models.Empresa
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Empresa";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Empresa</h4>
+<h4>Crear Empresa</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AepId" class="control-label"></label>
-                <select asp-for="AepId" class ="form-control" asp-items="ViewBag.AepId"></select>
+    <div class="col-md-8">
+        <form asp-action="Create" class="bg-light p-4 rounded shadow-sm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Sector Principal -->
+            <div class="form-floating mb-3">
+                <select asp-for="AepId" class="form-select" id="AepId" asp-items="ViewBag.AepId">
+                    <option value="">Selecciona un sector</option>
+                </select>
+                <label for="AepId"><i class="bi bi-briefcase"></i> Sector Principal</label>
+                <span asp-validation-for="AepId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpNombreEmpresa" class="control-label"></label>
-                <input asp-for="EmpNombreEmpresa" class="form-control" />
+
+            <!-- Nombre de la Empresa -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpNombreEmpresa" class="form-control" id="EmpNombreEmpresa" placeholder="Nombre de la Empresa" />
+                <label for="EmpNombreEmpresa"><i class="bi bi-building"></i> Nombre de la Empresa</label>
                 <span asp-validation-for="EmpNombreEmpresa" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpEmailRegistro" class="control-label"></label>
-                <input asp-for="EmpEmailRegistro" class="form-control" />
+
+            <!-- Email de Registro -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpEmailRegistro" class="form-control" id="EmpEmailRegistro" placeholder="Email de Registro" type="email" />
+                <label for="EmpEmailRegistro"><i class="bi bi-envelope"></i> Email de Registro</label>
                 <span asp-validation-for="EmpEmailRegistro" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpEmailAcceso" class="control-label"></label>
-                <input asp-for="EmpEmailAcceso" class="form-control" />
+
+            <!-- Email de Acceso -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpEmailAcceso" class="form-control" id="EmpEmailAcceso" placeholder="Email de Acceso" type="email" />
+                <label for="EmpEmailAcceso"><i class="bi bi-envelope"></i> Email de Acceso</label>
                 <span asp-validation-for="EmpEmailAcceso" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpDescripcion" class="control-label"></label>
-                <textarea asp-for="EmpDescripcion" class="form-control"></textarea>
+
+            <!-- Descripción -->
+            <div class="form-floating mb-3">
+                <textarea asp-for="EmpDescripcion" class="form-control" id="EmpDescripcion" placeholder="Descripción de la Empresa" style="height: 100px;"></textarea>
+                <label for="EmpDescripcion"><i class="bi bi-file-text"></i> Descripción</label>
                 <span asp-validation-for="EmpDescripcion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpPassword" class="control-label"></label>
-                <input asp-for="EmpPassword" class="form-control" />
+
+            <!-- Contraseña -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpPassword" class="form-control" id="EmpPassword" type="password" placeholder="Contraseña" />
+                <label for="EmpPassword"><i class="bi bi-lock"></i> Contraseña</label>
                 <span asp-validation-for="EmpPassword" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpRuc" class="control-label"></label>
-                <input asp-for="EmpRuc" class="form-control" />
+
+            <!-- RUC -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpRuc" class="form-control" id="EmpRuc" placeholder="RUC" type="text" maxlength="20" pattern="\d*" />
+                <label for="EmpRuc"><i class="bi bi-credit-card"></i> RUC</label>
                 <span asp-validation-for="EmpRuc" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpRazonSocial" class="control-label"></label>
-                <input asp-for="EmpRazonSocial" class="form-control" />
+
+            <!-- Razón Social -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpRazonSocial" class="form-control" id="EmpRazonSocial" placeholder="Razón Social" />
+                <label for="EmpRazonSocial"><i class="bi bi-people"></i> Razón Social</label>
                 <span asp-validation-for="EmpRazonSocial" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpCiudad" class="control-label"></label>
-                <input asp-for="EmpCiudad" class="form-control" />
+
+            <!-- Ciudad -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpCiudad" class="form-control" id="EmpCiudad" placeholder="Ciudad" />
+                <label for="EmpCiudad"><i class="bi bi-geo-alt"></i> Ciudad</label>
                 <span asp-validation-for="EmpCiudad" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpTelefono" class="control-label"></label>
-                <input asp-for="EmpTelefono" class="form-control" />
+
+            <!-- Teléfono -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpTelefono" class="form-control" id="EmpTelefono" placeholder="Teléfono" type="tel" pattern="\d*" />
+                <label for="EmpTelefono"><i class="bi bi-phone"></i> Teléfono</label>
                 <span asp-validation-for="EmpTelefono" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpNumeroTrabajadores" class="control-label"></label>
-                <input asp-for="EmpNumeroTrabajadores" class="form-control" />
+
+            <!-- Número de Trabajadores -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpNumeroTrabajadores" class="form-control" id="EmpNumeroTrabajadores" placeholder="Número de Trabajadores" type="number" min="0" />
+                <label for="EmpNumeroTrabajadores"><i class="bi bi-person-workspace"></i> Número de Trabajadores</label>
                 <span asp-validation-for="EmpNumeroTrabajadores" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmpVacantesAnuales" class="control-label"></label>
-                <input asp-for="EmpVacantesAnuales" class="form-control" />
+
+            <!-- Vacantes Anuales -->
+            <div class="form-floating mb-3">
+                <input asp-for="EmpVacantesAnuales" class="form-control" id="EmpVacantesAnuales" placeholder="Vacantes Anuales" type="number" min="0" />
+                <label for="EmpVacantesAnuales"><i class="bi bi-briefcase"></i> Vacantes Anuales</label>
                 <span asp-validation-for="EmpVacantesAnuales" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <!-- Botón de Crear -->
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Crear</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Volver a la Lista</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

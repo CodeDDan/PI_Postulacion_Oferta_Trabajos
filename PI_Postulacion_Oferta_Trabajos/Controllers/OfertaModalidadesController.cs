@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize]
     public class OfertaModalidadesController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -20,6 +22,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: OfertaModalidades
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
               return _context.OfertaModalidads != null ? 
@@ -28,6 +31,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: OfertaModalidades/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.OfertaModalidads == null)
@@ -46,6 +50,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: OfertaModalidades/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -88,6 +93,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("OfmId,OfmNombre")] OfertaModalidad ofertaModalidad)
         {
             if (id != ofertaModalidad.OfmId)
@@ -119,6 +125,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: OfertaModalidades/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.OfertaModalidads == null)
@@ -139,6 +146,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: OfertaModalidades/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.OfertaModalidads == null)

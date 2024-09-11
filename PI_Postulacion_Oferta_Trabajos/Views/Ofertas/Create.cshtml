@@ -1,116 +1,181 @@
 ﻿@model PI_Postulacion_Oferta_Trabajos.Models.Oferta
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Oferta";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Oferta</h4>
+<h4>Crear Oferta</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EmpId" class="control-label"></label>
-                <select asp-for="EmpId" class ="form-control" asp-items="ViewBag.EmpId"></select>
+    <div class="col-md-8">
+        <form asp-action="Create" class="bg-light p-4 rounded shadow-sm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- EmpId -->
+            <div class="form-floating mb-3">
+                <select asp-for="EmpId" class="form-select" id="EmpId" asp-items="ViewBag.EmpId">
+                    <option value="">Selecciona una Empresa</option>
+                </select>
+                <label for="EmpId"><i class="bi bi-building"></i> Empresa</label>
+                <span asp-validation-for="EmpId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfmId" class="control-label"></label>
-                <select asp-for="OfmId" class ="form-control" asp-items="ViewBag.OfmId"></select>
+
+            <!-- OfmId -->
+            <div class="form-floating mb-3">
+                <select asp-for="OfmId" class="form-select" id="OfmId" asp-items="ViewBag.OfmId">
+                    <option value="">Selecciona una Modalidad</option>
+                </select>
+                <label for="OfmId"><i class="bi bi-cog"></i> Modalidad</label>
+                <span asp-validation-for="OfmId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ArlId" class="control-label"></label>
-                <select asp-for="ArlId" class="form-control" asp-items="ViewBag.ArlId"></select>
+
+            <!-- ArlId -->
+            <div class="form-floating mb-3">
+                <select asp-for="ArlId" class="form-select" id="ArlId" asp-items="ViewBag.ArlId">
+                    <option value="">Selecciona un Área Laboral</option>
+                </select>
+                <label for="ArlId"><i class="bi bi-shield"></i> Área Laboral</label>
+                <span asp-validation-for="ArlId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PulId" class="control-label"></label>
-                <select asp-for="PulId" class ="form-control" asp-items="ViewBag.PulId"></select>
+
+            <!-- PulId -->
+            <div class="form-floating mb-3">
+                <select asp-for="PulId" class="form-select" id="PulId" asp-items="ViewBag.PulId">
+                    <option value="">Selecciona un Puesto Laboral</option>
+                </select>
+                <label for="PulId"><i class="bi bi-clipboard"></i> Puesto Laboral</label>
+                <span asp-validation-for="PulId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ProId" class="control-label"></label>
-                <select asp-for="ProId" class="form-control" asp-items="ViewBag.ProId"></select>
+
+            <!-- ProId -->
+            <div class="form-floating mb-3">
+                <select asp-for="ProId" class="form-select" id="ProId" asp-items="ViewBag.ProId">
+                    <option value="">Selecciona una Provincia</option>
+                </select>
+                <label for="ProId"><i class="bi bi-file-earmark-text"></i> Provincia</label>
+                <span asp-validation-for="ProId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CidId" class="control-label"></label>
-                <select asp-for="CidId" class ="form-control" asp-items="ViewBag.CidId"></select>
+
+            <!-- CidId -->
+            <div class="form-floating mb-3">
+                <select asp-for="CidId" class="form-select" id="CidId" asp-items="ViewBag.CidId">
+                    <option value="">Selecciona una Ciudad</option>
+                </select>
+                <label for="CidId"><i class="bi bi-geo-alt"></i> Ciudad</label>
+                <span asp-validation-for="CidId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeTitulo" class="control-label"></label>
-                <input asp-for="OfeTitulo" class="form-control" />
+
+            <!-- OfeTitulo -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeTitulo" class="form-control" id="OfeTitulo" placeholder="Título de la Oferta" />
+                <label for="OfeTitulo"><i class="bi bi-tag"></i> Título</label>
                 <span asp-validation-for="OfeTitulo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeDescripcion" class="control-label"></label>
-                <textarea asp-for="OfeDescripcion" class="form-control"></textarea>
+
+            <!-- OfeDescripcion -->
+            <div class="form-floating mb-3">
+                <textarea asp-for="OfeDescripcion" class="form-control" id="OfeDescripcion" placeholder="Descripción de la Oferta" style="height: 100px;"></textarea>
+                <label for="OfeDescripcion"><i class="bi bi-file-text"></i> Descripción</label>
                 <span asp-validation-for="OfeDescripcion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeTipoContrato" class="control-label"></label>
-                <input asp-for="OfeTipoContrato" class="form-control" />
+
+            <!-- OfeTipoContrato -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeTipoContrato" class="form-control" id="OfeTipoContrato" placeholder="Tipo de Contrato" />
+                <label for="OfeTipoContrato"><i class="bi bi-calendar-check"></i> Tipo de Contrato</label>
                 <span asp-validation-for="OfeTipoContrato" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeSalario" class="control-label"></label>
-                <input asp-for="OfeSalario" class="form-control" />
+
+            <!-- OfeSalario -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeSalario" class="form-control" id="OfeSalario" placeholder="Salario" type="number" step="0.01" />
+                <label for="OfeSalario"><i class="bi bi-cash"></i> Salario</label>
                 <span asp-validation-for="OfeSalario" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeFechaPublicacion" class="control-label"></label>
-                <input asp-for="OfeFechaPublicacion" class="form-control" />
+
+            <!-- OfeFechaPublicacion -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeFechaPublicacion" class="form-control" id="OfeFechaPublicacion" placeholder="Fecha de Publicación" type="date" />
+                <label for="OfeFechaPublicacion"><i class="bi bi-calendar"></i> Fecha de Publicación</label>
                 <span asp-validation-for="OfeFechaPublicacion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeCantidadVacantes" class="control-label"></label>
-                <input asp-for="OfeCantidadVacantes" class="form-control" />
+
+            <!-- OfeCantidadVacantes -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeCantidadVacantes" class="form-control" id="OfeCantidadVacantes" placeholder="Cantidad de Vacantes" type="number" />
+                <label for="OfeCantidadVacantes"><i class="bi bi-person-bounding-box"></i> Cantidad de Vacantes</label>
                 <span asp-validation-for="OfeCantidadVacantes" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeTiempoExperiencia" class="control-label"></label>
-                <input asp-for="OfeTiempoExperiencia" class="form-control" />
+
+            <!-- OfeTiempoExperiencia -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeTiempoExperiencia" class="form-control" id="OfeTiempoExperiencia" placeholder="Tiempo de Experiencia" type="number" />
+                <label for="OfeTiempoExperiencia"><i class="bi bi-hourglass-split"></i> Tiempo de Experiencia</label>
                 <span asp-validation-for="OfeTiempoExperiencia" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeEducacionMinima" class="control-label"></label>
-                <input asp-for="OfeEducacionMinima" class="form-control" />
+
+            <!-- OfeEducacionMinima -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeEducacionMinima" class="form-control" id="OfeEducacionMinima" placeholder="Educación Mínima" />
+                <label for="OfeEducacionMinima"><i class="bi bi-book"></i> Educación Mínima</label>
                 <span asp-validation-for="OfeEducacionMinima" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="OfeLicencia" /> @Html.DisplayNameFor(model => model.OfeLicencia)
-                </label>
+
+            <!-- OfeLicencia -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="OfeLicencia" id="OfeLicencia" type="checkbox" />
+                <label class="form-check-label" for="OfeLicencia"><i class="bi bi-check-circle"></i> Licencia</label>
+                <span asp-validation-for="OfeLicencia" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="OfeDisponibilidadViajar" /> @Html.DisplayNameFor(model => model.OfeDisponibilidadViajar)
-                </label>
+
+            <!-- OfeDisponibilidadViajar -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="OfeDisponibilidadViajar" id="OfeDisponibilidadViajar" type="checkbox" />
+                <label class="form-check-label" for="OfeDisponibilidadViajar"><i class="bi bi-geo-alt"></i> Disponibilidad para Viajar</label>
+                <span asp-validation-for="OfeDisponibilidadViajar" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="OfeDisponibilidadCambioResidencia" /> @Html.DisplayNameFor(model => model.OfeDisponibilidadCambioResidencia)
-                </label>
+
+            <!-- OfeDisponibilidadCambioResidencia -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="OfeDisponibilidadCambioResidencia" id="OfeDisponibilidadCambioResidencia" type="checkbox" />
+                <label class="form-check-label" for="OfeDisponibilidadCambioResidencia"><i class="bi bi-house-door"></i> Disponibilidad para Cambio de Residencia</label>
+                <span asp-validation-for="OfeDisponibilidadCambioResidencia" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="OfeDiscapacidad" /> @Html.DisplayNameFor(model => model.OfeDiscapacidad)
-                </label>
+
+            <!-- OfeDiscapacidad -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="OfeDiscapacidad" id="OfeDiscapacidad" type="checkbox" />
+                <label class="form-check-label" for="OfeDiscapacidad"><i class="bi bi-person-fill"></i> Discapacidad</label>
+                <span asp-validation-for="OfeDiscapacidad" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OfeEdadMinima" class="control-label"></label>
-                <input asp-for="OfeEdadMinima" class="form-control" />
+
+            <!-- OfeEdadMinima -->
+            <div class="form-floating mb-3">
+                <input asp-for="OfeEdadMinima" class="form-control" id="OfeEdadMinima" placeholder="Edad Mínima" type="number" />
+                <label for="OfeEdadMinima"><i class="bi bi-calendar"></i> Edad Mínima</label>
                 <span asp-validation-for="OfeEdadMinima" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <!-- Botón de Crear -->
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Crear</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Volver a la Lista</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

@@ -12,92 +12,109 @@
         <!-- Filtros -->
         <form method="get" class="bg-light p-4 rounded shadow-sm">
             <!-- Filtro por rango de fechas de publicación -->
-            <div class="form-group">
-                <label for="fechaDesde">Fecha Desde</label>
-                <input type="date" name="fechaDesde" class="form-control" id="fechaDesde" />
+            <div class="form-floating mb-2">
+                <input type="date" name="fechaDesde" class="form-control" id="fechaDesde" placeholder="Ingrese fecha desde">
+                <label for="fechaDesde" class="form-label">
+                    <i class="bi bi-calendar2"></i> Fecha Desde
+                </label>
             </div>
 
-            <div class="form-group">
-                <label for="fechaHasta">Fecha Hasta</label>
-                <input type="date" name="fechaHasta" class="form-control" id="fechaHasta" />
+            <div class="form-floating mb-2">
+                <input type="date" name="fechaHasta" class="form-control" id="fechaHasta" placeholder="Ingrese fecha hasta">
+                <label for="fechaHasta" class="form-label">
+                    <i class="bi bi-calendar-range"></i> Fecha Hasta
+                </label>
             </div>
 
             <!-- Filtro por provincia -->
-            <div class="form-group">
-                <label for="provincia">Provincia</label>
-                <select class="form-select" id="provincia" name="provincia">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="provincia" name="provincia" aria-label="Seleccione una provincia">
                     <option value="">Seleccione una provincia</option>
                     @foreach (var provincia in ViewBag.Provincias)
                     {
                         <option value="@provincia.ProId">@provincia.ProNombre</option>
                     }
                 </select>
+                <label for="provincia" class="form-label">
+                    <i class="bi bi-globe"></i> Provincia
+                </label>
             </div>
 
             <!-- Filtro por ciudad -->
-            <div class="form-group">
-                <label for="ciudad">Ciudad</label>
-                <select class="form-select" id="ciudad" name="ciudad">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="ciudad" name="ciudad" aria-label="Seleccione una ciudad">
                     <option value="">Seleccione una ciudad</option>
                     @foreach (var ciudad in ViewBag.Ciudades)
                     {
                         <option value="@ciudad.CidId">@ciudad.CidNombre</option>
                     }
                 </select>
+                <label for="ciudad" class="form-label">
+                    <i class="bi bi-geo-alt"></i> Ciudad
+                </label>
             </div>
 
             <!-- Filtro por área laboral -->
-            <div class="form-group">
-                <label for="areaLaboral">Área Laboral</label>
-                <select class="form-select" id="areaLaboral" name="areaLaboral">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="areaLaboral" name="areaLaboral" aria-label="Seleccione un área laboral">
                     <option value="">Seleccione un área laboral</option>
                     @foreach (var areaLaboral in ViewBag.AreasLaborales)
                     {
                         <option value="@areaLaboral.ArlId">@areaLaboral.ArlNombre</option>
                     }
                 </select>
+                <label for="areaLaboral" class="form-label">
+                    <i class="bi bi-diagram-3-fill"></i> Área Laboral
+                </label>
             </div>
 
             <!-- Filtro por puesto laboral -->
-            <div class="form-group">
-                <label for="puestoLaboral">Puesto Laboral</label>
-                <select class="form-select" id="puestoLaboral" name="puestoLaboral">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="puestoLaboral" name="puestoLaboral" aria-label="Seleccione un puesto laboral">
                     <option value="">Seleccione un puesto laboral</option>
                     @foreach (var puestoLaboral in ViewBag.PuestosLaborales)
                     {
                         <option value="@puestoLaboral.PulId">@puestoLaboral.PulNombre</option>
                     }
                 </select>
+                <label for="puestoLaboral" class="form-label">
+                    <i class="bi bi-person-workspace"></i> Puesto Laboral
+                </label>
             </div>
 
             <!-- Filtro por modalidad de oferta -->
-            <div class="form-group">
-                <label for="ofertaModalidad">Modalidad</label>
-                <select class="form-select" id="ofertaModalidad" name="ofertaModalidad">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="ofertaModalidad" name="ofertaModalidad" aria-label="Seleccione una modalidad">
                     <option value="">Seleccione una modalidad</option>
                     @foreach (var modalidad in ViewBag.OfertasModalidades)
                     {
                         <option value="@modalidad.OfmId">@modalidad.OfmNombre</option>
                     }
                 </select>
+                <label for="ofertaModalidad" class="form-label">
+                    <i class="bi bi-alarm"></i> Modalidad
+                </label>
             </div>
 
             <!-- Filtro por salario mínimo -->
-            <div class="form-group">
-                <label for="salarioMinimo">Salario Mínimo</label>
-                <input type="number" step="0.01" name="salarioMinimo" class="form-control" id="salarioMinimo" />
+            <div class="form-floating mb-2">
+                <input type="number" step="0.01" name="salarioMinimo" class="form-control" id="salarioMinimo" placeholder="Ingrese salario mínimo">
+                <label for="salarioMinimo" class="form-label">
+                    <i class="bi bi-currency-dollar"></i> Salario Mínimo
+                </label>
             </div>
 
             <!-- Filtro por salario máximo -->
-            <div class="form-group">
-                <label for="salarioMaximo">Salario Máximo</label>
-                <input type="number" step="0.01" name="salarioMaximo" class="form-control" id="salarioMaximo" />
+            <div class="form-floating mb-2">
+                <input type="number" step="0.01" name="salarioMaximo" class="form-control" id="salarioMaximo" placeholder="Ingrese salario máximo">
+                <label for="salarioMaximo" class="form-label">
+                    <i class="bi bi-currency-dollar"></i> Salario Máximo
+                </label>
             </div>
 
             <!-- Filtro por tipo de contrato -->
-            <div class="form-group">
-                <label for="tipoContrato">Tipo de Contrato</label>
-                <select class="form-select" id="tipoContrato" name="tipoContrato">
+            <div class="form-floating mb-2">
+                <select class="form-select" id="tipoContrato" name="tipoContrato" aria-label="Seleccione un tipo de contrato">
                     <option value="">Seleccione un tipo de contrato</option>
                     <option value="Por horas">Por horas</option>
                     <option value="Medio tiempo">Medio tiempo</option>
@@ -107,31 +124,41 @@
                     <option value="Pasantía">Pasantía</option>
                     <option value="Por obra o servicio">Por obra o servicio</option>
                 </select>
+                <label for="tipoContrato" class="form-label">
+                    <i class="bi bi-file-earmark-text-fill"></i> Tipo de Contrato
+                </label>
             </div>
 
             <!-- Filtro por existencia de postulantes -->
-            <div class="form-group">
-                <label for="tienePostulantes">¿Tiene Postulantes?</label>
-                <select id="tienePostulantes" name="tienePostulantes" class="form-control">
+            <div class="form-floating mb-2">
+                <select id="tienePostulantes" name="tienePostulantes" class="form-select" aria-label="Seleccione una opción">
                     <option value="">Seleccione una opción</option>
                     <option value="true">Sí</option>
                     <option value="false">No</option>
                 </select>
+                <label for="tienePostulantes" class="form-label">
+                    <i class="bi bi-people-fill"></i> ¿Tiene Postulantes?
+                </label>
             </div>
 
             <!-- Filtro por estado de la postulación -->
-            <div class="form-group">
-                <label for="estadoPostulacion">Estado de la Postulación</label>
-                <select name="estadoPostulacion" class="form-control" id="estadoPostulacion">
+            <div class="form-floating mb-3">
+                <select name="estadoPostulacion" class="form-select" id="estadoPostulacion" aria-label="Seleccione un estado">
                     <option value="">Cualquiera</option>
                     @foreach (var estado in ViewBag.EstadosPostulacion)
                     {
                         <option value="@estado.EspId">@estado.EspNombre</option>
                     }
                 </select>
+                <label for="estadoPostulacion" class="form-label">
+                    <i class="bi bi-clipboard-check-fill"></i> Estado de la Postulación
+                </label>
             </div>
 
-            <button type="submit" class="btn btn-custom mt-3">Filtrar</button>
+            <!-- Botón de Filtrar -->
+            <button type="submit" class="btn btn-custom">
+                <i class="bi bi-funnel-fill"></i> Filtrar
+            </button>
         </form>
     </div>
 

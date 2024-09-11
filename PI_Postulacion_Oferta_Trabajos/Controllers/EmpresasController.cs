@@ -11,6 +11,8 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+
+    [Authorize(Roles = "admin")]
     public class EmpresasController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -21,6 +23,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Empresas
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
             var pO_TrabajosContext = _context.Empresas.Include(e => e.Aep);
@@ -28,6 +31,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Empresas/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Empresas == null)
@@ -47,6 +51,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Empresas/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             ViewData["AepId"] = new SelectList(_context.AeSectoresPrincipales, "AepId", "AepNombre");
@@ -58,6 +63,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("EmpId,AepId,EmpNombreEmpresa,EmpEmailRegistro,EmpEmailAcceso,EmpPassword,EmpRuc,EmpRazonSocial,EmpCiudad,EmpTelefono,EmpNumeroTrabajadores,EmpVacantesAnuales,EmpDescripcion")] Empresa empresa)
         {
             if (ModelState.IsValid)
@@ -71,6 +77,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Empresas/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Empresas == null)
@@ -92,6 +99,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("EmpId,AepId,EmpNombreEmpresa,EmpEmailRegistro,EmpEmailAcceso,EmpPassword,EmpRuc,EmpRazonSocial,EmpCiudad,EmpTelefono,EmpNumeroTrabajadores,EmpVacantesAnuales,EmpDescripcion")] Empresa empresa)
         {
             if (id != empresa.EmpId)
@@ -124,6 +132,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Empresas/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Empresas == null)
@@ -145,6 +154,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Empresas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Empresas == null)

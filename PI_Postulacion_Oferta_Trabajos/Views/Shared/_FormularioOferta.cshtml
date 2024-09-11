@@ -1,23 +1,28 @@
 ﻿@model PI_Postulacion_Oferta_Trabajos.Models.Oferta
 
 <form asp-action="@ViewBag.FormAction" method="post" class="bg-light p-4 rounded shadow-sm">
+    <!--Este parte del código muestra los errores-->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <!--Hasta aquí-->
     <input type="hidden" asp-for="OfeId" />
 
-    <div class="form-group">
-        <label asp-for="OfeTitulo" class="form-label"></label>
-        <input asp-for="OfeTitulo" class="form-control" />
+    <!-- Título de la oferta -->
+    <div class="form-floating mb-3">
+        <input asp-for="OfeTitulo" class="form-control" id="OfeTitulo" placeholder="Título de la oferta" />
+        <label for="OfeTitulo"><i class="bi bi-briefcase"></i> Título de la oferta</label>
         <span asp-validation-for="OfeTitulo" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="OfeDescripcion" class="form-label"></label>
-        <textarea asp-for="OfeDescripcion" class="form-control"></textarea>
+    <!-- Descripción de la oferta -->
+    <div class="form-floating mb-3">
+        <textarea asp-for="OfeDescripcion" class="form-control" id="OfeDescripcion" placeholder="Descripción de la oferta"></textarea>
+        <label for="OfeDescripcion"><i class="bi bi-file-text"></i> Descripción de la oferta</label>
         <span asp-validation-for="OfeDescripcion" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="OfeTipoContrato" class="form-label"></label>
-        <select asp-for="OfeTipoContrato" class="form-control">
+    <!-- Tipo de contrato -->
+    <div class="form-floating mb-3">
+        <select asp-for="OfeTipoContrato" class="form-select" id="OfeTipoContrato">
             <option value="">Seleccione un tipo de contrato</option>
             <option value="Por horas">Por horas</option>
             <option value="Medio tiempo">Medio tiempo</option>
@@ -27,110 +32,133 @@
             <option value="Pasantía">Pasantía</option>
             <option value="Por obra o servicio">Por obra o servicio</option>
         </select>
+        <label for="OfeTipoContrato"><i class="bi bi-calendar-check"></i> Tipo de contrato</label>
         <span asp-validation-for="OfeTipoContrato" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="OfeSalario" class="form-label"></label>
-        <input asp-for="OfeSalario" class="form-control" type="number" step="0.01" />
+    <!-- Salario -->
+    <div class="form-floating mb-3">
+        <input asp-for="OfeSalario" class="form-control" id="OfeSalario" type="number" step="0.01" placeholder="Salario" />
+        <label for="OfeSalario"><i class="bi bi-cash"></i> Salario</label>
         <span asp-validation-for="OfeSalario" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="OfeCantidadVacantes" class="form-label"></label>
-        <input asp-for="OfeCantidadVacantes" class="form-control" type="number" />
+
+    <!-- Cantidad de vacantes -->
+    <div class="form-floating mb-3">
+        <input asp-for="OfeCantidadVacantes" class="form-control" id="OfeCantidadVacantes" type="number" placeholder="Cantidad de vacantes" />
+        <label for="OfeCantidadVacantes"><i class="bi bi-person-fill"></i> Cantidad de vacantes</label>
         <span asp-validation-for="OfeCantidadVacantes" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="OfeTiempoExperiencia" class="form-label"></label>
-        <input asp-for="OfeTiempoExperiencia" class="form-control" type="number" />
+
+    <!-- Tiempo de experiencia -->
+    <div class="form-floating mb-3">
+        <input asp-for="OfeTiempoExperiencia" class="form-control" id="OfeTiempoExperiencia" type="number" placeholder="Tiempo de experiencia (en años)" />
+        <label for="OfeTiempoExperiencia"><i class="bi bi-hourglass-split"></i> Tiempo de experiencia (en años)</label>
         <span asp-validation-for="OfeTiempoExperiencia" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="OfeEducacionMinima" class="form-label"></label>
-        <input asp-for="OfeEducacionMinima" class="form-control" />
+
+    <!-- Educación mínima -->
+    <div class="form-floating mb-3">
+        <input asp-for="OfeEducacionMinima" class="form-control" id="OfeEducacionMinima" placeholder="Educación mínima requerida" />
+        <label for="OfeEducacionMinima"><i class="bi bi-mortarboard"></i> Educación mínima requerida</label>
         <span asp-validation-for="OfeEducacionMinima" class="text-danger"></span>
     </div>
-    <div class="form-check">
-        <input asp-for="OfeLicencia" class="form-check-input" type="checkbox" />
-        <label asp-for="OfeLicencia" class="form-check-label"></label>
+
+    <!-- Licencia -->
+    <div class="form-check mb-3">
+        <input asp-for="OfeLicencia" class="form-check-input" type="checkbox" id="OfeLicencia" />
+        <label class="form-check-label" for="OfeLicencia"><i class="bi bi-card-checklist"></i> Licencia</label>
     </div>
-    <div class="form-check">
-        <input asp-for="OfeDisponibilidadViajar" class="form-check-input" type="checkbox" />
-        <label asp-for="OfeDisponibilidadViajar" class="form-check-label"></label>
+
+    <!-- Disponibilidad para viajar -->
+    <div class="form-check mb-3">
+        <input asp-for="OfeDisponibilidadViajar" class="form-check-input" type="checkbox" id="OfeDisponibilidadViajar" />
+        <label class="form-check-label" for="OfeDisponibilidadViajar"><i class="bi bi-travel"></i> Disponibilidad para viajar</label>
     </div>
-    <div class="form-check">
-        <input asp-for="OfeDisponibilidadCambioResidencia" class="form-check-input" type="checkbox" />
-        <label asp-for="OfeDisponibilidadCambioResidencia" class="form-check-label"></label>
+
+    <!-- Disponibilidad para cambio de residencia -->
+    <div class="form-check mb-3">
+        <input asp-for="OfeDisponibilidadCambioResidencia" class="form-check-input" type="checkbox" id="OfeDisponibilidadCambioResidencia" />
+        <label class="form-check-label" for="OfeDisponibilidadCambioResidencia"><i class="bi bi-house-door"></i> Disponibilidad para cambio de residencia</label>
     </div>
-    <div class="form-check">
-        <input asp-for="OfeDiscapacidad" class="form-check-input" type="checkbox" />
-        <label asp-for="OfeDiscapacidad" class="form-check-label"></label>
+
+    <!-- Discapacidad -->
+    <div class="form-check mb-3">
+        <input asp-for="OfeDiscapacidad" class="form-check-input" type="checkbox" id="OfeDiscapacidad" />
+        <label class="form-check-label" for="OfeDiscapacidad"><i class="bi bi-wheelchair"></i> Discapacidad</label>
     </div>
-    <div class="form-group">
-        <label asp-for="OfeEdadMinima" class="form-label"></label>
-        <input asp-for="OfeEdadMinima" class="form-control" type="number" />
+
+    <!-- Edad mínima -->
+    <div class="form-floating mb-3">
+        <input asp-for="OfeEdadMinima" class="form-control" id="OfeEdadMinima" type="number" placeholder="Edad mínima" />
+        <label for="OfeEdadMinima"><i class="bi bi-calendar"></i> Edad mínima</label>
         <span asp-validation-for="OfeEdadMinima" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="ArlId">Área Laboral</label>
-        <select asp-for="ArlId" class="form-control" id="ArlId">
+    <!-- Área laboral -->
+    <div class="form-floating mb-3">
+        <select asp-for="ArlId" class="form-select" id="ArlId">
             <option value="">Seleccione un área laboral</option>
             @foreach (var area in ViewBag.AreasLaborales as List<PI_Postulacion_Oferta_Trabajos.Models.AreaLaboral>)
             {
                 <option value="@area.ArlId">@area.ArlNombre</option>
             }
         </select>
+        <label for="ArlId"><i class="bi bi-geo-alt"></i> Área laboral</label>
         <span asp-validation-for="ArlId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="PulId">Puesto Laboral</label>
-        <select asp-for="PulId" class="form-control" id="PulId">
+    <!-- Puesto laboral -->
+    <div class="form-floating mb-3">
+        <select asp-for="PulId" class="form-select" id="PulId">
             <option value="">Seleccione un puesto laboral</option>
             @foreach (var puesto in ViewBag.PuestosLaborales as List<PI_Postulacion_Oferta_Trabajos.Models.PuestoLaboral>)
             {
                 <option value="@puesto.PulId">@puesto.PulNombre</option>
             }
         </select>
+        <label for="PulId"><i class="bi bi-briefcase-fill"></i> Puesto laboral</label>
         <span asp-validation-for="PulId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="OfmId">Modalidad</label>
-        <select asp-for="OfmId" class="form-control" id="OfmId">
+    <!-- Modalidad -->
+    <div class="form-floating mb-3">
+        <select asp-for="OfmId" class="form-select" id="OfmId">
             <option value="">Seleccione una modalidad</option>
             @foreach (var modalidad in ViewBag.OfertaModalidades as List<PI_Postulacion_Oferta_Trabajos.Models.OfertaModalidad>)
             {
                 <option value="@modalidad.OfmId">@modalidad.OfmNombre</option>
             }
         </select>
+        <label for="OfmId"><i class="bi bi-toggle-on"></i> Modalidad</label>
         <span asp-validation-for="OfmId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="CidId">Ciudad</label>
-        <select asp-for="CidId" class="form-control" id="CidId">
+    <!-- Ciudad -->
+    <div class="form-floating mb-3">
+        <select asp-for="CidId" class="form-select" id="CidId">
             <option value="">Seleccione una ciudad</option>
             @foreach (var ciudad in ViewBag.Ciudades as List<PI_Postulacion_Oferta_Trabajos.Models.Ciudad>)
             {
                 <option value="@ciudad.CidId">@ciudad.CidNombre</option>
             }
         </select>
+        <label for="CidId"><i class="bi bi-building"></i> Ciudad</label>
         <span asp-validation-for="CidId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="ProId">Provincia</label>
-        <select asp-for="ProId" class="form-control" id="ProId">
+    <!-- Provincia -->
+    <div class="form-floating mb-3">
+        <select asp-for="ProId" class="form-select" id="ProId">
             <option value="">Seleccione una provincia</option>
             @foreach (var provincia in ViewBag.Provincias as List<PI_Postulacion_Oferta_Trabajos.Models.Provincia>)
             {
                 <option value="@provincia.ProId">@provincia.ProNombre</option>
             }
         </select>
+        <label for="ProId"><i class="bi bi-geo-fill"></i> Provincia</label>
         <span asp-validation-for="ProId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">@ViewBag.SubmitButtonText</button>
+    <button type="submit" class="btn btn-primary mt-3"><i class="bi bi-save"></i> @ViewBag.SubmitButtonText</button>
 </form>

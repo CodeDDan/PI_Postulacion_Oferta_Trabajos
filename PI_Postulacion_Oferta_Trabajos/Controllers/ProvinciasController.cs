@@ -23,6 +23,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
         // Acción para obtener provincias y ciudades
         [HttpGet]
+        [Authorize(Roles = "admin,empleador,trabajador")]
         public IActionResult GetProvincias()
         {
             var provincias = _context.Provincias
@@ -37,6 +38,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Provincias
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
               return _context.Provincias != null ? 
@@ -45,6 +47,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Provincias/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Provincias == null)
@@ -63,6 +66,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Provincias/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -73,6 +77,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("ProId,ProNombre")] Provincia provincia)
         {
             if (ModelState.IsValid)
@@ -85,6 +90,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Provincias/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Provincias == null)
@@ -105,6 +111,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ProId,ProNombre")] Provincia provincia)
         {
             if (id != provincia.ProId)
@@ -136,6 +143,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Provincias/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Provincias == null)
@@ -156,6 +164,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Provincias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Provincias == null)
@@ -178,6 +187,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // Acción para obtener las ciudades basadas en el ProId
+        [Authorize(Roles = "admin,empleador,trabajador")]
         public IActionResult GetCiudades(int proId)
         {
             var ciudades = _context.Ciudades

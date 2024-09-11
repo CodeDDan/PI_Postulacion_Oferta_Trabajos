@@ -6,78 +6,92 @@
 
 <h2>Editar Empresa</h2>
 
-<form asp-action="EditarEmpresa" method="post">
-    <div class="form-group">
-        <label asp-for="EmpNombreEmpresa" class="control-label"></label>
-        <input asp-for="EmpNombreEmpresa" class="form-control" />
+<form asp-action="EditarEmpresa" method="post" class="bg-light p-4 rounded shadow-sm">
+    <!-- Nombre de la empresa -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpNombreEmpresa" class="form-control" id="EmpNombreEmpresa" placeholder="Nombre de la empresa" />
+        <label for="EmpNombreEmpresa"><i class="bi bi-building"></i> Nombre de la empresa</label>
         <span asp-validation-for="EmpNombreEmpresa" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpEmailRegistro" class="control-label"></label>
-        <input asp-for="EmpEmailRegistro" class="form-control" />
+    <!-- Email de registro -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpEmailRegistro" class="form-control" id="EmpEmailRegistro" type="email" placeholder="Email de registro" />
+        <label for="EmpEmailRegistro"><i class="bi bi-envelope"></i> Email de registro</label>
         <span asp-validation-for="EmpEmailRegistro" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpEmailAcceso" class="control-label"></label>
-        <input asp-for="EmpEmailAcceso" class="form-control" />
+    <!-- Email de acceso -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpEmailAcceso" class="form-control" id="EmpEmailAcceso" type="email" placeholder="Email de acceso" />
+        <label for="EmpEmailAcceso"><i class="bi bi-envelope-open"></i> Email de acceso</label>
         <span asp-validation-for="EmpEmailAcceso" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpPassword" class="control-label"></label>
-        <input asp-for="EmpPassword" class="form-control" type="password" />
+    <!-- Contraseña -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpPassword" class="form-control" id="EmpPassword" type="password" placeholder="Contraseña" required/>
+        <label for="EmpPassword"><i class="bi bi-lock"></i> Contraseña</label>
         <span asp-validation-for="EmpPassword" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpRuc" class="control-label"></label>
-        <input asp-for="EmpRuc" class="form-control" />
+    <!-- RUC -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpRuc" class="form-control" id="EmpRuc" placeholder="RUC" />
+        <label for="EmpRuc"><i class="bi bi-file-earmark-text"></i> RUC</label>
         <span asp-validation-for="EmpRuc" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpRazonSocial" class="control-label"></label>
-        <input asp-for="EmpRazonSocial" class="form-control" />
+    <!-- Razón social -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpRazonSocial" class="form-control" id="EmpRazonSocial" placeholder="Razón social" />
+        <label for="EmpRazonSocial"><i class="bi bi-card-text"></i> Razón social</label>
         <span asp-validation-for="EmpRazonSocial" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpCiudad" class="control-label"></label>
-        <input asp-for="EmpCiudad" class="form-control" />
+    <!-- Ciudad -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpCiudad" class="form-control" id="EmpCiudad" placeholder="Ciudad" />
+        <label for="EmpCiudad"><i class="bi bi-geo-alt"></i> Ciudad</label>
         <span asp-validation-for="EmpCiudad" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpTelefono" class="control-label"></label>
-        <input asp-for="EmpTelefono" class="form-control" />
+    <!-- Teléfono -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpTelefono" class="form-control" id="EmpTelefono" placeholder="Teléfono" />
+        <label for="EmpTelefono"><i class="bi bi-telephone"></i> Teléfono</label>
         <span asp-validation-for="EmpTelefono" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpNumeroTrabajadores" class="control-label"></label>
-        <input asp-for="EmpNumeroTrabajadores" class="form-control" />
+    <!-- Número de trabajadores -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpNumeroTrabajadores" class="form-control" id="EmpNumeroTrabajadores" type="number" placeholder="Número de trabajadores" />
+        <label for="EmpNumeroTrabajadores"><i class="bi bi-person-fill"></i> Número de trabajadores</label>
         <span asp-validation-for="EmpNumeroTrabajadores" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpVacantesAnuales" class="control-label"></label>
-        <input asp-for="EmpVacantesAnuales" class="form-control" />
+    <!-- Vacantes anuales -->
+    <div class="form-floating mb-3">
+        <input asp-for="EmpVacantesAnuales" class="form-control" id="EmpVacantesAnuales" type="number" placeholder="Vacantes anuales" />
+        <label for="EmpVacantesAnuales"><i class="bi bi-calendar"></i> Vacantes anuales</label>
         <span asp-validation-for="EmpVacantesAnuales" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="EmpDescripcion" class="control-label"></label>
-        <textarea asp-for="EmpDescripcion" class="form-control"></textarea>
+    <!-- Descripción -->
+    <div class="form-floating mb-3">
+        <textarea asp-for="EmpDescripcion" class="form-control" id="EmpDescripcion" placeholder="Descripción"></textarea>
+        <label for="EmpDescripcion"><i class="bi bi-file-text"></i> Descripción</label>
         <span asp-validation-for="EmpDescripcion" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="AepId" class="control-label"></label>
-        <select asp-for="AepId" class="form-control" asp-items="@(new SelectList(ViewBag.SectoresPrincipales, "AepId", "AepNombre"))"></select>
+    <!-- Sector principal -->
+    <div class="form-floating mb-3">
+        <select asp-for="AepId" class="form-select" id="AepId" asp-items="@(new SelectList(ViewBag.SectoresPrincipales, "AepId", "AepNombre"))">
+            <option value="">Seleccione un sector</option>
+        </select>
+        <label for="AepId"><i class="bi bi-building"></i> Sector principal</label>
         <span asp-validation-for="AepId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <button type="submit" class="btn btn-primary mt-3"><i class="bi bi-save"></i> Guardar cambios</button>
 </form>

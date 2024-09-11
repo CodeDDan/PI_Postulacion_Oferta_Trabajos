@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,8 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+
+    [Authorize]
     public class UsuarioDetallesController : Controller
     {
         private readonly PO_TrabajosContext _context;

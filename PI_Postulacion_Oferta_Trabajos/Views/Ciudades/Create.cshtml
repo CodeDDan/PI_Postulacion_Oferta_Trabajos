@@ -1,37 +1,49 @@
 ﻿@model PI_Postulacion_Oferta_Trabajos.Models.Ciudad
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Ciudad";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Ciudad</h4>
+<h4>Crear Ciudad</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProId" class="control-label"></label>
-                <select asp-for="ProId" class ="form-control" asp-items="ViewBag.ProId"></select>
+    <div class="col-md-6">
+        <form asp-action="Create" class="bg-light p-4 rounded shadow-sm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Provincia -->
+            <div class="form-floating mb-3">
+                <select asp-for="ProId" class="form-select" id="ProId" asp-items="ViewBag.ProId">
+                    <option value="">Selecciona una provincia</option>
+                </select>
+                <label for="ProId"><i class="bi bi-geo-alt"></i> Provincia</label>
+                <span asp-validation-for="ProId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CidNombre" class="control-label"></label>
-                <input asp-for="CidNombre" class="form-control" />
+
+            <!-- Nombre de la Ciudad -->
+            <div class="form-floating mb-3">
+                <input asp-for="CidNombre" class="form-control" id="CidNombre" placeholder="Nombre de la Ciudad" />
+                <label for="CidNombre"><i class="bi bi-building"></i> Nombre de la Ciudad</label>
                 <span asp-validation-for="CidNombre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <!-- Botón de Crear -->
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Crear</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Volver a la Lista</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

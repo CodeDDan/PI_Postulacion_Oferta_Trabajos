@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize]
     public class CiudadesController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -20,6 +22,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ciudades
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
             var pO_TrabajosContext = _context.Ciudades.Include(c => c.Pro);
@@ -28,6 +31,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
         // Acción para obtener las ciudades por el ID de la provincia
         [HttpGet]
+        [Authorize(Roles = "admin,empleador,trabajador")]
         public IActionResult GetCiudadesPorProvincia(int provinciaId)
         {
             var ciudades = _context.Ciudades
@@ -44,6 +48,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
 
         // GET: Ciudades/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Ciudades == null)
@@ -63,6 +68,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ciudades/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             ViewData["ProId"] = new SelectList(_context.Provincias, "ProId", "ProNombre");
@@ -74,6 +80,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("CidId,ProId,CidNombre")] Ciudad ciudad)
         {
             if (ModelState.IsValid)
@@ -87,6 +94,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ciudades/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Ciudades == null)
@@ -108,6 +116,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("CidId,ProId,CidNombre")] Ciudad ciudad)
         {
             if (id != ciudad.CidId)
@@ -140,6 +149,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ciudades/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Ciudades == null)
@@ -161,6 +171,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Ciudades/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Ciudades == null)

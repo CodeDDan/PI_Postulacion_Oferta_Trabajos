@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +17,8 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         public string EmpresaEmail { get; set; } = string.Empty;
         public string EmpresaPassword { get; set; } = string.Empty;
     }
+
+    [Authorize]
     public class UsuarioController : Controller
     {
 
@@ -35,6 +38,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Usuario
+        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             var users = _userManager.Users.ToList();
@@ -48,6 +52,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Usuario/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -73,6 +78,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Usuario/Create
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create()
         {
             var roles = await _roleManager.Roles.ToListAsync(); // Obtener lista de roles
@@ -83,6 +89,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Usuario/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(UserViewModel model)
         {
             if (ModelState.IsValid)
@@ -126,6 +133,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Usuario/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -156,6 +164,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Usuario/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id, UserViewModel model)
         {
             if (id != model.Usuario.Id)
@@ -222,6 +231,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Usuario/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -248,6 +258,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Usuario/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var usuario = await _userManager.FindByIdAsync(id);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PI_Postulacion_Oferta_Trabajos.Models;
 using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize(Roles = "trabajador")]
     public class TrabajadorController : Controller
     {
         private readonly PO_TrabajosContext _context;

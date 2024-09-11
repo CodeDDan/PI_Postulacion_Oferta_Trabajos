@@ -9,6 +9,7 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize(Roles = "empleador")]
     public class EmpleadorController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -135,10 +136,26 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                         _context.Ofertas.Add(oferta);
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Index", "Home"); // Redirigir a la vista principal del empleador
+                        return RedirectToAction("VerPostulaciones", "Empleador"); // Redirigir a la vista principal del empleador
                     }
                 }
                 ModelState.AddModelError("", "No se pudo identificar el usuario empleador.");
+            }
+            else
+            {
+                var errores = ModelState
+                    .Where(ms => ms.Value.Errors.Count > 0)
+                    .Select(ms => new
+                    {
+                        Campo = ms.Key, // Nombre del campo
+                        Errores = ms.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                    })
+                    .ToList();
+
+                var mensajeError = "No se pudo crear la oferta. Detalles del error: " +
+                                   string.Join(" | ", errores.Select(e => $"Campo: {e.Campo}, Errores: {string.Join(", ", e.Errores)}"));
+
+                ModelState.AddModelError("", mensajeError);
             }
 
             // Cargar los datos necesarios para los dropdowns en caso de error
@@ -345,7 +362,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerCandidatos(int ofertaId, int? edadDesde, int? edadHasta, string? genero, string? estadoCivil)
+        public async Task<IActionResult> VerCandidatos(int ofertaId, int? edadDesde, int? edadHasta, string? genero, string? estadoCivil, int? ciudad)
         {
             // Obtener la oferta con detalles relacionados
             var oferta = await _context.Ofertas
@@ -378,6 +395,13 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     .Where(p => p.Usu.UsuarioDetalles.Any(d => d.UsdGenero == genero));
             }
 
+            // Aplicar filtros por género
+            if (!string.IsNullOrEmpty(estadoCivil))
+            {
+                postulaciones = postulaciones
+                    .Where(p => p.Usu.UsuarioDetalles.Any(d => d.UsdEstadoCivil == estadoCivil));
+            }
+
             // Aplicar filtros por edad
             if (edadDesde.HasValue || edadHasta.HasValue)
             {
@@ -396,6 +420,22 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 }
             }
 
+            // Aplicar filtros por ciudad (donde 'ciudad' es el ID de la ciudad)
+            if (ciudad.HasValue)
+            {
+                // Obtener el nombre de la ciudad usando el ID
+                var ciudadNombre = await _context.Ciudades
+                    .Where(c => c.CidId == ciudad.Value)
+                    .Select(c => c.CidNombre)
+                    .FirstOrDefaultAsync();
+
+                // Aplicar el filtro de ciudad por nombre
+                if (!string.IsNullOrEmpty(ciudadNombre))
+                {
+                    postulaciones = postulaciones
+                        .Where(p => p.Usu.UsuarioDetalles.Any(d => d.UsdCiudad == ciudadNombre));
+                }
+            }
 
             var listaPostulaciones = await postulaciones.ToListAsync();
 
@@ -408,6 +448,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                 postulaciones: listaPostulaciones,
                 estadosPostulacion: estadoPostulacion
             );
+
+            ViewBag.Provincias = await _context.Provincias.ToListAsync();
+            ViewBag.Ciudades = await _context.Ciudades.ToListAsync();
 
             return View(modelo);
         }

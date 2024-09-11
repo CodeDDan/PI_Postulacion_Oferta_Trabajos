@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Menú de Administración";
+}
+
+<h1>@ViewData["Title"] <i class="bi bi-tools"></i></h1>
+
+<style>
+    .menu-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        background-color: #e90066;
+        color: #ffffff;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .menu-button:hover {
+            background-color: #d40059;
+        }
+
+    .menu-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .menu-item {
+        flex: 1;
+        max-width: 200px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row menu-container">
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "AeSectoresPrincipales")" class="menu-button">
+                <i class="bi bi-cog"></i> Sectores Principales
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "AreasLaborales")" class="menu-button">
+                <i class="bi bi-diagram-2"></i> Áreas Laborales
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "Ciudades")" class="menu-button">
+                <i class="bi bi-geo-alt"></i> Ciudades
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "Empresas")" class="menu-button">
+                <i class="bi bi-building"></i> Empresas
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "EstadoPostulaciones")" class="menu-button">
+                <i class="bi bi-clipboard-check"></i> Estado Postulaciones
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "IdentityRole")" class="menu-button">
+                <i class="bi bi-shield"></i> Roles de Identidad
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "OfertaModalidades")" class="menu-button">
+                <i class="bi bi-calendar"></i> Modalidades de Oferta
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "Ofertas")" class="menu-button">
+                <i class="bi bi-bag"></i> Ofertas
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "Postulaciones")" class="menu-button">
+                <i class="bi bi-file-text"></i> Postulaciones
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "Provincias")" class="menu-button">
+                <i class="bi bi-globe"></i> Provincias
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "Usuario")" class="menu-button">
+                <i class="bi bi-person"></i> Usuario
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "UsuarioDetalles")" class="menu-button">
+                <i class="bi bi-person-badge"></i> Detalles Usuario
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "UsuarioEducaciones")" class="menu-button">
+                <i class="bi bi-book"></i> Educaciones Usuario
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "UsuarioExperienciasLaborales")" class="menu-button">
+                <i class="bi bi-briefcase"></i> Experiencias Laborales
+            </a>
+        </div>
+        <div class="col-md-4 menu-item">
+            <a href="@Url.Action("Index", "UsuarioPerfiles")" class="menu-button">
+                <i class="bi bi-person-lines-fill"></i> Perfiles Usuario
+            </a>
+        </div>
+    </div>
+</div>

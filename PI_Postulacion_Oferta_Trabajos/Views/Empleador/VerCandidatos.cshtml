@@ -13,41 +13,81 @@
             <!-- Campo oculto para ofertaId -->
             <input type="hidden" name="ofertaId" value="@Model.OfertaId" />
 
-            <!-- Filtro por edad -->
-            <div class="form-group">
-                <label for="edadDesde">Edad Desde</label>
-                <input type="number" name="edadDesde" class="form-control" id="edadDesde" />
+            <!-- Filtro por Edad Desde -->
+            <div class="form-floating mb-2">
+                <input type="number" name="edadDesde" class="form-control" id="edadDesde" placeholder="Ingrese la edad desde">
+                <label for="edadDesde" class="form-label">
+                    <i class="bi bi-person-fill"></i> Edad Desde
+                </label>
             </div>
 
-            <div class="form-group">
-                <label for="edadHasta">Edad Hasta</label>
-                <input type="number" name="edadHasta" class="form-control" id="edadHasta" />
+            <!-- Filtro por Edad Hasta -->
+            <div class="form-floating mb-2">
+                <input type="number" name="edadHasta" class="form-control" id="edadHasta" placeholder="Ingrese la edad hasta">
+                <label for="edadHasta" class="form-label">
+                    <i class="bi bi-person-lines-fill"></i> Edad Hasta
+                </label>
             </div>
 
-            <!-- Filtro por género -->
-            <div class="form-group">
-                <label for="genero">Género</label>
-                <select class="form-select" id="genero" name="genero">
+            <!-- Filtro por Género -->
+            <div class="form-floating mb-2">
+                <select class="form-select" id="genero" name="genero" aria-label="Seleccione un género">
                     <option value="">Seleccione un género</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                     <option value="Otro">Otro</option>
                 </select>
+                <label for="genero" class="form-label">
+                    <i class="bi bi-gender-ambiguous"></i> Género
+                </label>
             </div>
 
-            <!-- Filtro por estado civil -->
-            <div class="form-group">
-                <label for="estadoCivil">Estado Civil</label>
-                <select class="form-select" id="estadoCivil" name="estadoCivil">
+            <!-- Filtro por Estado Civil -->
+            <div class="form-floating mb-3">
+                <select class="form-select" id="estadoCivil" name="estadoCivil" aria-label="Seleccione un estado civil">
                     <option value="">Seleccione un estado civil</option>
-                    <option value="Soltero">Soltero</option>
-                    <option value="Casado">Casado</option>
-                    <option value="Divorciado">Divorciado</option>
-                    <option value="Viudo">Viudo</option>
+                    <option value="Soltero/a">Soltero/a</option>
+                    <option value="Casado/a">Casado/a</option>
+                    <option value="Divorciado/a">Divorciado/a</option>
+                    <option value="Viudo/a">Viudo/a</option>
                 </select>
+                <label for="estadoCivil" class="form-label">
+                    <i class="bi bi-heart-fill"></i> Estado Civil
+                </label>
             </div>
 
-            <button type="submit" class="btn btn-custom mt-3">Filtrar</button>
+            <!-- Filtro de Provincia -->
+            <div class="form-floating mb-2">
+                <select class="form-select custom-select" style="font-size: 14px" id="provincia" name="provincia" aria-label="Provincia">
+                    <option value="">Seleccione una provincia</option>
+                    @foreach (var provincia in ViewBag.Provincias)
+                    {
+                        <option value="@provincia.ProId">@provincia.ProNombre</option>
+                    }
+                </select>
+                <label for="provincia" class="form-label">
+                    <i class="bi bi-globe-americas"></i> Provincia
+                </label>
+            </div>
+
+            <!-- Filtro de Ciudad -->
+            <div class="form-floating mb-2">
+                <select class="form-select" style="font-size: 14px" id="ciudad" name="ciudad">
+                    <option value="">Seleccione una ciudad</option>
+                    @foreach (var ciudad in ViewBag.Ciudades)
+                    {
+                        <option value="@ciudad.CidId">@ciudad.CidNombre</option>
+                    }
+                </select>
+                <label for="ciudad" class="form-label">
+                    <i class="bi bi-geo-alt-fill"></i> Ciudad
+                </label>
+            </div>
+
+            <!-- Botón de Filtrar -->
+            <button type="submit" class="btn btn-custom">
+                <i class="bi bi-funnel-fill"></i> Filtrar
+            </button>
         </form>
     </div>
 
@@ -192,7 +232,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-
+<!--Necesario para los filtros-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     // JavaScript para habilitar o deshabilitar el botón de envío basado en la selección del estado
     document.querySelectorAll('.estado-form').forEach(function (form) {
@@ -224,4 +265,30 @@
             alert.close();
         }
     }, 5000); // 5000 milisegundos = 5 segundos
+</script>
+
+<!--Método de filtro para ciudades-->
+<script>
+    $(document).ready(function () {
+        $('#provincia').change(function () {
+            var proId = $(this).val();
+            if (proId) {
+                $.ajax({
+                    url: '@Url.Action("GetCiudades", "Provincias")',
+                    type: 'GET',
+                    data: { proId: proId },
+                    success: function (data) {
+                        var $cidId = $('#ciudad');
+                        $cidId.empty();
+                        $cidId.append('<option value="">Seleccione una ciudad</option>');
+                        $.each(data, function (index, item) {
+                            $cidId.append($('<option>').val(item.cidId).text(item.cidNombre));
+                        });
+                    }
+                });
+            } else {
+                $('#ciudad').empty().append('<option value="">Seleccione una ciudad</option>');
+            }
+        });
+    });
 </script>

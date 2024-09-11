@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+
+    [Authorize]
     public class AeSectoresPrincipalesController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -20,6 +23,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AeSectoresPrincipales
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
               return _context.AeSectoresPrincipales != null ? 
@@ -28,6 +32,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AeSectoresPrincipales/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.AeSectoresPrincipales == null)
@@ -46,6 +51,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AeSectoresPrincipales/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -56,6 +62,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("AepId,AepNombre")] AeSectorPrincipal aeSectorPrincipal)
         {
             if (ModelState.IsValid)
@@ -68,6 +75,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AeSectoresPrincipales/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.AeSectoresPrincipales == null)
@@ -88,6 +96,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("AepId,AepNombre")] AeSectorPrincipal aeSectorPrincipal)
         {
             if (id != aeSectorPrincipal.AepId)
@@ -119,6 +128,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AeSectoresPrincipales/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.AeSectoresPrincipales == null)
@@ -139,6 +149,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: AeSectoresPrincipales/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.AeSectoresPrincipales == null)

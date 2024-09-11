@@ -79,9 +79,11 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
         {
             // Aquí definimos los campos para el ingreso de nuestro modelo
             [Required(ErrorMessage = "El nombre es obligatorio.")]
+            [RegularExpression(@"^[a-zA-ZÀ-ÖØ-ÿ\s]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]
             public string UsuNombre { get; set; }
 
             [Required(ErrorMessage = "El apellido es obligatorio.")]
+            [RegularExpression(@"^[a-zA-ZÀ-ÖØ-ÿ\s]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]
             public string UsuApellido { get; set; }
 
             [Required(ErrorMessage = "La cédula es obligatoria.")]
@@ -89,6 +91,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Areas.Identity.Pages.Account
             public string UsuCedula { get; set; }
 
             [Required(ErrorMessage = "El número de teléfono es obligatorio.")]
+            [RegularExpression(@"^(?:\+593|09)\d{9}$", ErrorMessage = "El número de teléfono debe tener el formato +593XXXXXXXXX o 09XXXXXXXXX.")]
             public string PhoneNumber { get; set; }
 
             /// <summary>

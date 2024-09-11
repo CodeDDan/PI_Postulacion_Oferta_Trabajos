@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PI_Postulacion_Oferta_Trabajos.Models.IdentityModels;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize]
     public class IdentityRoleController : Controller
     {
 
@@ -16,12 +18,14 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: IdentityRoleController
+        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             return View(_roleManager.Roles);
         }
 
         // GET: IdentityRoleController/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -40,6 +44,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: IdentityRoleController/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -48,6 +53,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: IdentityRoleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(RoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -66,6 +72,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: IdentityRoleController/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -87,6 +94,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: IdentityRoleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(RoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -112,6 +120,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: IdentityRoleController/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -132,6 +141,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: IdentityRoleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);

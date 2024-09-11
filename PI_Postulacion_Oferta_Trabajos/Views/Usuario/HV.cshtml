@@ -4,14 +4,263 @@
     ViewData["Title"] = "Hoja de Vida";
 }
 
-@section Styles {
-    <!-- SweetAlert CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-    <link rel="stylesheet" href="~/css/custom-hv-page.css" />
-}
+<!-- SweetAlert CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/PI_Postulacion_Oferta_Trabajos.styles.css" asp-append-version="true" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
 
+<style>
+    body{
+        background-color: rgb(237, 241, 247);
+    }
+    .i-trash {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-image: url('/images/trash.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        vertical-align: middle;
+    }
+
+    .i-pencil {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-image: url('/images/pencil.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        vertical-align: middle;
+        background-color: red; /* Temporal para verificar si la clase se aplica */
+    }
+
+
+    .container {
+        width: 100%;
+        margin: auto;
+        font-family: Arial, sans-serif;
+        display: flex;
+    }
+
+    .profile-section, .doc-section {
+        width: 35%;
+        padding: 20px;
+        border-right: 1px solid #ccc;
+        max-height: 900px;
+    }
+
+    .doc-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto; /* Centra el contenedor horizontalmente */
+        /* Añade más estilos si es necesario */
+    }
+
+    .profile-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+
+    .content-section {
+        width: 1000px;
+        padding: 20px;
+    }
+
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+        .tabs button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .tabs button.active {
+                border-bottom: 2px solid #ff4081;
+                color: #ff4081;
+            }
+
+    .section-content {
+        display: none;
+    }
+
+        .section-content.active {
+            display: block;
+        }
+
+    .section {
+        margin-bottom: 20px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .section-header h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+    .section .item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+    }
+
+        .section .item i {
+            font-size: 24px;
+            color: #ccc;
+        }
+
+        .section .item button {
+            background: none;
+            border: none;
+            color: #ff4081;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+            .section .item button i {
+                margin-right: 5px;
+            }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+    }
+
+        .form-group select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+    .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+        .item .icons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .item button {
+            margin: 5px 0; /* Espacio entre los botones */
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .item div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%; /* Asegura que ocupe el espacio disponible */
+        }
+
+    .modal-header {
+        border-bottom: none;
+    }
+
+    .modal-title {
+        color: #1a73e8;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #1a73e8;
+    }
+
+    .form-control {
+        border: 2px solid #1a73e8;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #1a73e8;
+        }
+
+    .modal-footer .btn-secondary {
+        color: #ff4081;
+        background-color: transparent;
+        border: none;
+        font-weight: bold;
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #808080;
+        border: none;
+        font-weight: bold;
+    }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #4c4c4c;
+        }
+
+    .required {
+        color: red;
+    }
+
+    .select2-container {
+        z-index: 2050 !important; /* Asegúrate de que este valor sea mayor que el z-index del modal */
+    }
+    /* Asegura que el dropdown de select2 esté correctamente posicionado */
+    .select2-container--open {
+        z-index: 2050 !important; /* Un z-index más alto que el modal */
+    }
+
+    .select2-search__field {
+        width: 100% !important;
+    }
+
+    /* Para evitar interferencias, puedes forzar el comportamiento de Select2 dentro del modal */
+    .select2-container--default .select2-results > .select2-results__options {
+        max-height: 150px; /* Ajusta esto según tus necesidades */
+        overflow-y: auto;
+    }
+
+    #institucion {
+        width: 100%; /* O ajusta a un valor fijo, como 250px */
+        height: 40px; /* Aumenta la altura */
+    }
+
+</style>
 <div class="container">
     <div class="profile-section">
         <div id="profileImgContainer" style="margin-left: 68px; border-radius: 50%; margin-bottom: 10px; position: relative; display: inline-block;">
@@ -72,8 +321,8 @@
         <div id="passSection">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePasswordModal"
                     style=" background: none;border: none;color: #ff4081; cursor: pointer;font-size: 14px;font-weight: bold;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-shaded" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 14.933a1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56" />
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-shaded" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M8 14.933a1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
                 </svg> Cambiar contraseña
             </button>
         </div>
@@ -776,7 +1025,7 @@
             <form id="editExperienceForm" method="post">
                 <div class="modal-body">
                     <input type="hidden" id="UsxId" name="UsxId" />
-                    <input type="text" class="form-control" id="UsuarioId" name="UsuarioId" HIDDEN />
+                        <input type="text" class="form-control" id="UsuarioId" name="UsuarioId" HIDDEN />
                     <div class="mb-3">
                         <label for="UsxEmpresa" class="form-label">Empresa</label>
                         <input type="text" class="form-control" id="UsxEmpresa" name="UsxEmpresa" required />
@@ -868,15 +1117,14 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<!-- SweetAlert JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <!-- SweetAlert JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script>
         const usuarioId = '@ViewBag.UserId';
         $('#profileImg').on('click', function () {
@@ -939,6 +1187,36 @@
                 }
             });
         }
+        function cargarProvincias() {
+            $.ajax({
+                url: '@Url.Action("GetProvincias", "Provincias")',
+                type: 'GET',
+                success: function (provincias) {
+                    var selectProvincia = $('#provincia');
+                    selectProvincia.empty();  // Limpiar las opciones actuales
+
+                    // Iterar sobre las provincias obtenidas y agregarlas como opciones
+                    $.each(provincias, function (index, provincia) {
+                        var option = $('<option>', {
+                            value: provincia.proId,
+                            text: provincia.proNombre
+                        });
+
+                        // Seleccionar la primera provincia de la lista automáticamente
+                        if (index === 0) {
+                            option.prop('selected', true);  // Marcar la primera opción como seleccionada
+                            cargarCiudades(provincia.proId); // Cargar las ciudades de la primera provincia seleccionada
+                        }
+
+                        selectProvincia.append(option);
+                    });
+                },
+                error: function () {
+                    console.log('Error al obtener las provincias.');
+                }
+            });
+        }
+
         // Evento para manejar el cambio en el select de provincias
         $(document).on('change', '#provincia', function () {
             var provinciaId = $(this).val();
@@ -1128,7 +1406,7 @@
 
             $('#objetiveFormEdit').on('submit', function (e) {
                 e.preventDefault(); // Evita el comportamiento predeterminado del formulario
-
+                
                 // Recolecta los datos del formulario
                 var formData = {
                     UsuarioId: $('#UsuarioId').val(),
@@ -1495,7 +1773,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Éxito',
-                                text: 'Experiencia laboral actualizada exitosamente.',
+                                text:'Experiencia laboral actualizada exitosamente.',
                                 timer: 1500,
                                 showConfirmButton: false,
                                 timerProgressBar: true
@@ -1635,15 +1913,27 @@
                 data: { userId: usuarioId },
                 success: function (response) {
                     if (response !== null) {
+                        // Nombre completo
                         var nombreCompleto = (response.userInfo.usuNombre + " " + response.userInfo.usuApellido).toUpperCase();
                         $('#nombreApellido').text(nombreCompleto);
 
+                        // Fecha de nacimiento
+                        var fechaNacimiento = response.usuarioDetalle?.usdFechaNacimiento;
+                        if (fechaNacimiento) {
+                            $('#fechaNacimientoDisplay').text(fechaNacimiento.split('T')[0]);
+                        } else {
+                            // Fecha predeterminada para persona de 18 años o más
+                            var today = new Date();
+                            var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                            var formattedDate = eighteenYearsAgo.toISOString().split('T')[0];
+                            $('#fechaNacimientoDisplay').text(formattedDate);
+                        }
+
                         // Otros detalles personales
-                        $('#fechaNacimientoDisplay').text(response.usuarioDetalle.usdFechaNacimiento.split('T')[0]);
-                        $('#generoDisplay').text(response.usuarioDetalle.usdGenero);
-                        $('#estadoCivilDisplay').text(response.usuarioDetalle.usdEstadoCivil);
-                        $('#cedulaDisplay').text(response.userInfo.usuCedula);
-                        $('#emailDisplay').text(response.userInfo.email);
+                        $('#generoDisplay').text(response.usuarioDetalle?.usdGenero || 'No disponible');
+                        $('#estadoCivilDisplay').text(response.usuarioDetalle?.usdEstadoCivil || 'No disponible');
+                        $('#cedulaDisplay').text(response.userInfo?.usuCedula || 'No disponible');
+                        $('#emailDisplay').text(response.userInfo?.email || 'No disponible');
                     }
                 },
                 error: function () {
@@ -1697,27 +1987,35 @@
                     type: 'GET',
                     data: { userId: userId },
                     success: function (data) {
-                        if (data) {
-                            // Llenar el select de estado civil con opciones predefinidas
-                            var estadoCivilSelect = $('#estadoCivil');
-                            var estadoCivilOptions = [
-                                'Soltero/a',
-                                'Casado/a',
-                                'Divorciado/a',
-                                'Pareja de Hecho',
-                                'Viudo/a',
-                                'Unión Libre'
-                            ];
+                        // Opciones predefinidas para Estado Civil, Género y provincias
+                        var estadoCivilOptions = [
+                            'Soltero/a',
+                            'Casado/a',
+                            'Divorciado/a',
+                            'Pareja de Hecho',
+                            'Viudo/a',
+                            'Unión Libre'
+                        ];
+                        var generoOptions = [
+                            'Masculino',
+                            'Femenino',
+                            'Otro'
+                        ];
 
-                            estadoCivilSelect.empty(); // Limpiar opciones actuales
+                        var estadoCivilSelect = $('#estadoCivil');
+                        var generoSelect = $('#genero');
+                        var selectProvincia = $('#provincia');
 
+                        // Si hay datos disponibles, llenar los selects con los valores correspondientes
+                        if (data!=null && data.usuarioDetalle!=null) {
+                            // Llenar el select de estado civil
+                            estadoCivilSelect.empty();
                             $.each(estadoCivilOptions, function (index, option) {
                                 var newOption = $('<option>', {
                                     value: option,
                                     text: option
                                 });
 
-                                // Seleccionar la opción si coincide con usdEstadoCivil
                                 if (option === data.usuarioDetalle.usdEstadoCivil) {
                                     newOption.prop('selected', true);
                                 }
@@ -1726,9 +2024,8 @@
                             });
 
                             // Llenar el select de provincias
-                            var selectProvincia = $('#provincia');
-                            selectProvincia.empty(); // Limpiar opciones actuales
-                            var provinciaSeleccionada = data.proId; // ID de la provincia que debe estar seleccionada
+                            selectProvincia.empty();
+                            var provinciaSeleccionada = data.proId;
                             var ciudadSeleccionada = data.usuarioDetalle.usdCiudad;
 
                             $.each(data.provincias, function (index, provincia) {
@@ -1745,23 +2042,14 @@
                                 selectProvincia.append(option);
                             });
 
-                            // Llenar el select de género con opciones predefinidas
-                            var generoSelect = $('#genero');
-                            var generoOptions = [
-                                'Masculino',
-                                'Femenino',
-                                'Otro'
-                            ];
-
-                            generoSelect.empty(); // Limpiar opciones actuales
-
+                            // Llenar el select de género
+                            generoSelect.empty();
                             $.each(generoOptions, function (index, option) {
                                 var newOption = $('<option>', {
                                     value: option,
                                     text: option
                                 });
 
-                                // Seleccionar la opción si coincide con usdGenero
                                 if (option === data.usuarioDetalle.usdGenero) {
                                     newOption.prop('selected', true);
                                 }
@@ -1769,11 +2057,77 @@
                                 generoSelect.append(newOption);
                             });
 
-                            $('#fechaNacimiento').val(data.usuarioDetalle.usdFechaNacimiento.split('T')[0]);
+                            // Llenar otros campos
+                            var fechaNacimiento = data.usuarioDetalle?.usdFechaNacimiento;
+
+                            if (fechaNacimiento) {
+                                // Si existe fecha de nacimiento, usa esa fecha
+                                $('#fechaNacimiento').val(fechaNacimiento.split('T')[0]);
+                            } else {
+                                // Si no existe fecha de nacimiento, calcula una fecha para una persona de 18 años o más
+                                var today = new Date();
+                                var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                                var formattedDate = eighteenYearsAgo.toISOString().split('T')[0];
+
+                                // Establecer la fecha por defecto
+                                $('#fechaNacimiento').val(formattedDate);
+                            }
+                            $('#email').val(data.userInfo.email);
+                            $('#phoneNumber').val(data.userInfo.phoneNumber);
+                            $('#cedula').val(data.userInfo.usuCedula);
+                        } else {
+                            
+                            estadoCivilSelect.empty();
+                            $.each(estadoCivilOptions, function (index, option) {
+                                var newOption = $('<option>', {
+                                    value: option,
+                                    text: option
+                                });
+
+                                // Seleccionar la primera opción como predeterminada
+                                if (index === 0) {
+                                    newOption.prop('selected', true);
+                                }
+
+                                estadoCivilSelect.append(newOption);
+                            });
+
+                            generoSelect.empty();
+                            $.each(generoOptions, function (index, option) {
+                                var newOption = $('<option>', {
+                                    value: option,
+                                    text: option
+                                });
+
+                                // Seleccionar la primera opción como predeterminada
+                                if (index === 0) {
+                                    newOption.prop('selected', true);
+                                }
+
+                                generoSelect.append(newOption);
+                            });
+
+                            cargarProvincias();
+                            var fechaNacimiento = data.usuarioDetalle?.usdFechaNacimiento;
+                            if (fechaNacimiento) {
+                                // Si existe fecha de nacimiento, usa esa fecha
+                                $('#fechaNacimiento').val(fechaNacimiento.split('T')[0]);
+                            } else {
+                                // Si no existe fecha de nacimiento, calcula una fecha para una persona de 18 años o más
+                                var today = new Date();
+                                var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                                var formattedDate = eighteenYearsAgo.toISOString().split('T')[0];
+
+                                // Establecer la fecha por defecto
+                                $('#fechaNacimiento').val(formattedDate);
+                            }
                             $('#email').val(data.userInfo.email);
                             $('#phoneNumber').val(data.userInfo.phoneNumber);
                             $('#cedula').val(data.userInfo.usuCedula);
                         }
+                    },
+                    error: function () {
+                        console.log('Error al obtener los datos.');
                     }
                 });
             });
@@ -2122,29 +2476,40 @@
                 data: { usuarioId: usuarioId },
                 success: function (data) {
                     let itemsHtml = '';
-                    data.forEach(function (item) {
-                        itemsHtml += `
-                                                        <div class="item">
-                                                            <span>${item.usE_TITULO}</span>
-                                                            <div>
-                                                               <p>${item.usE_INSTITUCION}</p>
-                                                               <p>${item.usE_TIPO_FORMACION} - ${item.usE_ESTADO}</p>
-                                                            </div>
-                                                                    <div class="icons">
-                                                                         <button class="btn btn-link" id="educacionEdit" value="${item.useId}" data-toggle="modal" data-target="#educacionEditModal">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                                        </svg>
-                                                                    </button>
-                                                                    <button id="deleteEducacion" class="btn btn-link" value="${item.useId}">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                                                                        </svg>
-                                                                    </button>
-                                                                </div>
-                                                        </div>
-                                                    `;
-                    });
+
+                    if (data.length === 0) {
+                        // Si no hay datos, mostrar mensaje predeterminado
+                        itemsHtml = `
+                        <div class="item">
+                            <span>Agrega tu experiencia laboral</span>
+                        </div>
+                    `;
+                    } else {
+                        // Si hay datos, construir los elementos
+                        data.forEach(function (item) {
+                            itemsHtml += `
+                            <div class="item">
+                                <span>${item.usE_TITULO}</span>
+                                <div>
+                                    <p>${item.usE_INSTITUCION}</p>
+                                    <p>${item.usE_TIPO_FORMACION} - ${item.usE_ESTADO}</p>
+                                </div>
+                                <div class="icons">
+                                    <button class="btn btn-link" id="educacionEdit" value="${item.useId}" data-toggle="modal" data-target="#educacionEditModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                        </svg>
+                                    </button>
+                                    <button id="deleteEducacion" class="btn btn-link" value="${item.useId}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        });
+                    }
 
                     $('#educationList').html(itemsHtml); // Insertar datos en el contenedor específico
                 },
@@ -2370,46 +2735,46 @@
                     if (data.length > 0) {
                         data.forEach(experiencia => {
                             const experienciaHtml = `
-                                                    <div class="card mb-3">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between align-items-start">
-                                                                        <div>
-                                                                            <h5 class="card-title">${experiencia.usxPuesto}</h5>
-                                                                            <h6 class="card-subtitle mb-2 text-muted">${experiencia.usxEmpresa} - ${experiencia.usxArea}</h6>
-                                                                            <p class="card-text">
-                                                                                <strong>Fecha de inicio:</strong> ${new Date(experiencia.usxFechaInicio).toLocaleDateString()}<br />
-                                                                                <strong>Fecha de fin:</strong> ${experiencia.usxFechaFin ? new Date(experiencia.usxFechaFin).toLocaleDateString() : 'Presente'}<br />
-                                                                                <strong>Nivel de experiencia:</strong> ${experiencia.usxNivelExperiencia}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="icons d-flex flex-column align-items-end">
-                                                                                    <button class="btn btn-link edit-experience-btn" data-id="${experiencia.usxId}" data-toggle="modal" data-target="#editExperienceModal">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                    <button id="deleteExperiencia" class="btn btn-link" value="${experiencia.usxId}">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                                                                                </svg>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                    <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-start">
+                                                        <div>
+                                                            <h5 class="card-title">${experiencia.usxPuesto}</h5>
+                                                            <h6 class="card-subtitle mb-2 text-muted">${experiencia.usxEmpresa} - ${experiencia.usxArea}</h6>
+                                                            <p class="card-text">
+                                                                <strong>Fecha de inicio:</strong> ${new Date(experiencia.usxFechaInicio).toLocaleDateString()}<br />
+                                                                <strong>Fecha de fin:</strong> ${experiencia.usxFechaFin ? new Date(experiencia.usxFechaFin).toLocaleDateString() : 'Presente'}<br />
+                                                                <strong>Nivel de experiencia:</strong> ${experiencia.usxNivelExperiencia}
+                                                            </p>
+                                                        </div>
+                                                        <div class="icons d-flex flex-column align-items-end">
+                                                                    <button class="btn btn-link edit-experience-btn" data-id="${experiencia.usxId}" data-toggle="modal" data-target="#editExperienceModal">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                                                        </svg>
+                                                                    </button>
+                                                                    <button id="deleteExperiencia" class="btn btn-link" value="${experiencia.usxId}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                    </div>`;
+                                    </div>`;
                             experienceList.append(experienciaHtml);
                         });
                     } else {
                         const noExperienceHtml = `
-                                                <div class="card text-center">
-                                                    <div class="card-body">
-                                                        <img src="/images/exp_laboral.jpg" alt="No Experience" style="width: 400px;height: 400px;border-radius:10px;margin: 40px;">
-                                                        <p class="card-text" style="color: #007aff; font-size: 18px; font-weight: bold;">
-                                                          Dar click en Sumar experiencia para agragar expereincia
-                                                        </p>
-                                                    </div>
-                                                </div>`;
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <img src="/images/exp_laboral.jpg" alt="No Experience" style="width: 400px;height: 400px;border-radius:10px;margin: 40px;">
+                                        <p class="card-text" style="color: #007aff; font-size: 18px; font-weight: bold;">
+                                          Dar click en Sumar experiencia para agragar expereincia
+                                        </p>
+                                    </div>
+                                </div>`;
                         experienceList.append(noExperienceHtml);
                     }
                 },
@@ -2437,147 +2802,197 @@
                     botonesObj.empty();
                     botonesSal.empty();
                     botonesDis.empty();
-
-                    if (!empty(data[0].uspAspiracionLarboral)) {
-                        const delete_edit = `<button class="btn btn-link edit-objetive-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editObjetiveModal">
-                                                        <!-- Icono de lápiz para editar -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                                        </svg>
-                                                    </button>
-                                                    <button id="deleteObjective" class="btn btn-link" value="${data[0].usuarioId}">
-                                                        <!-- Icono de basura para eliminar -->
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                                                        </svg>
-                                                </button>`;
-                        botonesObj.append(delete_edit);
-
-                        data.forEach(objective => {
-                            const objectiveHtml = `
-                                                                    <div class="card mb-3">
-                                                                                <div class="card-body">
-                                                                                    <div class="d-flex justify-content-between align-items-start">
-                                                                                        <div>
-                                                                                            <p class="card-text">
-                                                                                                     ${data[0].uspAspiracionLarboral}
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                    </div>`;
-                            objectiveList.append(objectiveHtml);
-                        });
-                    } else {
-                        const tal = `
-                                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addObjetiveModal"
-                                                                style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
-                                                            Escribir objetivo laboral
-                                                            </button>`;
+                    console.log(data[0]);
+                    if (typeof data[0] === 'undefined') { 
+                    const tal = `
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addObjetiveModal"
+                                                style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                            Escribir objetivo laboral
+                                            </button>`;
                         botonesObj.append(tal);
 
                         const noObjectiveHtml = `
-                                                                <div class="card text-center">
-                                                                    <div class="card-body">
-                                                                                <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
-                                                                                  Cuéntanos cuáles son tus expectativas profesionales
-                                                                        </p>
-                                                                    </div>
-                                                                </div>`;
+                                                <div class="card text-center">
+                                                    <div class="card-body">
+                                                                <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                                                  Cuéntanos cuáles son tus expectativas profesionales
+                                                        </p>
+                                                    </div>
+                                                </div>`;
                         objectiveList.append(noObjectiveHtml);
-                    }
-                    if (!empty(data[0].uspPreferenciaSalarial)) {
 
-                        const delete_edit2 = `<button class="btn btn-link edit-salary-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editSalaryModal">
-                                            <!-- Icono de lápiz para editar -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                            </svg>
-                                        </button>
-                                                <button id="deleteSalario" class="btn btn-link" value="${data[0].usuarioId}">
-                                            <!-- Icono de basura para eliminar -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                                            </svg>
+                        const tal2 = `
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSalaryModal"
+                                style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                Escribir preferencia salarial
+                                    </button>`;
+                        botonesSal.append(tal2);
+                        const noSalaryHtml = `
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                                    <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                              Cuéntanos cuáles son tus expectativas profesionales
+                                            </p>
+                                        </div>
+                                    </div>`;
+                        salaryList.append(noSalaryHtml);
+                        const tal3 = `
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDisabilityModal"
+                                            style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                        Agregar discapacidad
                                         </button>`;
-                        botonesSal.append(delete_edit2);
-                        data.forEach(salary => {
-                            const salaryHtml = `
+                        botonesDis.append(tal3);
+                        const noDisabilityHtml = `
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                                    <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                                      Si tienes alguna discapacidad, no es obligatorio que la declares. Pero si lo haces, te ayudará a encontrar puestos que mejor se adapten a tus necesidades.
+                                            </p>
+                                        </div>
+                                    </div>`;
+                        disabilityList.append(noDisabilityHtml);
+                    }else{
+                        if (data[0].uspAspiracionLarboral && data[0].uspAspiracionLarboral.trim() !== "") {
+                            const delete_edit = `<button class="btn btn-link edit-objetive-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editObjetiveModal">
+                                                <!-- Icono de lápiz para editar -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                </svg>
+                                            </button>
+                                            <button id="deleteObjective" class="btn btn-link" value="${data[0].usuarioId}">
+                                                <!-- Icono de basura para eliminar -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                                </svg>
+                                        </button>`;
+                            botonesObj.append(delete_edit);
+
+                            data.forEach(objective => {
+                                const objectiveHtml = `
+                                                            <div class="card mb-3">
+                                                                        <div class="card-body">
+                                                                            <div class="d-flex justify-content-between align-items-start">
+                                                                                <div>
+                                                                                    <p class="card-text">
+                                                                                             ${data[0].uspAspiracionLarboral}
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                            </div>`;
+                                objectiveList.append(objectiveHtml);
+                            });
+                        } else {
+                            const tal = `
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addObjetiveModal"
+                                                        style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                                    Escribir objetivo laboral
+                                                    </button>`;
+                            botonesObj.append(tal);
+
+                            const noObjectiveHtml = `
+                                                        <div class="card text-center">
+                                                            <div class="card-body">
+                                                                        <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                                                          Cuéntanos cuáles son tus expectativas profesionales
+                                                                </p>
+                                                            </div>
+                                                        </div>`;
+                            objectiveList.append(noObjectiveHtml);
+                        }
+                        if (data[0].uspPreferenciaSalarial && data[0].uspPreferenciaSalarial.trim() !== "") {
+
+                            const delete_edit2 = `<button class="btn btn-link edit-salary-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editSalaryModal">
+                                    <!-- Icono de lápiz para editar -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                    </svg>
+                                </button>
+                                        <button id="deleteSalario" class="btn btn-link" value="${data[0].usuarioId}">
+                                    <!-- Icono de basura para eliminar -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                    </svg>
+                                </button>`;
+                            botonesSal.append(delete_edit2);
+                            data.forEach(salary => {
+                                const salaryHtml = `
+                                        <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <div>
+                                                                <p class="card-text">
+                                                                                    ${data[0].uspPreferenciaSalarial}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                        </div>`;
+                                salaryList.append(salaryHtml);
+                            });
+                        } else {
+                            const tal2 = `
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSalaryModal"
+                                style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                Escribir preferencia salarial
+                                    </button>`;
+                            botonesSal.append(tal2);
+                            const noSalaryHtml = `
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                                    <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
+                                              Cuéntanos cuáles son tus expectativas profesionales
+                                            </p>
+                                        </div>
+                                    </div>`;
+                            salaryList.append(noSalaryHtml);
+                        }
+                        if (data[0].uspDiscapacidad && data[0].uspDiscapacidad.trim() !== "") {
+                            const delete_edit3 = `<button class="btn btn-link edit-disability-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editDisabilityModal">
+                                                                            <!-- Icono de lápiz para editar -->
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                                            </svg>
+                                                                        </button>
+                                                                                <button id="deleteDiscapacidad" class="btn btn-link" value="${data[0].usuarioId}">
+                                                                            <!-- Icono de basura para eliminar -->
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                                                            </svg>
+                                                                        </button>`;
+                            botonesDis.append(delete_edit3);
+                            data.forEach(salary => {
+                                const disabilityHtml = `
                                                 <div class="card mb-3">
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between align-items-start">
                                                                     <div>
                                                                         <p class="card-text">
-                                                                                            ${data[0].uspPreferenciaSalarial}
+                                                                                                    ${data[0].uspDiscapacidad}
                                                                         </p>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                 </div>`;
-                            salaryList.append(salaryHtml);
-                        });
-                    } else {
-                        const tal2 = `
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSalaryModal"
-                                        style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
-                                        Escribir preferencia salarial
-                                            </button>`;
-                        botonesSal.append(tal2);
-                        const noSalaryHtml = `
+                                disabilityList.append(disabilityHtml);
+                            });
+                        } else {
+                            const tal3 = `
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDisabilityModal"
+                                                    style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
+                                                Agregar discapacidad
+                                                </button>`;
+                            botonesDis.append(tal3);
+                            const noDisabilityHtml = `
                                             <div class="card text-center">
                                                 <div class="card-body">
                                                             <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
-                                                      Cuéntanos cuáles son tus expectativas profesionales
+                                                              Si tienes alguna discapacidad, no es obligatorio que la declares. Pero si lo haces, te ayudará a encontrar puestos que mejor se adapten a tus necesidades.
                                                     </p>
                                                 </div>
                                             </div>`;
-                        salaryList.append(noSalaryHtml);
-                    }
-                    if (!empty(data[0].uspDiscapacidad)) {
-                        const delete_edit3 = `<button class="btn btn-link edit-disability-btn" data-id="${data[0].usuarioId}" data-toggle="modal" data-target="#editDisabilityModal">
-                                                                                    <!-- Icono de lápiz para editar -->
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                                                                    </svg>
-                                                                                </button>
-                                                                                        <button id="deleteDiscapacidad" class="btn btn-link" value="${data[0].usuarioId}">
-                                                                                    <!-- Icono de basura para eliminar -->
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                                                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                                                                                    </svg>
-                                                                                </button>`;
-                        botonesDis.append(delete_edit3);
-                        data.forEach(salary => {
-                            const disabilityHtml = `
-                                                        <div class="card mb-3">
-                                                                    <div class="card-body">
-                                                                        <div class="d-flex justify-content-between align-items-start">
-                                                                            <div>
-                                                                                <p class="card-text">
-                                                                                                            ${data[0].uspDiscapacidad}
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                        </div>`;
-                            disabilityList.append(disabilityHtml);
-                        });
-                    } else {
-                        const tal3 = `
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDisabilityModal"
-                                                            style="background: none; border: none; color: #ff4081; cursor: pointer; font-size: 14px; font-weight: bold;">
-                                                        Agregar discapacidad
-                                                        </button>`;
-                        botonesDis.append(tal3);
-                        const noDisabilityHtml = `
-                                                    <div class="card text-center">
-                                                        <div class="card-body">
-                                                                    <p class="card-text" style="color: rgba(0, 0, 24, 0.48);">
-                                                                      Si tienes alguna discapacidad, no es obligatorio que la declares. Pero si lo haces, te ayudará a encontrar puestos que mejor se adapten a tus necesidades.
-                                                            </p>
-                                                        </div>
-                                                    </div>`;
-                        disabilityList.append(noDisabilityHtml);
+                            disabilityList.append(noDisabilityHtml);
+                        }
                     }
                 },
                 error: function () {

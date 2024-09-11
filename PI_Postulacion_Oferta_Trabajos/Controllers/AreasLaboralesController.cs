@@ -11,6 +11,7 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize]
     public class AreasLaboralesController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -21,6 +22,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AreasLaborales
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
               return _context.AreasLaborales != null ? 
@@ -29,6 +31,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AreasLaborales/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.AreasLaborales == null)
@@ -47,6 +50,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AreasLaborales/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -57,6 +61,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("ArlId,ArlNombre")] AreaLaboral areaLaboral)
         {
             if (ModelState.IsValid)
@@ -69,6 +74,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AreasLaborales/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.AreasLaborales == null)
@@ -89,6 +95,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ArlId,ArlNombre")] AreaLaboral areaLaboral)
         {
             if (id != areaLaboral.ArlId)
@@ -120,6 +127,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: AreasLaborales/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.AreasLaborales == null)
@@ -140,6 +148,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: AreasLaborales/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.AreasLaborales == null)
@@ -179,6 +188,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // Acción para obtener los puestos laborales basados en el ArlId
+        [Authorize(Roles = "admin, empleador, trabajador")]
         public IActionResult GetPuestosLaborales(int arlId)
         {
             var puestos = _context.PuestosLaborales

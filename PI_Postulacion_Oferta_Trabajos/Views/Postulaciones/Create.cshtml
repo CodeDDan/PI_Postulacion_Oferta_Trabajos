@@ -1,45 +1,67 @@
 ﻿@model PI_Postulacion_Oferta_Trabajos.Models.Postulacion
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Postulación";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Postulacion</h4>
+<h4>Crear Postulación</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OfeId" class="control-label"></label>
-                <select asp-for="OfeId" class ="form-control" asp-items="ViewBag.OfeId"></select>
+    <div class="col-md-6">
+        <form asp-action="Create" class="bg-light p-4 rounded shadow-sm">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- OfeId -->
+            <div class="form-floating mb-3">
+                <select asp-for="OfeId" class="form-select" id="OfeId" asp-items="ViewBag.OfeId">
+                    <option value="">Selecciona una Oferta</option>
+                </select>
+                <label for="OfeId"><i class="bi bi-briefcase"></i> Oferta</label>
+                <span asp-validation-for="OfeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <select asp-for="UsuarioId" class ="form-control" asp-items="ViewBag.UsuarioId"></select>
+
+            <!-- UsuarioId -->
+            <div class="form-floating mb-3">
+                <select asp-for="UsuarioId" class="form-select" id="UsuarioId" asp-items="ViewBag.UsuarioId">
+                    <option value="">Selecciona un Usuario</option>
+                </select>
+                <label for="UsuarioId"><i class="bi bi-person"></i> Usuario</label>
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EspId" class="control-label"></label>
-                <select asp-for="EspId" class ="form-control" asp-items="ViewBag.EspId"></select>
+
+            <!-- EspId -->
+            <div class="form-floating mb-3">
+                <select asp-for="EspId" class="form-select" id="EspId" asp-items="ViewBag.EspId">
+                    <option value="">Selecciona el Estado de Postulación</option>
+                </select>
+                <label for="EspId"><i class="bi bi-check-circle"></i> Estado de Postulación</label>
+                <span asp-validation-for="EspId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PosFechaPostulacion" class="control-label"></label>
-                <input asp-for="PosFechaPostulacion" class="form-control" />
+
+            <!-- PosFechaPostulacion -->
+            <div class="form-floating mb-3">
+                <input asp-for="PosFechaPostulacion" class="form-control" id="PosFechaPostulacion" type="date" />
+                <label for="PosFechaPostulacion"><i class="bi bi-calendar"></i> Fecha de Postulación</label>
                 <span asp-validation-for="PosFechaPostulacion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <!-- Botón de Crear -->
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Crear</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Volver a la Lista</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

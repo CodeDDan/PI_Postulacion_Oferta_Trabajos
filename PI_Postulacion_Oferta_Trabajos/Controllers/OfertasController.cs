@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using PI_Postulacion_Oferta_Trabajos.Persistence.Context;
 
 namespace PI_Postulacion_Oferta_Trabajos.Controllers
 {
+    [Authorize]
     public class OfertasController : Controller
     {
         private readonly PO_TrabajosContext _context;
@@ -20,6 +22,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ofertas
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
             var pO_TrabajosContext = _context.Ofertas.Include(o => o.Arl).Include(o => o.Cid).Include(o => o.Emp).Include(o => o.Ofm).Include(o => o.Pro).Include(o => o.Pul);
@@ -51,6 +54,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ofertas/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             ViewData["ArlId"] = new SelectList(_context.AreasLaborales, "ArlId", "ArlNombre");
@@ -67,6 +71,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("OfeId,EmpId,OfmId,PulId,CidId,ArlId,ProId,OfeTitulo,OfeDescripcion,OfeTipoContrato,OfeSalario,OfeFechaPublicacion,OfeCantidadVacantes,OfeTiempoExperiencia,OfeEducacionMinima,OfeLicencia,OfeDisponibilidadViajar,OfeDisponibilidadCambioResidencia,OfeDiscapacidad,OfeEdadMinima")] Oferta oferta)
         {
             if (ModelState.IsValid)
@@ -85,6 +90,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ofertas/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Ofertas == null)
@@ -111,6 +117,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("OfeId,EmpId,OfmId,PulId,CidId,ArlId,ProId,OfeTitulo,OfeDescripcion,OfeTipoContrato,OfeSalario,OfeFechaPublicacion,OfeCantidadVacantes,OfeTiempoExperiencia,OfeEducacionMinima,OfeLicencia,OfeDisponibilidadViajar,OfeDisponibilidadCambioResidencia,OfeDiscapacidad,OfeEdadMinima")] Oferta oferta)
         {
             if (id != oferta.OfeId)
@@ -148,6 +155,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         }
 
         // GET: Ofertas/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Ofertas == null)
@@ -174,6 +182,7 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
         // POST: Ofertas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Ofertas == null)
