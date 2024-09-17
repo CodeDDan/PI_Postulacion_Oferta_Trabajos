@@ -86,6 +86,9 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
                     usuario.Email = Email;
                     usuario.PhoneNumber = PhoneNumber;
                     usuario.UsuCedula = Cedula;
+                    usuario.UserName = Email;
+                    usuario.NormalizedEmail = Email.ToUpper();
+                    usuario.NormalizedUserName = Email.ToUpper();
                 }
                 else
                 {

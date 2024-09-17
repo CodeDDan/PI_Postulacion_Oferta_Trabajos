@@ -301,17 +301,19 @@ namespace PI_Postulacion_Oferta_Trabajos.Controllers
 
             return View(usuarioIdiomas); // Pasar la lista a la vista
         }
-        public async Task<IActionResult> vista_perfil(string id)
+        public async Task<IActionResult> vista_perfil(string userId)
         {
-            // Validar que el id no sea nulo o vacío
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(userId))
             {
-                return NotFound(); // O redirige a una página de error si es necesario
+                // Si no se pasa un userId, usar el del usuario autenticado
+                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
-            // Obtener el listado de UsuarioIdioma para el usuario actual
+            ViewBag.UserId = userId;
+
+            // Obtener el listado de UsuarioIdioma para el usuario especificado
             var usuarioIdiomas = await _context.UsuarioIdiomas
-                .Where(ui => ui.UsuarioId == id)
+                .Where(ui => ui.UsuarioId == userId)
                 .ToListAsync();
 
             return View(usuarioIdiomas); // Pasar la lista a la vista
